@@ -676,8 +676,6 @@ class Doppler_For_Woocommerce_Admin {
 				$last_id = $v->ID;
 			}
 		}
-		$logger = wc_get_logger();
-		$logger->info( wc_print_r( $completed_orders_by_email, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
 
 		$subscribers['items'] =  array();
 		$subscribers['fields'] =  array();
@@ -767,9 +765,6 @@ class Doppler_For_Woocommerce_Admin {
 		}
 
 		$users = array_merge($registered_users,$orders_by_email);
-
-		$logger = wc_get_logger();
-		$logger->info( wc_print_r( $orders_by_email, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
 
 		$subscribers['items'] =  array();
 		$subscribers['fields'] =  array();
