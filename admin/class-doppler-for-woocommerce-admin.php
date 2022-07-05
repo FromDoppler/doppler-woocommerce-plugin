@@ -330,6 +330,26 @@ class Doppler_For_Woocommerce_Admin {
 	/**
 	 * Get the WooCommerce customer's fields.
 	 */
+	public function sync_all_buyers() {
+		$last_synch = get_option('dplrwoo_last_synch');
+
+		$list_id = get_option('dplr_subscribers_list')['buyers'];
+		if(empty($list_id)) return false;
+		
+		//Synch!
+		if(!empty($last_synch) && isset($last_synch['buyers'][$list_id])){
+			
+			$last_synch['buyers'][$list_id] = 0;	
+			
+			update_option('dplrwoo_last_synch', $last_synch);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get the WooCommerce customer's fields.
+	 */
 	public function get_checkout_fields() {
 		if ( ! class_exists( 'WC_Session' ) ) {
 			include_once( WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-session.php' );
