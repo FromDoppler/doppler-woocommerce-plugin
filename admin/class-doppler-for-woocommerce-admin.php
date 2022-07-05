@@ -332,14 +332,24 @@ class Doppler_For_Woocommerce_Admin {
 	 */
 	public function sync_all_buyers() {
 		$last_synch = get_option('dplrwoo_last_synch');
-
-		$list_id = get_option('dplr_subscribers_list')['buyers'];
-		if(empty($list_id)) return false;
 		
 		//Synch!
-		if(!empty($last_synch) && isset($last_synch['buyers'][$list_id])){
+		if(!empty($last_synch)){
 			
-			$last_synch['buyers'][$list_id] = 0;	
+			//bayers reset
+			$buyer_list_id = get_option('dplr_subscribers_list')['buyers'];
+
+			if(!empty($buyer_list_id) && isset($last_synch['buyers'][$buyer_list_id])) {
+				$last_synch['buyers'][$buyer_list_id] = 0;
+			}
+
+			//contacts reset
+			$contact_list_id = get_option('dplr_subscribers_list')['contacts'];
+
+			if(!empty($contact_list_id) && isset($last_synch['contacts'][$contact_list_id])) {
+				$last_synch['contacts'][$contact_list_id]['orders'] = 0;	
+				$last_synch['contacts'][$contact_list_id]['users'] = 0;
+			}
 			
 			update_option('dplrwoo_last_synch', $last_synch);
 		} else {
