@@ -887,7 +887,16 @@ class Doppler_For_Woocommerce_Admin {
 		if(!empty($fields_map)){
 			foreach($fields_map as $wc_field=>$dplr_field){
 				if( !empty($order->get_meta('_'.$wc_field)) && !empty($dplr_field) ){
-					$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_meta('_'.$wc_field));
+					$fexist=false;
+					foreach ($fields as $k => $v) {
+						if($v['name'] == $dplr_field) {
+							$fexist=true;
+							break;
+						}
+					}
+					if(!$fexist) {
+						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_meta('_'.$wc_field));
+					}
 				}
 			}
 		}
