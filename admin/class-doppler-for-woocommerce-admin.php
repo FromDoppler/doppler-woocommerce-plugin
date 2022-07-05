@@ -676,6 +676,8 @@ class Doppler_For_Woocommerce_Admin {
 				$last_id = $v->ID;
 			}
 		}
+		$logger = wc_get_logger();
+		$logger->info( wc_print_r( $completed_orders_by_email, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
 
 		$subscribers['items'] =  array();
 		$subscribers['fields'] =  array();
@@ -765,6 +767,9 @@ class Doppler_For_Woocommerce_Admin {
 		}
 
 		$users = array_merge($registered_users,$orders_by_email);
+
+		$logger = wc_get_logger();
+		$logger->info( wc_print_r( $orders_by_email, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
 
 		$subscribers['items'] =  array();
 		$subscribers['fields'] =  array();
@@ -887,14 +892,7 @@ class Doppler_For_Woocommerce_Admin {
 		if(!empty($fields_map)){
 			foreach($fields_map as $wc_field=>$dplr_field){
 				if( !empty($order->get_meta('_'.$wc_field)) && !empty($dplr_field) ){
-					$fexist=false;
-					foreach ($fields as $k => $v) {
-						if($v['name'] == $dplr_field) {
-							$fexist=true;
-							break;
-						}
-					}
-					if(!$fexist) {
+					if(array_search($dplr_field, array_column($array, 'name'))===false) {
 						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_meta('_'.$wc_field));
 					}
 				}
