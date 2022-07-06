@@ -887,7 +887,7 @@ class Doppler_For_Woocommerce_Admin {
 		if(!empty($fields_map)){
 			foreach($fields_map as $wc_field=>$dplr_field){
 				if( !empty($order->get_meta('_'.$wc_field)) && !empty($dplr_field) ){
-					if(array_search($dplr_field, array_column($array, 'name'))===false) {
+					if(array_search($dplr_field, array_column($fields, 'name'))===false) {
 						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_meta('_'.$wc_field));
 					}
 				}
