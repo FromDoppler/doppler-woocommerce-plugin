@@ -723,10 +723,7 @@ class Doppler_For_Woocommerce_Admin {
 				}
 			}
 		}
-
-		$logger = wc_get_logger();
-		$logger->info( wc_print_r( $subscribers, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
-	
+			
 		$subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
 		$this->set_origin();
 		$response = json_decode($subscriber_resource->importSubscribers($list_id, $subscribers)['body']);
