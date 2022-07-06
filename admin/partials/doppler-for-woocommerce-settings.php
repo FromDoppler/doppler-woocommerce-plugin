@@ -50,6 +50,7 @@
             if( isset($_POST['dplrwoo_mapping']) && is_array($_POST['dplrwoo_mapping']) && current_user_can('manage_options') && check_admin_referer('map-fields') ){
                 update_option( 'dplrwoo_mapping', $this->sanitize_text_array($_POST['dplrwoo_mapping']) );
                 $this->set_success_message(__('Fields mapped succesfully', 'doppler-for-woocommerce'));
+                $this->sync_all_buyers();
             }
             $wc_fields = $this->get_checkout_fields();
             $fields_resource = $this->doppler_service->getResource('fields');
