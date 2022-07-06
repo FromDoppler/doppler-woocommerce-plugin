@@ -64,6 +64,7 @@
             if( isset($_POST['dplr_subscribers_list']) && $this->validate_subscribers_list($_POST['dplr_subscribers_list']) && current_user_can('manage_options') && check_admin_referer('map-lists') ){
                 update_option( 'dplr_subscribers_list', $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']) );
                 $this->set_success_message(__('Subscribers lists saved succesfully', 'doppler-for-woocommerce'));
+                $this->sync_all_buyers();
             }
             
             $lists = $this->get_alpha_lists();

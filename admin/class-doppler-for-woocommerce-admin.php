@@ -716,7 +716,16 @@ class Doppler_For_Woocommerce_Admin {
 
 		foreach($completed_orders_by_email as $email=>$fields){
 			$subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
+
+			foreach ($fields as $k => $v) {
+				if(!in_array($v['name'], $subscribers['fields'])) {
+					$subscribers['fields'][] = $v['name'];
+				}
+			}
 		}
+
+		$logger = wc_get_logger();
+		$logger->info( wc_print_r( $subscribers, true ), array( 'source' => 'dplrwoo_synch_buyers_cron' ) );
 	
 		$subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
 		$this->set_origin();
