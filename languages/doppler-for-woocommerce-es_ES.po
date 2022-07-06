@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2020-06-17 12:57-0300\n"
+"POT-Creation-Date: 2022-07-06 18:22-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "esc_attr_e;esc_attr_x:1,2c;esc_attr__;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
 "_x:1,2c;_n:1,2;_n_noop:1,2;__ngettext:1,2;__ngettext_noop:1,2;_c,_nc:4c,1,2\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 3.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: admin/class-doppler-for-woocommerce-admin.php:160
@@ -61,8 +61,7 @@ msgstr ""
 msgid "Ouch! List name is invalid. Please choose another name."
 msgstr "¡Ouch! El nombre de la Lista es inválido. Elige otro nombre."
 
-#: admin/class-doppler-for-woocommerce-admin.php:168
-#: admin/partials/mapping.php:111
+#: admin/class-doppler-for-woocommerce-admin.php:168 admin/partials/hub.php:23
 msgid "Save"
 msgstr "Guardar"
 
@@ -125,12 +124,12 @@ msgstr ""
 
 #: admin/class-doppler-for-woocommerce-admin.php:262
 #: admin/class-doppler-for-woocommerce-admin.php:263
-#: admin/class-doppler-for-woocommerce-admin.php:1113
+#: admin/class-doppler-for-woocommerce-admin.php:1157
 #: admin/partials/doppler-for-woocommerce-settings.php:36
 msgid "Doppler for WooCommerce"
 msgstr "Doppler para WooCommerce"
 
-#: admin/class-doppler-for-woocommerce-admin.php:1115
+#: admin/class-doppler-for-woocommerce-admin.php:1159
 msgid ""
 "By confirming this action some automations in your Doppler Woocommerce "
 "activation can be lost. <br> ¿Do yo wish to continue? "
@@ -162,6 +161,28 @@ msgstr "Los Campos han sido guardados correctamente."
 #: admin/partials/doppler-for-woocommerce-settings.php:65
 msgid "Subscribers lists saved succesfully"
 msgstr "Las Listas han sido guardadas correctamente."
+
+#: admin/partials/hub.php:13
+#, fuzzy
+#| msgid ""
+#| "Get your Site Tracking Code from Doppler and paste it below to track your "
+#| "visitors activity. Not sure how to get your code? Press <a href=\"https://"
+#| "help.fromdoppler.com/en/create-onsite-tracking-automation\" class=\"green-"
+#| "link\">HELP</a>"
+msgid ""
+"Obtain the Tracking Code from the Doppler App and paste it here in order to "
+"monitor the actions that the visitors perform in it. Any doubts? Press <a "
+"href=\"https://help.fromdoppler.com/en/create-onsite-tracking-automation\" "
+"class=\"green-link\">HELP</a>"
+msgstr ""
+"Obtén el código de Seguimiento de Doppler para tu Sitio Web y colócalo "
+"debajo para monitorear la actividad de tus visitantes. ¿Tienes dudas sobre "
+"cómo obtener tu código? Presiona <a href=\"https://help.fromdoppler.com/es/"
+"crear-automation-por-comportamiento-en-sitio\" class=\"green-link\">HELP</a>"
+
+#: admin/partials/hub.php:20
+msgid "Paste tracking code here."
+msgstr "Pegue aquí el código de Seguimiento en Sitio"
 
 #: admin/partials/lists.php:34
 msgid ""
@@ -257,6 +278,10 @@ msgstr "Campos de WooCommerce"
 msgid "Doppler Fields"
 msgstr "Campos de Doppler"
 
+#: admin/partials/mapping.php:111
+msgid "Save and Synchronize"
+msgstr "Guardar y Sincronizar"
+
 #: doppler-for-woocommerce.php:78
 msgid "This plugin requires "
 msgstr "Este plugin requiere que el plugin"
@@ -305,21 +330,6 @@ msgstr ""
 
 #~ msgid "Tracking code is invalid"
 #~ msgstr "El código de seguimiento no es válido."
-
-#~ msgid ""
-#~ "Get your Site Tracking Code from Doppler and paste it below to track your "
-#~ "visitors activity. Not sure how to get your code? Press <a href=\"https://"
-#~ "help.fromdoppler.com/en/create-onsite-tracking-automation\" class=\"green-"
-#~ "link\">HELP</a>"
-#~ msgstr ""
-#~ "Obtén el código de Seguimiento de Doppler para tu Sitio Web y colócalo "
-#~ "debajo para monitorear la actividad de tus visitantes. ¿Tienes dudas "
-#~ "sobre cómo obtener tu código? Presiona <a href=\"https://help.fromdoppler."
-#~ "com/es/crear-automation-por-comportamiento-en-sitio\" class=\"green-link"
-#~ "\">HELP</a>"
-
-#~ msgid "Paste tracking code here."
-#~ msgstr "Pegue aquí el código de Seguimiento en Sitio"
 
 #~ msgid "Clear selection"
 #~ msgstr "Limpiar selección"
