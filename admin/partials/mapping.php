@@ -108,7 +108,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
     </table>
 
     <button id="dplrwoo-mapping-btn" class="dp-button button-medium primary-green">
-        <?php _e('Save', 'doppler-for-woocommerce') ?>
+        <?php _e('Save and Synchronize', 'doppler-for-woocommerce') ?>
     </button>
 
     </form>
