@@ -328,9 +328,9 @@ class Doppler_For_Woocommerce_Admin {
 	}
 
 	/**
-	 * Get the WooCommerce customer's fields.
+	 * Set buyers and contacts last synch value to 0.
 	 */
-	public function sync_all_buyers() {
+	public function reset_buyers_and_contacts_last_synch() {
 		$last_synch = get_option('dplrwoo_last_synch');
 		
 		//Synch!
@@ -812,6 +812,12 @@ class Doppler_For_Woocommerce_Admin {
 
 		foreach($users as $email=>$fields){
 			$subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
+
+			foreach ($fields as $k => $v) {
+				if(!in_array($v['name'], $subscribers['fields'])) {
+					$subscribers['fields'][] = $v['name'];
+				}
+			}
 		}
 	
 		$subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
