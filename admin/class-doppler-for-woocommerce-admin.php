@@ -360,6 +360,36 @@ class Doppler_For_Woocommerce_Admin {
 	/**
 	 * Get the WooCommerce customer's fields.
 	 */
+	public function sync_all_buyers() {
+		$last_synch = get_option('dplrwoo_last_synch');
+		
+		//Synch!
+		if(!empty($last_synch)){
+			
+			//bayers reset
+			$buyer_list_id = get_option('dplr_subscribers_list')['buyers'];
+
+			if(!empty($buyer_list_id) && isset($last_synch['buyers'][$buyer_list_id])) {
+				$last_synch['buyers'][$buyer_list_id] = 0;
+			}
+
+			//contacts reset
+			$contact_list_id = get_option('dplr_subscribers_list')['contacts'];
+
+			if(!empty($contact_list_id) && isset($last_synch['contacts'][$contact_list_id])) {
+				$last_synch['contacts'][$contact_list_id]['orders'] = 0;	
+				$last_synch['contacts'][$contact_list_id]['users'] = 0;
+			}
+			
+			update_option('dplrwoo_last_synch', $last_synch);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get the WooCommerce customer's fields.
+	 */
 	public function get_checkout_fields() {
 		if ( ! class_exists( 'WC_Session' ) ) {
 			include_once( WP_PLUGIN_DIR . '/woocommerce/includes/abstracts/abstract-wc-session.php' );
