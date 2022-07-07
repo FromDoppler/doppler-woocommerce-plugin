@@ -4,14 +4,15 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.0.0
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
 WC tested up: 5.1.0
 
 Submit your WooCommerce customers and buyers to a Doppler List.
-
+== 1.1.6 ==
+* Fix app sincronization in field mappings and list settings.
 == 1.1.1 ==
 * Fix app couldnt connect on php cgi mode.
 == 1.1.0 ==
