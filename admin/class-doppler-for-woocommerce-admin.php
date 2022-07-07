@@ -328,6 +328,36 @@ class Doppler_For_Woocommerce_Admin {
 	}
 
 	/**
+	 * Set buyers and contacts last synch value to 0.
+	 */
+	public function reset_buyers_and_contacts_last_synch() {
+		$last_synch = get_option('dplrwoo_last_synch');
+		
+		//Synch!
+		if(!empty($last_synch)){
+			
+			//bayers reset
+			$buyer_list_id = get_option('dplr_subscribers_list')['buyers'];
+
+			if(!empty($buyer_list_id) && isset($last_synch['buyers'][$buyer_list_id])) {
+				$last_synch['buyers'][$buyer_list_id] = 0;
+			}
+
+			//contacts reset
+			$contact_list_id = get_option('dplr_subscribers_list')['contacts'];
+
+			if(!empty($contact_list_id) && isset($last_synch['contacts'][$contact_list_id])) {
+				$last_synch['contacts'][$contact_list_id]['orders'] = 0;	
+				$last_synch['contacts'][$contact_list_id]['users'] = 0;
+			}
+			
+			update_option('dplrwoo_last_synch', $last_synch);
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Get the WooCommerce customer's fields.
 	 */
 	public function sync_all_buyers() {
@@ -716,8 +746,14 @@ class Doppler_For_Woocommerce_Admin {
 
 		foreach($completed_orders_by_email as $email=>$fields){
 			$subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
+
+			foreach ($fields as $k => $v) {
+				if(!in_array($v['name'], $subscribers['fields'])) {
+					$subscribers['fields'][] = $v['name'];
+				}
+			}
 		}
-	
+			
 		$subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
 		$this->set_origin();
 		$response = json_decode($subscriber_resource->importSubscribers($list_id, $subscribers)['body']);
@@ -806,6 +842,12 @@ class Doppler_For_Woocommerce_Admin {
 
 		foreach($users as $email=>$fields){
 			$subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
+
+			foreach ($fields as $k => $v) {
+				if(!in_array($v['name'], $subscribers['fields'])) {
+					$subscribers['fields'][] = $v['name'];
+				}
+			}
 		}
 	
 		$subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
