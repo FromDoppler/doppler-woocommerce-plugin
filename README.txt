@@ -12,7 +12,7 @@ WC tested up: 5.1.0
 
 Submit your WooCommerce customers and buyers to a Doppler List.
 == 1.1.6 ==
-* Fix app sincronization in field mappings and list settings.
+* Fix app synchronization in field mappings and list settings.
 == 1.1.1 ==
 * Fix app couldnt connect on php cgi mode.
 == 1.1.0 ==
