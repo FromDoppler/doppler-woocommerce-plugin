@@ -63,14 +63,13 @@
         default:
             if( isset($_POST['dplr_subscribers_list']) && $this->validate_subscribers_list($_POST['dplr_subscribers_list']) && current_user_can('manage_options') && check_admin_referer('map-lists') ){
 
-                $sanitized_subscribers_list = $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']);
+                $subscribers_lists = $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']);
 
-                update_option( 'dplr_subscribers_list', $sanitized_subscribers_list);
+                update_option( 'dplr_subscribers_list', $subscribers_lists);
                 $this->set_success_message(__('Subscribers lists saved succesfully', 'doppler-for-woocommerce'));
                 
                 $this->reset_buyers_and_contacts_last_synch();
 
-                $subscribers_lists = $sanitized_subscribers_list;
 
             } else {
                 $subscribers_lists = get_option('dplr_subscribers_list');
