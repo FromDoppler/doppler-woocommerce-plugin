@@ -62,13 +62,21 @@
 
         default:
             if( isset($_POST['dplr_subscribers_list']) && $this->validate_subscribers_list($_POST['dplr_subscribers_list']) && current_user_can('manage_options') && check_admin_referer('map-lists') ){
-                update_option( 'dplr_subscribers_list', $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']) );
+
+                $sanitized_subscribers_list = $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']);
+
+                update_option( 'dplr_subscribers_list', $sanitized_subscribers_list);
                 $this->set_success_message(__('Subscribers lists saved succesfully', 'doppler-for-woocommerce'));
+                
                 $this->reset_buyers_and_contacts_last_synch();
+
+                $subscribers_lists = $sanitized_subscribers_list;
+
+            } else {
+                $subscribers_lists = get_option('dplr_subscribers_list');
             }
             
-            $lists = $this->get_alpha_lists();
-            $subscribers_lists = get_option('dplr_subscribers_list');
+            $lists = $this->get_alpha_lists();            
             
             //Check if saved buyers & contact Lists still exists, unset them if not.
             $has_to_update = false;
@@ -79,8 +87,8 @@
             }
         
             if(!empty($subscribers_lists['contacts']) && !$this->list_exists($subscribers_lists['contacts'], $lists)){
-                $has_to_update = true;
                 $subscribers_lists['contacts'] = '0';
+                $has_to_update = true;
             }
                 
             if($has_to_update) update_option('dplr_subscribers_list', $subscribers_lists);
