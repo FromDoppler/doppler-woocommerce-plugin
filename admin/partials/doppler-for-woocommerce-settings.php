@@ -69,8 +69,6 @@
                 $this->set_success_message(__('Subscribers lists saved succesfully', 'doppler-for-woocommerce'));
                 
                 $this->reset_buyers_and_contacts_last_synch();
-
-
             } else {
                 $subscribers_lists = get_option('dplr_subscribers_list');
             }
