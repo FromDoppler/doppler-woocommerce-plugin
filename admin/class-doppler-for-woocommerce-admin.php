@@ -913,8 +913,10 @@ class Doppler_For_Woocommerce_Admin {
 	 * persists through page redirects.
 	 */
 	public function show_admin_notice() {
-		$class = $this->admin_notice[0];
-		$text = $this->admin_notice[1];
+		if(!is_null($this->admin_notice)){
+			$class = $this->admin_notice[0];
+			$text = $this->admin_notice[1];
+		}
 		if( !empty($class) && !empty($text) ){
 			?>
 				<div class="notice notice-<?php echo $class?> is-dismissible">
