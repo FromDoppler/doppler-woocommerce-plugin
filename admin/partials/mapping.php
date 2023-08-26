@@ -45,6 +45,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
                                     case 'account':
                                         _e('Account fields', 'doppler-for-woocommerce');
                                         break;
+                                    case 'product':
+                                        _e('Last Product fields', 'doppler-for-woocommerce');
+                                        break;
                                     default:
                                         echo esc_html($fieldtype);
                                         break;
