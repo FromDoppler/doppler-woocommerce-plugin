@@ -270,6 +270,10 @@ msgstr "Campos de Envío"
 msgid "Account fields"
 msgstr "Campos de Cuenta"
 
+#: admin/partials/mapping.php:49
+msgid "Last Product fields"
+msgstr "Campos del Ultimo Producot comprado"
+
 #: admin/partials/mapping.php:56
 msgid "WooCommerce Fields"
 msgstr "Campos de WooCommerce"
