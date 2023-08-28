@@ -272,7 +272,7 @@ msgstr "Campos de Cuenta"
 
 #: admin/partials/mapping.php:49
 msgid "Last Product fields"
-msgstr "Campos del Ultimo Producot comprado"
+msgstr "Campos del Ultimo Producto comprado"
 
 #: admin/partials/mapping.php:56
 msgid "WooCommerce Fields"
