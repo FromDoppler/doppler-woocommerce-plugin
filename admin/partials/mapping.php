@@ -56,7 +56,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                             </th>
                         </tr>
                         <tr>
-                                <th class="text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
+                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
                                 <th class="text-left pt-1 pb-1"><?php _e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
                         </tr>
                     </thead>
