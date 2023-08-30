@@ -417,7 +417,7 @@ class Doppler_For_Woocommerce_Admin {
 														"required" => true,
 														"class" => array("form-row-first"),
 														"autocomplete" => "date-order",
-														"type" => "string",
+														"type" => "date",
 														"priority"=>30));
 
 		$fields["product"] = $last_product;
@@ -1001,7 +1001,7 @@ class Doppler_For_Woocommerce_Admin {
 						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_total());
 					}
 					else if($wc_field == 'product_date'){		
-						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_date_created()->format('Y-m-d H:i'));
+						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_date_created()->format('Y-m-d'));
 					}
 					else if($wc_field == 'product_names'){
 						$items = $order->get_items();
