@@ -45,6 +45,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
                                     case 'account':
                                         _e('Account fields', 'doppler-for-woocommerce');
                                         break;
+                                    case 'product':
+                                        _e('Last Product fields', 'doppler-for-woocommerce');
+                                        break;
                                     default:
                                         echo esc_html($fieldtype);
                                         break;
@@ -53,7 +56,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                             </th>
                         </tr>
                         <tr>
-                                <th class="text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
+                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
                                 <th class="text-left pt-1 pb-1"><?php _e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
                         </tr>
                     </thead>

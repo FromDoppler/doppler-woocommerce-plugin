@@ -22,6 +22,10 @@
   font-weight: 700;
   display: inline-block; }
 
+.mapping-th-left {
+  width: 60%;
+}
+
 /**
 * Settings
 */
