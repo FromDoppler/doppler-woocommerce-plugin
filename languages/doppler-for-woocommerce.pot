@@ -356,7 +356,7 @@ msgid "Products"
 msgstr ""
 
 #: admin/partials/mapping.php:75
-msgid "Total ammount"
+msgid "Total amount"
 msgstr ""
 
 #: admin/partials/mapping.php:75

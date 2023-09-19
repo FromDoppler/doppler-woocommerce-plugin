@@ -407,7 +407,7 @@ class Doppler_For_Woocommerce_Admin {
 														"autocomplete" => "products_names",
 														"type" => "string",
 														"priority"=>10),
-								"product_total" => array("label" => "Total ammount",
+								"product_total" => array("label" => "Total amount",
 														"required" => true,
 														"class" => array("form-row-first"),
 														"autocomplete" => "total_ammount",
