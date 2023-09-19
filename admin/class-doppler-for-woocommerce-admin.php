@@ -404,19 +404,19 @@ class Doppler_For_Woocommerce_Admin {
 		$last_product = array( "product_names" => array("label" => "Products",
 														"required" => true,
 														"class" => array("form-row-first"),
-														"autocomplete" => "product-name",
+														"autocomplete" => "products_names",
 														"type" => "string",
 														"priority"=>10),
-								"product_total" => array("label" => "Total Ammount",
+								"product_total" => array("label" => "Total amount",
 														"required" => true,
 														"class" => array("form-row-first"),
-														"autocomplete" => "total-ammount",
+														"autocomplete" => "total_ammount",
 														"type" => "number",
 														"priority"=>20),
-								"product_date" => array("label" => "Date of Purchase",
+								"product_date" => array("label" => "Date of purchase",
 														"required" => true,
 														"class" => array("form-row-first"),
-														"autocomplete" => "date-order",
+														"autocomplete" => "date_of_purchase",
 														"type" => "date",
 														"priority"=>30));
 
@@ -424,6 +424,7 @@ class Doppler_For_Woocommerce_Admin {
 
 		return $fields;
 	}
+
 
 	/**
 	 * Compares field types between WooCommerce and Doppler
@@ -1283,4 +1284,6 @@ class Doppler_For_Woocommerce_Admin {
 		</div>
 		<?php
 	}
+
+	
 }

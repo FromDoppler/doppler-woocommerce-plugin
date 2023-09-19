@@ -46,7 +46,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                                         _e('Account fields', 'doppler-for-woocommerce');
                                         break;
                                     case 'product':
-                                        _e('Last Product fields', 'doppler-for-woocommerce');
+                                        _e('Last purchase fields', 'doppler-for-woocommerce');
                                         break;
                                     default:
                                         echo esc_html($fieldtype);
@@ -69,7 +69,14 @@ if ( ! current_user_can( 'manage_options' ) ) {
                     if($fieldname!=='billing_email'):
                         ?>
                             <tr>
-                                <td><?php echo $fieldAtributes['label']?></td>
+                                <td>
+                                    <?php 
+                                    if($fieldtype==='product'):
+                                        _e($fieldAtributes['label'], 'doppler-for-woocommerce');   
+                                    else:
+                                         echo $fieldAtributes['label'];
+                                    endif; ?>
+                                </td>
                                 <td>
                                     <select class="dplrwoo-mapping-fields" name="dplrwoo_mapping[<?php echo $fieldname?>]" data-type="<?php if (isset($fieldAtributes['type'])) echo $fieldAtributes['type'] ?>">
                                         <option></option>
