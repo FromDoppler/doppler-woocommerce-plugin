@@ -4,7 +4,7 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.2
-Stable tag: 1.2.0
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
