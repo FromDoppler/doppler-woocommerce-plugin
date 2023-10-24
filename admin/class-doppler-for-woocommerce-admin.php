@@ -331,6 +331,7 @@ class Doppler_For_Woocommerce_Admin {
 	 * Set buyers and contacts last synch value to 0.
 	 */
 	public function reset_buyers_and_contacts_last_synch() {
+
 		$last_synch = get_option('dplrwoo_last_synch');
 		
 		//Synch!
@@ -396,8 +397,34 @@ class Doppler_For_Woocommerce_Admin {
 		}
 		WC()->session = new WC_Session_Handler;
 		WC()->customer = new WC_Customer;
-		return WC()->checkout->checkout_fields;
+
+		//checkout from woocommerce
+		$fields = WC()->checkout->checkout_fields;
+
+		$last_product = array( "product_names" => array("label" => "Products",
+														"required" => true,
+														"class" => array("form-row-first"),
+														"autocomplete" => "products_names",
+														"type" => "string",
+														"priority"=>10),
+								"product_total" => array("label" => "Total amount",
+														"required" => true,
+														"class" => array("form-row-first"),
+														"autocomplete" => "total_ammount",
+														"type" => "number",
+														"priority"=>20),
+								"product_date" => array("label" => "Date of purchase",
+														"required" => true,
+														"class" => array("form-row-first"),
+														"autocomplete" => "date_of_purchase",
+														"type" => "date",
+														"priority"=>30));
+
+		$fields["product"] = $last_product;
+
+		return $fields;
 	}
+
 
 	/**
 	 * Compares field types between WooCommerce and Doppler
@@ -529,7 +556,7 @@ class Doppler_For_Woocommerce_Admin {
 	 * from my-account.
 	 */
 	public function dprwoo_after_register( $user_id ) {
-		$list_id = get_option('dplr_subscribers_list')['buyers'];
+		$list_id = get_option('dplr_subscribers_list')['contacts'];
 		$user_info = get_userdata($user_id);
 		if(empty($list_id) || empty($user_id) || empty($user_info->user_email)) return false;
 		$meta_fields = get_user_meta($user_id);
@@ -818,7 +845,7 @@ class Doppler_For_Woocommerce_Admin {
 		//get uncomplete orders
 		$query = "SELECT p.ID, pm.meta_value as email FROM ".$wpdb->prefix."posts p ";
 		$query.= "JOIN ".$wpdb->prefix."postmeta pm ON p.ID = pm.post_id ";
-		$query.= "WHERE post_type = 'shop_order' AND p.post_status!='wc-completed' AND pm.meta_key = '_billing_email' AND pm.meta_value != '' ";
+		$query.= "WHERE post_type = 'shop_order' AND pm.meta_key = '_billing_email' AND pm.meta_value != '' ";
 		$query.= $condition_orders;
 		$query.= "ORDER BY p.ID ASC LIMIT 150";
 		$response = $wpdb->get_results($query);
@@ -913,10 +940,8 @@ class Doppler_For_Woocommerce_Admin {
 	 * persists through page redirects.
 	 */
 	public function show_admin_notice() {
-		if(!is_null($this->admin_notice)) {
-		$class = $this->admin_notice[0];
-		$text = $this->admin_notice[1];
-		}
+		if(isset($this->admin_notice[0]))			$class = $this->admin_notice[0];
+		if(isset($this->admin_notice[1]))			$text = $this->admin_notice[1];
 		if( !empty($class) && !empty($text) ){
 			?>
 				<div class="notice notice-<?php echo $class?> is-dismissible">
@@ -938,7 +963,7 @@ class Doppler_For_Woocommerce_Admin {
 		$fields_map = get_option('dplrwoo_mapping');
 		//Map default fields.
 		foreach($order_data as $key=>$fieldgroup){
-			if( $key === 'shipping' || $key === 'billing' ){	
+			if( $key === 'shipping' || $key === 'billing'){	
 				foreach($fieldgroup as $fieldname=>$v){
 					$f = $key.'_'.$fieldname;
 					if( isset($fields_map[$f]) && $fields_map[$f] != '' ){
@@ -967,6 +992,29 @@ class Doppler_For_Woocommerce_Admin {
 				}
 			}
 		}
+
+		if(!empty($fields_map)){
+			foreach($fields_map as $wc_field=>$dplr_field){
+				// changes requested on ticket ID:1009
+				if(!empty($dplr_field)){
+					if($wc_field == 'product_total'){		
+						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_total());
+					}
+					else if($wc_field == 'product_date'){		
+						$fields[] = array('name'=>$dplr_field, 'value'=>$order->get_date_created()->format('Y-m-d'));
+					}
+					else if($wc_field == 'product_names'){
+						$items = $order->get_items();
+						foreach ($items as $item_id => $item) {
+							$product_names[] = $item->get_name();
+						}
+						$product_names_st = implode(', ', $product_names);
+						$fields[] = array('name'=>$dplr_field, 'value'=>$product_names_st);
+					}
+				}
+			}
+		}
+		
 		return $fields;
 	}
 
@@ -1236,4 +1284,6 @@ class Doppler_For_Woocommerce_Admin {
 		</div>
 		<?php
 	}
+
+	
 }
