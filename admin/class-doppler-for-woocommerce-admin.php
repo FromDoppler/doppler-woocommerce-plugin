@@ -536,7 +536,7 @@ class Doppler_For_Woocommerce_Admin {
 	public function dplrwoo_created_customer( $customer_id, $customer_data, $customer_password ) {
 		if( wp_verify_nonce( $_POST['woocommerce-register-nonce'], 'woocommerce-register' ) ){
 			$fields_map = get_option('dplrwoo_mapping');
-			$list_id = get_option('dplr_subscribers_list')['contacts'];
+			$list_id = get_option('dplr_subscribers_list')['buyers'];
 			if( !empty($list_id) ){
 				$fields = array();
 				if(!empty($fields_map)){
@@ -585,7 +585,7 @@ class Doppler_For_Woocommerce_Admin {
 	 * Only WC > 3.0.
 	 */
 	public function dplrwoo_customer_checkout_success( $order_id ) {
-		$list_id = get_option('dplr_subscribers_list')['contacts'];
+		$list_id = get_option('dplr_subscribers_list')['buyers'];
 		$order = wc_get_order( $order_id );
 		$order_data = $order->get_data();
 		$fields = $this->get_mapped_fields($order);
