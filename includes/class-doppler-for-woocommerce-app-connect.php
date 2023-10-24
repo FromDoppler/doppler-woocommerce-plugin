@@ -79,7 +79,7 @@ class Doppler_For_WooCommerce_App_Connect {
 	 * @return array|object 
 	 * 
 	 */
-	public function do_request( $body = array() , $method ) {
+	public function do_request($method, $body = array() ) {
 		
 		$api_url = $this->get_api_url();
 		$account = $this->get_api_account();
