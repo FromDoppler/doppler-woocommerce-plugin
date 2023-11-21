@@ -397,7 +397,7 @@ class Doppler_For_Woocommerce_Admin {
 		}
 		WC()->session = new WC_Session_Handler;
 		WC()->customer = new WC_Customer;
-
+		
 		//checkout from woocommerce
 		$fields = WC()->checkout->checkout_fields;
 
@@ -424,7 +424,6 @@ class Doppler_For_Woocommerce_Admin {
 
 		return $fields;
 	}
-
 
 	/**
 	 * Compares field types between WooCommerce and Doppler
@@ -728,7 +727,13 @@ class Doppler_For_Woocommerce_Admin {
 		global $wpdb;
 		$log = '';
 		//Get list.
-		$list_id = get_option('dplr_subscribers_list')['buyers'];
+		$list_id = '';
+		if(!empty(get_option('dplr_subscribers_list')) && is_array(get_option('dplr_subscribers_list'))){
+			$list_id = get_option('dplr_subscribers_list')['buyers'];
+		} else {
+			return false;
+		}
+
 		if(empty($list_id)) return false;
 
 		$last_id = 0;
@@ -800,7 +805,13 @@ class Doppler_For_Woocommerce_Admin {
 		global $wpdb;
 
 		//Get list.
-		$list_id = get_option('dplr_subscribers_list')['contacts'];
+		$list_id = '';
+		if(!empty(get_option('dplr_subscribers_list')) && is_array(get_option('dplr_subscribers_list'))){
+			$list_id = get_option('dplr_subscribers_list')['contacts'];
+		} else {
+			return false;
+		}
+		
 		if(empty($list_id)) return false;
 
 		$last_user_id = 0;
@@ -963,7 +974,7 @@ class Doppler_For_Woocommerce_Admin {
 		$fields_map = get_option('dplrwoo_mapping');
 		//Map default fields.
 		foreach($order_data as $key=>$fieldgroup){
-			if( $key === 'shipping' || $key === 'billing'){	
+			if($key === 'shipping' || $key === 'billing'){	
 				foreach($fieldgroup as $fieldname=>$v){
 					$f = $key.'_'.$fieldname;
 					if( isset($fields_map[$f]) && $fields_map[$f] != '' ){
@@ -1014,7 +1025,7 @@ class Doppler_For_Woocommerce_Admin {
 				}
 			}
 		}
-		
+
 		return $fields;
 	}
 
@@ -1284,6 +1295,4 @@ class Doppler_For_Woocommerce_Admin {
 		</div>
 		<?php
 	}
-
-	
 }

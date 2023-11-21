@@ -288,8 +288,10 @@ class Doppler_For_Woocommerce {
 
 	public function schedule_cron() {
 		
-		add_filter( 'cron_schedules', function() {
-			// Adds once every minute to the existing schedules.
+		add_filter( 'cron_schedules', 'dplrwoo_define_custom_intervals');
+
+		function dplrwoo_define_custom_intervals($schedules) {
+			// Adds once every 15 minutes to the existing schedules.
 			$schedules['15min'] = array(
 				'interval' => 15*60,
 				'display' => __( 'Doppler Once Every 15 Minutes' )
@@ -303,10 +305,11 @@ class Doppler_For_Woocommerce {
 				'display' => __( 'Doppler Once Every 5 Minutes' )
 			);
 			return $schedules;
-		} );
+		}
 		
 		//houry, daily, twicedaily
-		add_action('wp', function() {
+		add_action('wp', 'dplrwoo_schedule_events');
+		function dplrwoo_schedule_events() {
 			if( !wp_next_scheduled( 'dplrwoo_cron_job' ) ) {  
 				wp_schedule_event( time(), 'daily', 'dplrwoo_cron_job' );  
 			}
@@ -316,7 +319,7 @@ class Doppler_For_Woocommerce {
 			if( !wp_next_scheduled( 'dplrwoo_synch_cron' ) ) {  
 				wp_schedule_event( time(), '2min', 'dplrwoo_synch_cron' );  
 			}
-		});
+		};
 	}
 
 }
