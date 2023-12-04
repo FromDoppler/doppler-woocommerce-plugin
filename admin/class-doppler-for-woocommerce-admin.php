@@ -570,7 +570,7 @@ class Doppler_For_Woocommerce_Admin {
 	 */
 	public function dplrwoo_order_status_changed( $order_id, $old_status, $new_status, $instance ) {
 		if( $new_status == "completed" ) {
-			$list_id = get_option('dplr_subscribers_list')['buyers'];
+			$list_id = get_option('dplr_subscribers_list')['buyers']; 
 			$order = wc_get_order( $order_id );
 			$order_data = $order->get_data();
 			$fields = $this->get_mapped_fields($order);
