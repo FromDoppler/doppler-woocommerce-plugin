@@ -270,6 +270,10 @@ msgstr "Campos de Envío"
 msgid "Account fields"
 msgstr "Campos de Cuenta"
 
+#: admin/partials/mapping.php:49
+msgid "Last purchase fields"
+msgstr "Campos de Ultima Compra"
+
 #: admin/partials/mapping.php:56
 msgid "WooCommerce Fields"
 msgstr "Campos de WooCommerce"
@@ -277,6 +281,18 @@ msgstr "Campos de WooCommerce"
 #: admin/partials/mapping.php:57
 msgid "Doppler Fields"
 msgstr "Campos de Doppler"
+
+#: admin/partials/mapping.php:75
+msgid "Products"
+msgstr "Productos"
+
+#: admin/partials/mapping.php:75
+msgid "Total amount"
+msgstr "Monto total"
+
+#: admin/partials/mapping.php:75
+msgid "Date of purchase"
+msgstr "Fecha de compra"
 
 #: admin/partials/mapping.php:111
 msgid "Save and Synchronize"
@@ -396,3 +412,12 @@ msgstr ""
 
 #~ msgid "It'll be deleted and can't be recovered."
 #~ msgstr "Será eliminada y no puede ser recuperada."
+
+#~ msgid "Products"
+#~ msgstr "Productos"
+
+#~ msgid "Total amount"
+#~ msgstr "Monto total"
+
+#~ msgid "Date of purchase"
+#~ msgstr "Fecha de compra"

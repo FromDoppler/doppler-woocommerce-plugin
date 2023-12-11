@@ -369,7 +369,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 							'currency'		=>	sanitize_text_field( $cart_currency ),
 							'time'			=>	sanitize_text_field( $current_time ),
 							'other_fields'	=>	sanitize_text_field( serialize($other_fields) ),
-							'cart_url '=> $cart_url,
+							'cart_url'=> $cart_url,
 						),
 						array('session_id' => $dplr_cart_session_id),
 						array('%s', '%s', '%s', '%s', '%s', '%s', '%0.2f', '%s', '%s', '%s', '%s'),

@@ -45,6 +45,9 @@ if ( ! current_user_can( 'manage_options' ) ) {
                                     case 'account':
                                         _e('Account fields', 'doppler-for-woocommerce');
                                         break;
+                                    case 'product':
+                                        _e('Last purchase fields', 'doppler-for-woocommerce');
+                                        break;
                                     default:
                                         echo esc_html($fieldtype);
                                         break;
@@ -53,7 +56,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                             </th>
                         </tr>
                         <tr>
-                                <th class="text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
+                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
                                 <th class="text-left pt-1 pb-1"><?php _e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
                         </tr>
                     </thead>
@@ -66,21 +69,27 @@ if ( ! current_user_can( 'manage_options' ) ) {
                     if($fieldname!=='billing_email'):
                         ?>
                             <tr>
-                                <td><?php echo $fieldAtributes['label']?></td>
+                                <td>
+                                    <?php 
+                                    if($fieldtype==='product'):
+                                        _e($fieldAtributes['label'], 'doppler-for-woocommerce');   
+                                    else:
+                                         echo $fieldAtributes['label'];
+                                    endif; ?>
+                                </td>
                                 <td>
                                     <select class="dplrwoo-mapping-fields" name="dplrwoo_mapping[<?php echo $fieldname?>]" data-type="<?php if (isset($fieldAtributes['type'])) echo $fieldAtributes['type'] ?>">
                                         <option></option>
                                         <?php 
                                         foreach ($dplr_fields as $field){
                                             
-                                            if( $this->check_field_type($woo_field_type,$field->type) && !in_array($field->name,$used_fields) || $maps[$fieldname] === $field->name ){
+                                            if(($this->check_field_type($woo_field_type,$field->type) && is_array($used_fields) && !in_array($field->name,$used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ){
                                                 ?>
-                                                <option value="<?php echo esc_attr($field->name)?>" <?php if( $maps[$fieldname] === $field->name ) echo 'selected' ?> data-type="<?php echo esc_attr($field->type) ?>">
+                                                <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) echo 'selected' ?> data-type="<?php echo esc_attr($field->type) ?>">
                                                     <?php echo esc_html($field->name)?>
                                                 </option>
                                                 <?php
                                             }
-                                        
                                         }
                                         ?>
                                     </select>

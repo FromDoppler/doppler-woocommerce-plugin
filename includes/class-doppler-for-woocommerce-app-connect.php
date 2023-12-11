@@ -79,7 +79,7 @@ class Doppler_For_WooCommerce_App_Connect {
 	 * @return array|object 
 	 * 
 	 */
-	public function do_request( $body = array() , $method ) {
+	public function do_request($method, $body = array()) {
 		
 		$api_url = $this->get_api_url();
 		$account = $this->get_api_account();
@@ -112,7 +112,7 @@ class Doppler_For_WooCommerce_App_Connect {
 			'accountName' => get_site_url(), 
 			'refreshToken' => $keys['consumer_secret']
 		);
-		$response = $this->do_request($body, 'PUT');
+		$response = $this->do_request('PUT', $body);
 		return $response;
     }
 
@@ -124,7 +124,7 @@ class Doppler_For_WooCommerce_App_Connect {
 	 * @return array|object
 	 */
     public function disconnect(){
-		return $this->do_request([], 'DELETE');		
+		return $this->do_request('DELETE', []);		
 	}
 
 	/**

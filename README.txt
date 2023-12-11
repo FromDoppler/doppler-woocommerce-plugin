@@ -4,13 +4,17 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.2
-Stable tag: 1.1.7
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
 WC tested up: 7.5.1
 
 Submit your WooCommerce customers and buyers to a Doppler List.
+== 1.2.1 ==
+* Fixes for php 8 version
+== 1.2.0 ==
+* Mapping of last puchased products
 == 1.1.7 ==
 * Fix abandoned cart's product price when using taxes
 == 1.1.6 ==
