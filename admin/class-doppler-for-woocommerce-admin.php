@@ -535,7 +535,7 @@ class Doppler_For_Woocommerce_Admin {
 	public function dplrwoo_created_customer( $customer_id, $customer_data, $customer_password ) {
 		if( wp_verify_nonce( $_POST['woocommerce-register-nonce'], 'woocommerce-register' ) ){
 			$fields_map = get_option('dplrwoo_mapping');
-			$list_id = get_option('dplr_subscribers_list')['buyers'];
+			$list_id = get_option('dplr_subscribers_list')['contacts'];
 			if( !empty($list_id) ){
 				$fields = array();
 				if(!empty($fields_map)){
