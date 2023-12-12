@@ -1,5 +1,5 @@
 <?php
-if ( ! current_user_can( 'manage_options' ) ) {
+if (! current_user_can('manage_options') ) {
     return;
 }
 ?>
@@ -11,23 +11,23 @@ if ( ! current_user_can( 'manage_options' ) ) {
     <?php $this->display_error_message() ?>
 
     <p class="size-medium">
-        <?php _e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?','doppler-for-woocommerce'); ?>
+        <?php _e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
         <a href="<?php _e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php _e('Learn how', 'doppler-for-woocommerce')?></a>.
     </p>
 
     <form id="dplrwoo-form-mapping" action="" method="post">
 
-    <?php wp_nonce_field( 'map-fields' );?>
+    <?php wp_nonce_field('map-fields');?>
 
     <?php
 
     $maps? $used_fields = array_filter($maps): $used_fields = array();
 
-    if(is_array($wc_fields)){
+    if(is_array($wc_fields)) {
 
         foreach($wc_fields as $fieldtype=>$arr){
 
-            if( $fieldtype!='' && $fieldtype!='order' && (count($arr)>0) ):
+            if($fieldtype!='' && $fieldtype!='order' && (count($arr)>0) ) :
 
                 ?>
                 <table class="grid panel w-100 mw-8">
@@ -36,27 +36,27 @@ if ( ! current_user_can( 'manage_options' ) ) {
                             <th colspan="2" class="text-white semi-bold">
                                 <?php
                                 switch($fieldtype){
-                                    case 'billing':
-                                        _e('Billing fields', 'doppler-for-woocommerce');
-                                        break;
-                                    case 'shipping':
-                                        _e('Shipping fields', 'doppler-for-woocommerce');
-                                        break;
-                                    case 'account':
-                                        _e('Account fields', 'doppler-for-woocommerce');
-                                        break;
-                                    case 'product':
-                                        _e('Last purchase fields', 'doppler-for-woocommerce');
-                                        break;
-                                    default:
-                                        echo esc_html($fieldtype);
-                                        break;
+                                case 'billing':
+                                    _e('Billing fields', 'doppler-for-woocommerce');
+                                    break;
+                                case 'shipping':
+                                    _e('Shipping fields', 'doppler-for-woocommerce');
+                                    break;
+                                case 'account':
+                                    _e('Account fields', 'doppler-for-woocommerce');
+                                    break;
+                                case 'product':
+                                    _e('Last purchase fields', 'doppler-for-woocommerce');
+                                    break;
+                                default:
+                                    echo esc_html($fieldtype);
+                                    break;
                                 }
                                 ?>
                             </th>
                         </tr>
                         <tr>
-                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields','doppler-for-woocommerce') ?></th>
+                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields', 'doppler-for-woocommerce') ?></th>
                                 <th class="text-left pt-1 pb-1"><?php _e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
                         </tr>
                     </thead>
@@ -66,26 +66,28 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
                 foreach($arr as $fieldname=>$fieldAtributes){
                     isset($fieldAtributes['type'])? $woo_field_type = $fieldAtributes['type'] : $woo_field_type = 'string';
-                    if($fieldname!=='billing_email'):
+                    if($fieldname!=='billing_email') :
                         ?>
                             <tr>
                                 <td>
                                     <?php 
-                                    if($fieldtype==='product'):
+                                    if($fieldtype==='product') :
                                         _e($fieldAtributes['label'], 'doppler-for-woocommerce');   
                                     else:
                                          echo $fieldAtributes['label'];
                                     endif; ?>
                                 </td>
                                 <td>
-                                    <select class="dplrwoo-mapping-fields" name="dplrwoo_mapping[<?php echo $fieldname?>]" data-type="<?php if (isset($fieldAtributes['type'])) echo $fieldAtributes['type'] ?>">
+                                    <select class="dplrwoo-mapping-fields" name="dplrwoo_mapping[<?php echo $fieldname?>]" data-type="<?php if (isset($fieldAtributes['type'])) { echo $fieldAtributes['type']; 
+                                                                                                 } ?>">
                                         <option></option>
                                         <?php 
                                         foreach ($dplr_fields as $field){
                                             
-                                            if(($this->check_field_type($woo_field_type,$field->type) && is_array($used_fields) && !in_array($field->name,$used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ){
+                                            if(($this->check_field_type($woo_field_type, $field->type) && is_array($used_fields) && !in_array($field->name, $used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ) {
                                                 ?>
-                                                <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) echo 'selected' ?> data-type="<?php echo esc_attr($field->type) ?>">
+                                                <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) { echo 'selected'; 
+                                                               } ?> data-type="<?php echo esc_attr($field->type) ?>">
                                                     <?php echo esc_html($field->name)?>
                                                 </option>
                                                 <?php

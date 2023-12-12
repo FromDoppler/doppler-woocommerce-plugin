@@ -19,40 +19,41 @@
  * For more information, see the following discussion:
  * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
  *
- * @link       https://www.fromdoppler.com/
- * @since      1.0.0
+ * @link  https://www.fromdoppler.com/
+ * @since 1.0.0
  *
- * @package    Doppler_For_Woocommerce
+ * @package Doppler_For_Woocommerce
  */
 
 // If uninstall not called from WordPress, then exit.
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+if (! defined('WP_UNINSTALL_PLUGIN') ) {
+    exit;
 }
 
 // Remove all plugin options and plugin tables from database.
-if( $_REQUEST['plugin'] === ( plugin_basename( __DIR__ ) . '/doppler-for-woocommerce.php' ) ){
+if($_REQUEST['plugin'] === ( plugin_basename(__DIR__) . '/doppler-for-woocommerce.php' ) ) {
 
-	$options = array(
-		'dplr_subscribers_list',
-		'dplrwoo_mapping',
-		'dplrwoo_use_hub',
-		'dplrwoo_version',
-		'dplrwoo_api_connected',
-		'dplrwoo_notice_field'
-	);
-	
-	array_map('uninstall_options', $options);
+    $options = array(
+    'dplr_subscribers_list',
+    'dplrwoo_mapping',
+    'dplrwoo_use_hub',
+    'dplrwoo_version',
+    'dplrwoo_api_connected',
+    'dplrwoo_notice_field'
+    );
+    
+    array_map('uninstall_options', $options);
 
-	//Delete abandoned cart table on uninstall.
-	global $wpdb;
-	$table_name = $wpdb->prefix . 'dplrwoo_abandoned_cart';
-	$result = $wpdb->query( "DROP TABLE IF EXISTS {$table_name}");
-	$table_name = $wpdb->prefix . 'dplrwoo_visited_products';
-	$wpdb->query( "DROP TABLE IF EXISTS {$table_name} ");
+    //Delete abandoned cart table on uninstall.
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'dplrwoo_abandoned_cart';
+    $result = $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
+    $table_name = $wpdb->prefix . 'dplrwoo_visited_products';
+    $wpdb->query("DROP TABLE IF EXISTS {$table_name} ");
 }
 
-function uninstall_options($option_name){
-	delete_option($option_name);
-	delete_site_option($option_name);
+function uninstall_options($option_name)
+{
+    delete_option($option_name);
+    delete_site_option($option_name);
 }
