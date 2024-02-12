@@ -1208,14 +1208,16 @@ class Doppler_For_Woocommerce_Admin
         register_rest_route(
             'wc/v3', 'abandoned-carts', array(
             'methods' => 'GET',
-            'callback' => array($this, 'get_abandoned_carts')
+            'callback' => array($this, 'get_abandoned_carts'),
+            'permission_callback' => '__return_true'
             )
         );
         //Register product views endpoint.
         register_rest_route(
             'wc/v3', 'viewed-products', array(
             'methods' => 'GET',
-            'callback' => array($this, 'get_viewed_products')
+            'callback' => array($this, 'get_viewed_products'),
+            'permission_callback' => '__return_true'
             )
         );
     }
