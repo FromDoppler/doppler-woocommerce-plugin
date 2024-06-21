@@ -209,45 +209,15 @@ msgstr ""
 msgid "Fields Mapping"
 msgstr ""
 
-#: admin/partials/doppler-for-woocommerce-settings.php:41
-msgid "On-Site Tracking"
-msgstr ""
-
 #: admin/partials/doppler-for-woocommerce-settings.php:53
 msgid ""
 "Fields mapped succesfully"
-msgstr ""
-
-#: admin/partials/doppler-for-woocommerce-settings.php:68
-msgid ""
-"On Site Tracking code "
-"saved successfully"
-msgstr ""
-
-#: admin/partials/doppler-for-woocommerce-settings.php:70
-msgid ""
-"Tracking code is invalid"
 msgstr ""
 
 #: admin/partials/doppler-for-woocommerce-settings.php:81
 msgid ""
 "Subscribers lists saved "
 "succesfully"
-msgstr ""
-
-#: admin/partials/hub.php:13
-msgid ""
-"Get your Site Tracking "
-"Code from Doppler and "
-"paste it below to track "
-"your visitors activity. "
-"Not sure how to get your "
-"code? Press <a href="
-"\"https://help."
-"fromdoppler.com/en/"
-"create-onsite-tracking-"
-"automation\" class="
-"\"green-link\">HELP</a>"
 msgstr ""
 
 #: admin/partials/hub.php:20
@@ -292,10 +262,6 @@ msgstr ""
 msgid ""
 "Doppler List to send "
 "Contacts"
-msgstr ""
-
-#: admin/partials/lists.php:107
-msgid "Clear selection"
 msgstr ""
 
 #: admin/partials/lists.php:112
@@ -365,10 +331,48 @@ msgstr ""
 
 #: doppler-for-woocommerce.php:56
 msgid ""
-"This plugin requires "
+"This plugin requires"
 msgstr ""
 
 #: doppler-for-woocommerce.php:56
 msgid ""
-" plugin to be active."
+"plugin to be active."
+msgstr ""
+
+msgid ""
+"By confirming this action some automations "
+"in your Doppler Woocommerce activation "
+"can be lost. <br> ¿Do yo wish to continue?"
+msgstr ""
+
+msgid ""
+"Obtain the Tracking Code from the Doppler App "
+"and paste it here in order to monitor the "
+"actions that the visitors perform in it. "
+"Any doubts? Press <a href=\"https://"
+"help.fromdoppler.com/en/create-onsite-tracking-"
+"automation\" class=\"green-link\">HELP</a>"
+msgstr ""
+
+msgid ""
+"Currently there is no Buyers list selected. "
+"Press synchronize to create and syncrhonize "
+"default Buyers List."
+msgstr ""
+
+msgid ""
+"Currently there is no Contacts list selected. "
+"Press synchronize to create and syncrhonize "
+"default Contacts List."
+msgstr ""
+
+msgid "Save and Synchronize"
+msgstr ""
+
+msgid ""
+"Ouch! Doppler for WooCommerce will not work if "
+"the following plugins are not installed and active:"
+msgstr ""
+
+msgid "Connected account"
 msgstr ""

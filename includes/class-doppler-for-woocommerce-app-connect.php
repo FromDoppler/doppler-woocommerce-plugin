@@ -187,7 +187,7 @@ class Doppler_For_WooCommerce_App_Connect
             // Check if current user can edit other users.
             if ($user_id && ! current_user_can('edit_user', $user_id) ) {
                 if (get_current_user_id() !== $user_id ) {
-                    throw new Exception(__('You do not have permission to assign API Keys to the selected user.', 'woocommerce'));
+                    throw new Exception('You do not have permission to assign API Keys to the selected user.');
                 }
             }
             
@@ -221,8 +221,8 @@ class Doppler_For_WooCommerce_App_Connect
             $response                    = $data;
             $response['consumer_key']    = $consumer_key;
             $response['consumer_secret'] = $consumer_secret;
-            $response['message']         = __('API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page.', 'woocommerce');
-            $response['revoke_url']      = '<a style="color: #a00; text-decoration: none;" href="' . esc_url(wp_nonce_url(add_query_arg(array( 'revoke-key' => $key_id ), admin_url('admin.php?page=wc-settings&tab=advanced&section=keys')), 'revoke')) . '">' . __('Revoke key', 'woocommerce') . '</a>';
+            $response['message']         = 'API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page.';
+            $response['revoke_url']      = '<a style="color: #a00; text-decoration: none;" href="' . esc_url(wp_nonce_url(add_query_arg(array( 'revoke-key' => $key_id ), admin_url('admin.php?page=wc-settings&tab=advanced&section=keys')), 'revoke')) . '">' . 'Revoke key' . '</a>';
         
         } catch ( Exception $e ) {
             //return array( 'message' => $e->getMessage());

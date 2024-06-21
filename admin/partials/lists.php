@@ -131,7 +131,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
     <?php 
     $display_status = get_option('dplrwoo_api_connected');
     if(!empty($display_status)){
-        echo '<p><small>Connected account: '.$display_status['account'].'</small></p>';
+        echo '<p><small>' . __('Connected account', 'doppler-for-woocommerce').': '.$display_status['account'].'</small></p>';
     }
     ?>
                
