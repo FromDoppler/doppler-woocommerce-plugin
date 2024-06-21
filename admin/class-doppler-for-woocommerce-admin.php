@@ -1386,7 +1386,7 @@ class Doppler_For_Woocommerce_Admin
         ?>
         <div id="dplrwoo-dialog" title="<?php _e("Doppler for WooCommerce", "doppler-for-woocommerce")?>">
             <p><span class="dashicons dashicons-warning" style="float:left; margin:12px 12px 20px 0;"></span>
-        <?php _e("By confirming this action some automations in your Doppler Woocommerce activation can be lost. <br> ¿Do yo wish to continue? ", "doppler-for-woocommerce")?></p>
+        <?php _e("By confirming this action some automations in your Doppler Woocommerce activation can be lost. <br> ¿Do yo wish to continue?", "doppler-for-woocommerce")?></p>
         </div>
         <?php
     }

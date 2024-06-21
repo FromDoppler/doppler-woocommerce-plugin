@@ -307,15 +307,15 @@ class Doppler_For_Woocommerce
             // Adds once every 15 minutes to the existing schedules.
             $schedules['15min'] = array(
             'interval' => 15*60,
-            'display' => __('Doppler Once Every 15 Minutes')
+            'display' => 'Doppler Once Every 15 Minutes'
             );
             $schedules['2min'] = array(
             'interval' => 2*60,
-            'display' => __('Doppler Once Every 2 Minutes')
+            'display' => 'Doppler Once Every 2 Minutes'
             );
             $schedules['5min'] = array(
             'interval' => 5*60,
-            'display' => __('Doppler Once Every 5 Minutes')
+            'display' => 'Doppler Once Every 5 Minutes'
             );
             return $schedules;
         }
