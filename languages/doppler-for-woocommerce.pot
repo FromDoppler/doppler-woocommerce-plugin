@@ -373,3 +373,6 @@ msgid ""
 "Ouch! Doppler for WooCommerce will not work if "
 "the following plugins are not installed and active:"
 msgstr ""
+
+msgid "Connected account"
+msgstr ""
