@@ -38,15 +38,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
             ?>
             </p>
         </div>
-        <div class="flex-grow-1"> 
-            <form id="dplrwoo-form-list-new" class="text-right" action="" method="post">
-                <input type="text" value="" class="d-inline-block"  maxlength="100" placeholder="<?php _e('Write the List name', 'doppler-for-woocommerce')?>"/>
-                <button id="dplrwoo-save-list" class="dp-button dp-button--inline button-medium primary-green" disabled="disabled">
-                    <?php _e('Create List', 'doppler-form') ?>
-                </button>
-            </form>
-        </div>
-
     </div>
 
     <form id="dplrwoo-form-list" action="" method="post">
