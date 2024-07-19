@@ -105,13 +105,13 @@ if ( ! current_user_can( 'manage_options' ) ) {
             <?php endif; ?>
         </p>  
         
-        <p class="d-flex justify-end">
+        <p class="d-flex justify-start">
 
             <?php
                $btn_disable = !$suggest_default_lists && ( empty($subscribers_lists['buyers']) && empty($subscribers_lists['contacts']) ) ? 'disabled' : '';
             ?>
         
-            <button id="dplrwoo-lists-btn" class="dp-button button-medium primary-green ml-1" <?php echo $btn_disable?>>
+            <button id="dplrwoo-lists-btn" class="dp-button button-medium primary-green" <?php echo $btn_disable?>>
                 <?php _e('Synchronize', 'doppler-for-woocommerce') ?>
             </button>
 
