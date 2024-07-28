@@ -1060,9 +1060,17 @@ class Doppler_For_Woocommerce_Admin
         //Map custom fields
         if(!empty($fields_map)) {
             foreach($fields_map as $wc_field=>$dplr_field){
-                if(!empty($order->get_meta('_'.$wc_field)) && !empty($dplr_field) ) {
+                $wc_field_parts = explode("_", $wc_field);
+                $wc_field_prefix = $wc_field_parts[0];
+                $wc_field_property = $wc_field_parts[0];
+                
+                if(!empty($order_data[$wc_field_prefix][$wc_field_property]) 
+                    && !empty($dplr_field) ) {
                     if(array_search($dplr_field, array_column($fields, 'name'))===false) {
-                        $fields[] = array('name'=>$dplr_field, 'value'=>$order->get_meta('_'.$wc_field));
+                        $fields[] = array(
+                            'name'=>$dplr_field,
+                            'value'=>$order_data[$wc_field_prefix][$wc_field_property]
+                        );
                     }
                 }
             }
