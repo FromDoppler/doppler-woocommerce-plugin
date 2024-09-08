@@ -170,6 +170,18 @@ class Doppler_For_Woocommerce_Admin
             array( 'jquery', 'Doppler' ), 
             $this->version, false 
         );
+        wp_enqueue_script(
+            'doppler-loader',
+            'https://cdn.fromdoppler.com/mfe-loader/loader-v2.0.0.js',
+            array($this->plugin_name),
+            $this->version, false
+        );
+		wp_enqueue_script(
+            'doppler-styles',
+            plugin_dir_url( __FILE__ ) . 'js/doppler-styles.js',
+            array($this->plugin_name, 'doppler-loader'),
+            $this->version, false
+        );
         wp_localize_script(
             $this->plugin_name, 'ObjWCStr', array( 
             'invalidUser'        => __('Ouch! Enter a valid Email.', 'doppler-for-woocommerce'),
