@@ -5,22 +5,37 @@ if (! current_user_can('manage_options') ) {
 ?>
 
 <div class="dplr-tab-content">
-
+    <header class="hero-banner">
+        <div class="dp-container">
+            <div class="dp-rowflex">
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                    <h2><?php _e('Fields Mapping', 'doppler-for-woocommerce')?></h2>
+                </div>
+                <div class="col-sm-7">
+                    <p>
+                        <?php _e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
+                        <a href="<?php _e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php _e('Learn how', 'doppler-for-woocommerce')?></a>.
+                    </p>
+                </div>
+                <div class="col-sm-5 text-align--right">
+                    <a href="?page=doppler_woocommerce_menu&tab=lists">
+                    <button type="button" class="dp-button button-medium primary-green">
+                        <?php _e('Lists to synchronize', 'doppler-for-woocommerce')?>
+                    </button>
+                    </a>
+                </div>
+            </div>
+            <span class="arrow"></span>
+        </div>
+    </header>
     <?php $this->display_success_message() ?>
 
     <?php $this->display_error_message() ?>
 
-    <p class="size-medium">
-        <?php _e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
-        <a href="<?php _e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php _e('Learn how', 'doppler-for-woocommerce')?></a>.
-    </p>
-
     <form id="dplrwoo-form-mapping" action="" method="post">
-
     <?php wp_nonce_field('map-fields');?>
 
     <?php
-
     $maps? $used_fields = array_filter($maps): $used_fields = array();
 
     if(is_array($wc_fields)) {
@@ -30,7 +45,7 @@ if (! current_user_can('manage_options') ) {
             if($fieldtype!='' && $fieldtype!='order' && (count($arr)>0) ) :
 
                 ?>
-                <table class="grid panel w-100 mw-8">
+                <table class="grid panel col-sm-12 col-md-12 col-lg-12 dp-box-shadow">
                     <thead>
                         <tr class="panel-header">
                             <th colspan="2" class="text-white semi-bold">
@@ -78,23 +93,30 @@ if (! current_user_can('manage_options') ) {
                                     endif; ?>
                                 </td>
                                 <td>
-                                    <select class="dplrwoo-mapping-fields" name="dplrwoo_mapping[<?php echo $fieldname?>]" data-type="<?php if (isset($fieldAtributes['type'])) { echo $fieldAtributes['type']; 
-                                                                                                 } ?>">
-                                        <option></option>
-                                        <?php 
-                                        foreach ($dplr_fields as $field){
-                                            
-                                            if(($this->check_field_type($woo_field_type, $field->type) && is_array($used_fields) && !in_array($field->name, $used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ) {
+                                    <div class="awa-form">
+                                        <div class="dp-select">
+                                            <span class="dropdown-arrow"></span>
+                                            <select class="dplrwoo-mapping-fields"
+                                                name="dplrwoo_mapping[<?php echo $fieldname?>]"
+                                                data-type="<?php if (isset($fieldAtributes['type']))
+                                                { echo $fieldAtributes['type']; } ?>">
+                                                <option></option>
+                                                <?php 
+                                                foreach ($dplr_fields as $field){
+                                                    
+                                                    if(($this->check_field_type($woo_field_type, $field->type) && is_array($used_fields) && !in_array($field->name, $used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ) {
+                                                        ?>
+                                                        <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) { echo 'selected'; 
+                                                                    } ?> data-type="<?php echo esc_attr($field->type) ?>">
+                                                            <?php echo esc_html($field->name)?>
+                                                        </option>
+                                                        <?php
+                                                    }
+                                                }
                                                 ?>
-                                                <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) { echo 'selected'; 
-                                                               } ?> data-type="<?php echo esc_attr($field->type) ?>">
-                                                    <?php echo esc_html($field->name)?>
-                                                </option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         
