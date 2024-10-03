@@ -2,28 +2,30 @@
 * Admin styles for Doppler for WooCommerce
 */
 .dplr_settings .dplr-tab-content .col-68 {
-  width: 68%; }
+	width: 68%;
+}
 
 .dplr_settings .dplr-tab-content .mt10 {
-  margin-top: 10px; }
+	margin-top: 10px;
+}
 
 .dplr_settings .dplr-tab-content .pr10 {
-  padding-right: 10px; }
-
-.dplr_settings .dplr-tab-content #dplrwoo-form-list {
-  max-width: 600px; }
+	padding-right: 10px;
+}
 
 .dplr_settings .dplr-tab-content #dplrwoo-form-list-new input[type="text"] {
-  width: 200px; }
+	width: 200px;
+}
 
 .dplr_settings .dplr-tab-content .dplrwoo-warning {
-  padding: 5px;
-  background-color: #ffbb00;
-  font-weight: 700;
-  display: inline-block; }
+	padding: 5px;
+	background-color: #ffbb00;
+	font-weight: 700;
+	display: inline-block;
+}
 
 .mapping-th-left {
-  width: 60%;
+	width: 60%;
 }
 
 /**

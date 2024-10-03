@@ -130,7 +130,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                 </p>
             </div>
             
-            <p class="d-flex justify-start">
+            <p class="d-flex justify-end">
 
                 <?php
                 $btn_disable = !$suggest_default_lists && ( empty($subscribers_lists['buyers']) && empty($subscribers_lists['contacts']) ) ? 'disabled' : '';

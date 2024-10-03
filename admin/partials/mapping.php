@@ -17,13 +17,6 @@ if (! current_user_can('manage_options') ) {
                         <a href="<?php _e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php _e('Learn how', 'doppler-for-woocommerce')?></a>.
                     </p>
                 </div>
-                <div class="col-sm-5 text-align--right">
-                    <a href="?page=doppler_woocommerce_menu&tab=lists">
-                    <button type="button" class="dp-button button-medium primary-green">
-                        <?php _e('Lists to synchronize', 'doppler-for-woocommerce')?>
-                    </button>
-                    </a>
-                </div>
             </div>
             <span class="arrow"></span>
         </div>
@@ -140,10 +133,17 @@ if (! current_user_can('manage_options') ) {
 
     </table>
 
-    <button id="dplrwoo-mapping-btn" class="dp-button button-medium primary-green">
-        <?php _e('Save and Synchronize', 'doppler-for-woocommerce') ?>
-    </button>
+    <div class="dp-group-buttons">
+        <a href="?page=doppler_woocommerce_menu&tab=lists">
+        <button type="button" class="dp-button button-medium secondary-grey">
+            <?php _e('Back', 'doppler-for-woocommerce') ?>
+        </button>
+        </a>
 
+        <button id="dplrwoo-mapping-btn" class="dp-button button-medium primary-green">
+            <?php _e('Save and Synchronize', 'doppler-for-woocommerce') ?>
+        </button>
+    </div>
     </form>
 
 </div>
