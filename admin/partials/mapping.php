@@ -21,9 +21,11 @@ if (! current_user_can('manage_options') ) {
             <span class="arrow"></span>
         </div>
     </header>
-    <?php $this->display_success_message() ?>
 
-    <?php $this->display_error_message() ?>
+    <div class="dp-container">
+        <?php $this->display_success_message() ?>
+        <?php $this->display_error_message() ?>
+    </div>
 
     <form id="dplrwoo-form-mapping" action="" method="post">
     <?php wp_nonce_field('map-fields');?>
