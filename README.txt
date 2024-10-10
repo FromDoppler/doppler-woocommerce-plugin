@@ -3,7 +3,7 @@ Contributors: fromdoppler
 Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
-Tested up to: 6.5
+Tested up to: 6.6.2
 Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -11,6 +11,8 @@ WC requires at least: 3.3.2
 WC tested up: 7.5.1
 
 Submit your WooCommerce customers and buyers to a Doppler List.
+== 1.2.3 ==
+* Update: Apply Doppler's style library
 == 1.2.2 ==
 * Fix: Add translations for every spanish language.
 == 1.2.1 ==
