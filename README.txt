@@ -3,14 +3,16 @@ Contributors: fromdoppler
 Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
-Tested up to: 6.7.1
-Stable tag: 1.2.3
+Tested up to: 6.7.2
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
-WC tested up: 7.5.1
+WC tested up: 8.7.0
 
 Submit your WooCommerce customers and buyers to a Doppler List.
+== 1.2.4 ==
+* Update: Add counter for synchronized contacts
 == 1.2.3 ==
 * Update: Apply Doppler's style library
 == 1.2.2 ==
