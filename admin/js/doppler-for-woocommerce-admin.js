@@ -10,7 +10,9 @@
 (function( $ ) {
 	'use strict';
 
-	$(function() {
+	$(window).on('load', function () {
+		$('#doppler-loading-screen').hide();
+		$('#dplr_body_content').show();
 
 		var mappingFieldsSelects = $(".dplrwoo-mapping-fields");
 		var listsSelect = $(".dplrwoo-lists-sel");
@@ -76,8 +78,6 @@
 		}
 
 		var synchLists = function(buyersList,contactsList){
-			console.log(buyersList);
-			console.log(contactsList);
 			if(contactsList==='' || buyersList==='') return false;
 			$.post(ajaxurl, {action: 'dplrwoo_ajax_synch', buyers_list: buyersList, contacts_list : contactsList});
 		}
