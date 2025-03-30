@@ -29,7 +29,10 @@ if(isset($_GET['tab']) ) {
 
 ?>
 <div class="dp-library">
-    <div class="dp-container">
+    <div class="wrapper-loading" id="doppler-loading-screen">
+            <div class="loading-page"></div>
+    </div>
+    <div class="dp-container" id="dplr_body_content" style="display: none;">
         <div class="dplr_settings">
 
             <a href="<?php _e('https://www.fromdoppler.com/en/?utm_source=landing&utm_medium=integracion&utm_campaign=wordpress', 'doppler-form')?>" target="_blank" class="dplr-logo-header"><img src="<?php echo DOPPLER_FOR_WOOCOMMERCE_URL?>admin/img/logo-doppler.svg" alt="Doppler logo"/></a>
