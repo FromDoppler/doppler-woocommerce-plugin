@@ -625,6 +625,10 @@ class Doppler_For_Woocommerce_Admin
             $order_data = $order->get_data();
 
             $fields = $this->get_mapped_fields($order);
+
+            if($order->get_meta('_doppler_consent_key') == 1) {
+                $fields[] = array('name'=>'CONSENT', 'value'=>'true');
+            }
             $this->subscribe_customer($list_id, $order_data['billing']['email'], $fields);
         }
     }
