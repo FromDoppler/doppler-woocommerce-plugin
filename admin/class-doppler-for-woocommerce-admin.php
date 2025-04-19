@@ -692,67 +692,6 @@ class Doppler_For_Woocommerce_Admin
         echo $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
     }
 
-
-    /**
-     * Syncrhonizes "Contacts" or "Buyers"
-     *
-     * Contacts are customers who completed 
-     * a checkout form or are registered users.
-     * Buyers are users who has orders that
-     * have been completed.
-     * 
-     * DEPRECATED old method.
-     */
-    /*
-    public function dplrwoo_synch( $list_id , $list_type) {
-
-    $orders_by_email = array();
-
-    $args = array(
-    'limit'        => -1,
-    'orderby'    => 'date',
-    'order'        => 'DESC'
-    );
-        
-    if( $list_type === 'contacts' ){
-    $registered_users = $this->get_registered_users();
-    }else if( $list_type === 'buyers' ){
-    $args['status'] = 'completed';
-    }
-
-    $orders = wc_get_orders($args);
-
-    if(!empty($orders)){
-    foreach($orders as $k=>$order){
-                $orders_by_email[$order->get_data()['billing']['email']] = $this->get_mapped_fields($order);
-    }
-    }
-
-    if( $list_type === 'contacts' ){
-    $users = array_merge($registered_users,$orders_by_email);
-    }else{
-    $users = $orders_by_email;
-    }
-        
-    $subscribers['items'] =  array();
-    $subscribers['fields'] =  array();
-
-    if(empty($users) || empty($list_id)){
-    echo '0';
-    wp_die();
-    };
-
-    foreach($users as $email=>$fields){
-    $subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
-    }
-    
-    $subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
-    $this->set_origin();
-    return $subscriber_resource->importSubscribers($list_id, $subscribers)['body'];
-    wp_die();
-
-    }*/
-
     public function dplrwoo_synch( $buyers_list , $contacts_list)
     {
 
@@ -782,7 +721,8 @@ class Doppler_For_Woocommerce_Admin
             return false;
         }
 
-        if(empty($list_id)) { return false;
+        if(empty($list_id)) { 
+            return false;
         }
 
         $last_id = 0;
@@ -1079,7 +1019,6 @@ class Doppler_For_Woocommerce_Admin
 
         if(!empty($fields_map)) {
             foreach($fields_map as $wc_field=>$dplr_field){
-                // changes requested on ticket ID:1009
                 if(!empty($dplr_field)) {
                     if($wc_field == 'product_total') {        
                         $fields[] = array('name'=>$dplr_field, 'value'=>$order->get_total());
