@@ -616,11 +616,17 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_customer_checkout_success( $order_id )
     {
-        $list_id = get_option('dplr_subscribers_list')['contacts'];
-        $order = wc_get_order($order_id);
-        $order_data = $order->get_data();
-        $fields = $this->get_mapped_fields($order);
-        $this->subscribe_customer($list_id, $order_data['billing']['email'], $fields);
+        $dplr_lists = get_option('dplr_subscribers_list');
+
+        if(is_array($dplr_lists) && !empty($dplr_lists)) {
+            $list_id = $dplr_lists['contacts'];
+            
+            $order = wc_get_order($order_id);
+            $order_data = $order->get_data();
+
+            $fields = $this->get_mapped_fields($order);
+            $this->subscribe_customer($list_id, $order_data['billing']['email'], $fields);
+        }
     }
 
     /**
