@@ -146,6 +146,10 @@ class Doppler_For_Woocommerce
         include_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-doppler-for-woocommerce-visited-products.php';
         
         /**
+         * The class responsible for defining all actions that occur in the checkout page.
+         */
+        include_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-doppler-for-woocommerce-checkout.php';
+        /**
          * The class responsible of defining the custom API endpoint to get abandoned carts data.
          */
         //require_once plugin_dir_path( dirname(__FILE__) ) . 'includes/class-doppler-for-woocommerce-rest-controller.php';
@@ -223,9 +227,12 @@ class Doppler_For_Woocommerce
         $plugin_public = new Doppler_For_Woocommerce_Public($this->get_plugin_name(), $this->get_version());
         $doppler_abandoned_cart = new Doppler_For_Woocommerce_Abandoned_Cart($wpdb->prefix . DOPPLER_ABANDONED_CART_TABLE);
         $doppler_visited_products = new Doppler_For_WooCommerce_Visited_Products($wpdb->prefix . DOPPLER_VISITED_PRODUCTS_TABLE);
+        $doppler_checkout = new Doppler_For_WooCommerce_Checkout();
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
+        $this->loader->add_action('woocommerce_init', $doppler_checkout, 'doppler_add_email_optin_checkbox');
+        $this->loader->add_action('woocommerce_set_additional_field_value', $doppler_checkout, 'doppler_set_email_optin_checkbox_value', 10, 4);
         //Abandoned cart public hooks.
         //$this->loader->add_action( 'woocommerce_after_checkout_form', $plugin_public, 'add_additional_scripts_on_checkout' ); //Adds additional functionality only to Checkout page
         $this->loader->add_action('wp_ajax_nopriv_save_data', $doppler_abandoned_cart, 'save_frontend_user_data'); //Handles data saving using Ajax after any changes made by the user on the E-mail or Phone field in Checkout form

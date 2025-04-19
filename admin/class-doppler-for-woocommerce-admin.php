@@ -616,11 +616,21 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_customer_checkout_success( $order_id )
     {
-        $list_id = get_option('dplr_subscribers_list')['contacts'];
-        $order = wc_get_order($order_id);
-        $order_data = $order->get_data();
-        $fields = $this->get_mapped_fields($order);
-        $this->subscribe_customer($list_id, $order_data['billing']['email'], $fields);
+        $dplr_lists = get_option('dplr_subscribers_list');
+
+        if(is_array($dplr_lists) && !empty($dplr_lists)) {
+            $list_id = $dplr_lists['contacts'];
+            
+            $order = wc_get_order($order_id);
+            $order_data = $order->get_data();
+
+            $fields = $this->get_mapped_fields($order);
+
+            if($order->get_meta('_doppler_consent_key') == 1) {
+                $fields[] = array('name'=>'CONSENT', 'value'=>'true');
+            }
+            $this->subscribe_customer($list_id, $order_data['billing']['email'], $fields);
+        }
     }
 
     /**
@@ -682,67 +692,6 @@ class Doppler_For_Woocommerce_Admin
         echo $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
     }
 
-
-    /**
-     * Syncrhonizes "Contacts" or "Buyers"
-     *
-     * Contacts are customers who completed 
-     * a checkout form or are registered users.
-     * Buyers are users who has orders that
-     * have been completed.
-     * 
-     * DEPRECATED old method.
-     */
-    /*
-    public function dplrwoo_synch( $list_id , $list_type) {
-
-    $orders_by_email = array();
-
-    $args = array(
-    'limit'        => -1,
-    'orderby'    => 'date',
-    'order'        => 'DESC'
-    );
-        
-    if( $list_type === 'contacts' ){
-    $registered_users = $this->get_registered_users();
-    }else if( $list_type === 'buyers' ){
-    $args['status'] = 'completed';
-    }
-
-    $orders = wc_get_orders($args);
-
-    if(!empty($orders)){
-    foreach($orders as $k=>$order){
-                $orders_by_email[$order->get_data()['billing']['email']] = $this->get_mapped_fields($order);
-    }
-    }
-
-    if( $list_type === 'contacts' ){
-    $users = array_merge($registered_users,$orders_by_email);
-    }else{
-    $users = $orders_by_email;
-    }
-        
-    $subscribers['items'] =  array();
-    $subscribers['fields'] =  array();
-
-    if(empty($users) || empty($list_id)){
-    echo '0';
-    wp_die();
-    };
-
-    foreach($users as $email=>$fields){
-    $subscribers['items'][] = array('email'=>$email, 'fields'=>$fields);
-    }
-    
-    $subscriber_resource = $this->doppler_service->getResource( 'subscribers' );
-    $this->set_origin();
-    return $subscriber_resource->importSubscribers($list_id, $subscribers)['body'];
-    wp_die();
-
-    }*/
-
     public function dplrwoo_synch( $buyers_list , $contacts_list)
     {
 
@@ -772,7 +721,8 @@ class Doppler_For_Woocommerce_Admin
             return false;
         }
 
-        if(empty($list_id)) { return false;
+        if(empty($list_id)) { 
+            return false;
         }
 
         $last_id = 0;
@@ -1069,7 +1019,6 @@ class Doppler_For_Woocommerce_Admin
 
         if(!empty($fields_map)) {
             foreach($fields_map as $wc_field=>$dplr_field){
-                // changes requested on ticket ID:1009
                 if(!empty($dplr_field)) {
                     if($wc_field == 'product_total') {        
                         $fields[] = array('name'=>$dplr_field, 'value'=>$order->get_total());
