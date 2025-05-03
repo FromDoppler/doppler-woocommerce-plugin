@@ -231,8 +231,11 @@ class Doppler_For_Woocommerce
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
-        $this->loader->add_action('woocommerce_init', $doppler_checkout, 'doppler_add_email_optin_checkbox');
-        $this->loader->add_action('woocommerce_set_additional_field_value', $doppler_checkout, 'doppler_set_email_optin_checkbox_value', 10, 4);
+        if (get_option('dplr_wc_consent') == 1) {
+            $this->loader->add_action('woocommerce_init', $doppler_checkout, 'doppler_add_email_optin_checkbox');
+            $this->loader->add_action('woocommerce_set_additional_field_value', $doppler_checkout, 'doppler_set_email_optin_checkbox_value', 10, 4);
+        }
+        
         //Abandoned cart public hooks.
         //$this->loader->add_action( 'woocommerce_after_checkout_form', $plugin_public, 'add_additional_scripts_on_checkout' ); //Adds additional functionality only to Checkout page
         $this->loader->add_action('wp_ajax_nopriv_save_data', $doppler_abandoned_cart, 'save_frontend_user_data'); //Handles data saving using Ajax after any changes made by the user on the E-mail or Phone field in Checkout form

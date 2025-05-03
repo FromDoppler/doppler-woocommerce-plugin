@@ -21,13 +21,16 @@ class Doppler_For_WooCommerce_Checkout
             return;
         }
 
+        $consent_text = get_option('dplr_wc_consent_text', __('I agree to receive promotional emails.', 'doppler-for-woocommerce'));
+        $consent_location = get_option('dplr_wc_consent_location', 'contact');
+
         woocommerce_register_additional_checkout_field(
             [
                 'id' => self::CONSENT_ID,
-                'location' => 'contact',
+                'location' => $consent_location,
                 'type' => 'checkbox',
-                'label' => __('I agree to receive promotional emails.'),
-                'optionalLabel' => __('I agree to receive promotional emails.'),
+                'label' => $consent_text,
+                'optionalLabel' => $consent_text,
                 'required' => false
             ]   
         );
