@@ -4,13 +4,16 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.8.1
-Stable tag: 1.2.4
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
 WC tested up: 8.7.0
 
 Submit your WooCommerce customers and buyers to a Doppler List.
+== 1.3.0 ==
+* Feat: Add consent checkbox in checkout.
+* Update: Add loading screen to wait for style library.
 == 1.2.4 ==
 * Update: Add counter for synchronized contacts
 == 1.2.3 ==
