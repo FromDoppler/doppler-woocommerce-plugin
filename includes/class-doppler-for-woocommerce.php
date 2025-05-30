@@ -230,6 +230,7 @@ class Doppler_For_Woocommerce
         $doppler_checkout = new Doppler_For_WooCommerce_Checkout();
 
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+        $this->loader->add_action('wp_head', $plugin_public, 'add_open_graph_meta_tags');
 
         if (get_option('dplr_wc_consent') == 1) {
             $this->loader->add_action('woocommerce_init', $doppler_checkout, 'doppler_add_email_optin_checkbox');
