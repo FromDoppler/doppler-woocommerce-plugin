@@ -83,6 +83,10 @@ class Doppler_For_Woocommerce
             $this->version = '1.0.1';
         }
         
+        if (get_option('dplr_wc_open_graph_meta') === false) {
+            update_option('dplr_wc_open_graph_meta', 1);
+        }
+        
         $this->plugin_name = 'doppler-for-woocommerce';
 
         $this->load_dependencies();
