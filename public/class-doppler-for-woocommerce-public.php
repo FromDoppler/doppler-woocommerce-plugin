@@ -107,8 +107,8 @@ class Doppler_For_Woocommerce_Public
             echo '<meta property="og:image" content="' . esc_url($image) . '" />' . "\n";
         }
         if ($price) {
-            echo '<meta property="product:price:amount" content="' . esc_attr($price) . '" />' . "\n";
-            echo '<meta property="product:price:currency" content="' . esc_attr($currency) . '" />' . "\n";
+            echo '<meta property="og:price" content="' . esc_attr($price) . '" />' . "\n";
+            echo '<meta property="og:currency" content="' . esc_attr($currency) . '" />' . "\n";
         }
     }
 }
