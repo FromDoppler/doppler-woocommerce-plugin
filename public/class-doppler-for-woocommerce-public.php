@@ -82,6 +82,7 @@ class Doppler_For_Woocommerce_Public
     public function add_open_graph_meta_tags()
     {
         if (!is_product()) {
+            echo '<meta property="og:type" content="website" />';
             return;
         }
 
