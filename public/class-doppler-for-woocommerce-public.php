@@ -79,4 +79,37 @@ class Doppler_For_Woocommerce_Public
         wp_localize_script($this->plugin_name, 'dplrWooAjaxObj', array( 'ajaxurl' => admin_url('admin-ajax.php')));
     }
 
+    public function add_open_graph_meta_tags()
+    {
+        if (!is_product()) {
+            echo '<meta property="og:type" content="website" />';
+            return;
+        }
+
+        global $post;
+        $product = wc_get_product($post->ID);
+
+        if (!$product) {
+            return;
+        }
+
+        $title = get_the_title($post);
+        $description = get_the_excerpt($post);
+        $url = get_permalink($post);
+        $image = wp_get_attachment_url($product->get_image_id());
+        $price = $product->get_price();
+        $currency = get_woocommerce_currency();
+
+        echo '<meta property="og:type" content="product" />' . "\n";
+        echo '<meta property="og:title" content="' . esc_attr($title) . '" />' . "\n";
+        echo '<meta property="og:description" content="' . esc_attr($description) . '" />' . "\n";
+        echo '<meta property="og:url" content="' . esc_url($url) . '" />' . "\n";
+        if ($image) {
+            echo '<meta property="og:image" content="' . esc_url($image) . '" />' . "\n";
+        }
+        if ($price) {
+            echo '<meta property="og:price" content="' . esc_attr($price) . '" />' . "\n";
+            echo '<meta property="og:currency" content="' . esc_attr($currency) . '" />' . "\n";
+        }
+    }
 }
