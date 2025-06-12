@@ -11,6 +11,16 @@ WC requires at least: 3.3.2
 WC tested up: 8.7.0
 
 Submit your WooCommerce customers and buyers to a Doppler List.
+
+== Upgrade Notice ==
+
+= 1.4.0 =
+*Important:* This version improves the tracking performance of visited products. Updating is recommended.
+
+== Changelog ==
+
+= 1.4.0 =
+* Feat: Add Open Graph metadata.
 == 1.3.0 ==
 * Feat: Add consent checkbox in checkout.
 * Update: Add loading screen to wait for style library.
