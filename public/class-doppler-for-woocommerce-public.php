@@ -112,4 +112,64 @@ class Doppler_For_Woocommerce_Public
             echo '<meta property="og:currency" content="' . esc_attr($currency) . '" />' . "\n";
         }
     }
+
+    public function add_date_filter_to_rest_api_endpoint( $prepared_args, $request ) {
+        $created_after = $request->get_param('after');
+        $created_before = $request->get_param('before');
+        $updated_after = $request->get_param('modified_after');
+        $updated_before = $request->get_param('modified_before');
+        $date_query = [];
+
+        if ( $created_after && $this->is_valid_date($created_after) ) {
+            $date_query['after'] = $this->to_mysql_date($created_after);
+        }
+
+        if ( $created_before && $this->is_valid_date($created_before) ) {
+            $date_query['before'] = $this->to_mysql_date($created_before);
+        }
+
+        if ( ! empty($date_query) ) {
+            $prepared_args['date_query'][] = $date_query;
+        }
+
+        if ( $updated_after && $this->is_valid_date($updated_after) && $updated_before && $this->is_valid_date($updated_before) ) {
+            $prepared_args['meta_query'][] = [
+                'key'     => 'last_update',
+                'value'   => [ (int) strtotime($updated_after), (int) strtotime($updated_before) ],
+                'compare' => 'BETWEEN',
+            ];
+        } elseif ( $updated_after && $this->is_valid_date($updated_after) ) {
+            $prepared_args['meta_query'][] = [
+                'key'     => 'last_update',
+                'value'   => (int) strtotime($updated_after),
+                'compare' => '>=',
+            ];
+        } elseif ( $updated_before && $this->is_valid_date($updated_before) ) {
+            $prepared_args['meta_query'][] = [
+                'key'     => 'last_update',
+                'value'   => (int) strtotime($updated_before),
+                'compare' => '<=',
+            ];
+        }
+
+        return $prepared_args;
+    }
+
+    private function is_valid_date($date) {
+        $d = date_create($date);
+        return $d !== false;
+    }
+
+    private function to_mysql_date($date) {
+        if (empty($date)) {
+            return false;
+        }
+        // Convert date format from 'Y-m-d H:i:s' to 'Y-m-d+H:i:s'
+        $date = preg_replace('/T(\d{2}:\d{2}:\d{2}) (\d{2}:\d{2})$/', 'T$1+$2', $date);
+        $d = date_create($date);
+        if (!$d) {
+            return false;
+        }
+        return $d->format('Y-m-d H:i:s');
+    }
 }
