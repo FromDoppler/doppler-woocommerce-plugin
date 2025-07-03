@@ -238,6 +238,7 @@ class Doppler_For_Woocommerce
         {
             $this->loader->add_action('wp_head', $plugin_public, 'add_open_graph_meta_tags');
         }
+        $this->loader->add_filter('woocommerce_rest_customer_query', $plugin_public, 'add_date_filter_to_rest_api_endpoint', 10, 2);
 
         if (get_option('dplr_wc_consent') == 1) {
             $this->loader->add_action('woocommerce_init', $doppler_checkout, 'doppler_add_email_optin_checkbox');
