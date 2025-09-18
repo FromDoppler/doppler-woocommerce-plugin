@@ -1324,6 +1324,22 @@ class Doppler_For_Woocommerce_Admin
             }
             update_option('dplrwoo_version', DOPPLER_FOR_WOOCOMMERCE_VERSION);
         }
+
+        // Update API Key permissions if they are 'read' to 'read_write'
+        $key_row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT key_id, permissions FROM {$wpdb->prefix}woocommerce_api_keys WHERE description = %s",
+                'Doppler App integration'
+            )
+        );
+
+        if ($key_row && 'read' === $key_row->permissions) {
+            $wpdb->update(
+                "{$wpdb->prefix}woocommerce_api_keys",
+                array( 'permissions' => 'read_write' ),
+                array( 'key_id' => $key_row->key_id )
+            );
+        }
     }
 
     /**
