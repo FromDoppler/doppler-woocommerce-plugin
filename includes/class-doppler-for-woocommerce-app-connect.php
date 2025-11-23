@@ -182,7 +182,7 @@ class Doppler_For_WooCommerce_App_Connect
             
             $key_id = 0;
             $description = sanitize_text_field(wp_unslash($this->get_api_keys_description()));
-            $permissions = 'read';
+            $permissions = 'read_write';
             $user_id     = get_current_user_id();
             // Check if current user can edit other users.
             if ($user_id && ! current_user_can('edit_user', $user_id) ) {
@@ -249,4 +249,3 @@ class Doppler_For_WooCommerce_App_Connect
 
 
 }
-
