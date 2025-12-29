@@ -115,6 +115,9 @@ class Doppler_For_WooCommerce_App_Connect
      */
     public function connect()
     {
+        if(!$this->isAdmin()) {
+            return new WP_Error('forbidden', 'Insufficient permissions to connect integration.');
+        }
         //just in case, remove previous keys.
         $this->remove_keys();
         $keys = $this->generate_WC_Api_keys();
@@ -142,12 +145,30 @@ class Doppler_For_WooCommerce_App_Connect
     }
 
     /**
+     * Retrieve current integration status from Doppler.
+     *
+     * @since 1.1.x
+     * @return array|object|WP_Error
+     */
+    public function get_status()
+    {
+        if(!$this->isAdmin()) {
+            return new WP_Error('forbidden', 'Insufficient permissions to check integration.');
+        }
+
+        return $this->do_request('GET', []);
+    }
+
+    /**
      * Delete current keys. 
      *
      * @since 1.1.0
      */
     public function remove_keys()
     {
+        if(!$this->isAdmin()) {
+            return new WP_Error('forbidden', 'Insufficient permissions to remove keys.');
+        }
         global $wpdb;
         try{
             $wpdb->DELETE(
@@ -171,10 +192,7 @@ class Doppler_For_WooCommerce_App_Connect
     private function generate_WC_Api_keys()
     {
         global $wpdb;
-        if(! function_exists('wp_current_user_can') ) {
-            include_once ABSPATH . 'wp-includes/pluggable.php';
-        }
-        if (! current_user_can('manage_woocommerce') ) {
+        if(!$this->isAdmin()) {
             return false;
         }
         $response = array();
@@ -247,5 +265,11 @@ class Doppler_For_WooCommerce_App_Connect
         return hash_hmac('sha256', $data, 'wc-api');
     }
 
-
+    private function isAdmin()
+    {
+        if ( ! function_exists('current_user_can') ) {
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+        }
+        return current_user_can('manage_woocommerce');
+    }
 }
