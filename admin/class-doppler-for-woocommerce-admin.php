@@ -320,7 +320,9 @@ class Doppler_For_Woocommerce_Admin
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
                 }
@@ -1153,7 +1155,15 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_verify_keys()
     {
-        if(!empty(get_option('dplrwoo_api_connected'))) {
+        if ( ! function_exists('current_user_can') ) {
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+        }
+        if ( ! current_user_can('manage_woocommerce') ) {
+            wp_send_json_error(array('message' => __('Forbidden', 'doppler-for-woocommerce')), 403);
+        }
+        
+        $status = get_option('dplrwoo_api_connected');
+        if(!empty($status) && isset($status['remote_status']) && $status['remote_status'] === 'connected') {
             wp_send_json_success();
         }else{
             $options = get_option('dplr_settings');
@@ -1167,14 +1177,20 @@ class Doppler_For_Woocommerce_Admin
                 );
 
                 $response = $app_connect->connect();
-                if($response['response']['code'] === 200) {
+                if(is_wp_error($response)) {
+                    wp_send_json_error(array('message' => $response->get_error_message()), 403);
+                }
+                $code = isset($response['response']['code']) ? intval($response['response']['code']) : 0;
+                if($code === 200) {
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
-                             wp_send_json_success();
+                    wp_send_json_success();
                 }
             }        
         }
@@ -1447,7 +1463,9 @@ class Doppler_For_Woocommerce_Admin
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
                 }
