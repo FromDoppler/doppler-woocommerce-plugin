@@ -90,7 +90,6 @@ class Doppler_For_Woocommerce
         $this->plugin_name = 'doppler-for-woocommerce';
 
         $this->load_dependencies();
-        $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
         $this->schedule_cron();
@@ -159,24 +158,6 @@ class Doppler_For_Woocommerce
         //require_once plugin_dir_path( dirname(__FILE__) ) . 'includes/class-doppler-for-woocommerce-rest-controller.php';
         
         $this->loader = new Doppler_For_Woocommerce_Loader();
-
-    }
-
-    /**
-     * Define the locale for this plugin for internationalization.
-     *
-     * Uses the Doppler_For_Woocommerce_i18n class in order to set the domain and to register the hook
-     * with WordPress.
-     *
-     * @since  1.0.0
-     * @access private
-     */
-    private function set_locale()
-    {
-
-        $plugin_i18n = new Doppler_For_Woocommerce_i18n();
-
-        $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 
     }
 

@@ -141,7 +141,7 @@ class Doppler_For_Woocommerce_Admin
 		<div id="displayErrorMessage" class="dp-wrap-message dp-wrap-cancel m-b-12">
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message">
-					<p><?php echo $this->get_error_message(); ?></p>
+					<p><?php echo esc_html($this->get_error_message()); ?></p>
 				</div>
 			</div>
 		<?php
@@ -154,7 +154,7 @@ class Doppler_For_Woocommerce_Admin
 		<div id="displaySuccessMessage" class="dp-wrap-message dp-wrap-success m-b-12">
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message">
-					<p><?php echo $this->get_success_message(); ?></p>
+					<p><?php echo esc_html($this->get_success_message()); ?></p>
 				</div>
 			</div>
 		<?php
@@ -372,7 +372,7 @@ class Doppler_For_Woocommerce_Admin
     public function dplrwoo_save_list()
     {
         if(!empty($_POST['listName']) && ( strlen($_POST['listName']) < 100) ) {
-            echo $this->create_list(sanitize_text_field($_POST['listName']));
+            echo esc_html($this->create_list(sanitize_text_field($_POST['listName'])));
         }
         wp_die();
     }
@@ -726,7 +726,7 @@ class Doppler_For_Woocommerce_Admin
     {
         if(empty($_POST['buyers_list']) || empty($_POST['contacts_list']) ) { return false;
         }
-        echo $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
+        $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
     }
 
     public function dplrwoo_synch( $buyers_list , $contacts_list)
@@ -994,8 +994,8 @@ class Doppler_For_Woocommerce_Admin
         }
         if(!empty($class) && !empty($text) ) {
             ?>
-                <div class="notice notice-<?php echo $class?> is-dismissible">
-                    <p><?php echo $text ?></p>
+                <div class="notice notice-<?php echo esc_attr($class)?> is-dismissible">
+                    <p><?php echo wp_kses_post($text); ?></p>
                 </div>
             <?php
         }
@@ -1497,9 +1497,13 @@ class Doppler_For_Woocommerce_Admin
     public function display_deactivation_confirm_html()
     {
         ?>
-        <div id="dplrwoo-dialog" title="<?php _e("Doppler for WooCommerce", "doppler-for-woocommerce")?>">
-            <p><span class="dashicons dashicons-warning" style="float:left; margin:12px 12px 20px 0;"></span>
-        <?php _e("By confirming this action some automations in your Doppler Woocommerce activation can be lost. <br> ¿Do yo wish to continue?", "doppler-for-woocommerce")?></p>
+        <div id="dplrwoo-dialog" title="<?php esc_html_e("Doppler for WooCommerce", "doppler-for-woocommerce")?>">
+            <p>
+                <span class="dashicons dashicons-warning" style="float:left; margin:12px 12px 20px 0;"></span>
+                <?php esc_html_e("By confirming this action some automations in your Doppler Woocommerce activation can be lost.", "doppler-for-woocommerce")?>
+                <br>
+                <?php esc_html_e("¿Do yo wish to continue?", "doppler-for-woocommerce")?>
+            </p>
         </div>
         <?php
     }
