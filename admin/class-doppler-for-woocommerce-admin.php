@@ -1182,6 +1182,102 @@ class Doppler_For_Woocommerce_Admin
     }
 
     /**
+     * Check real integration status against Doppler API.
+     *
+     * @since 1.1.x
+     */
+    public function dplrwoo_check_status()
+    {
+        if ( ! function_exists('current_user_can') ) {
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+        }
+        $is_ajax = (function_exists('wp_doing_ajax') && wp_doing_ajax())
+            || (defined('DOING_AJAX') && DOING_AJAX);
+
+        if ( ! current_user_can('manage_woocommerce') ) {
+            $payload = array(
+                'success' => false,
+                'message' => __('Forbidden', 'doppler-for-woocommerce'),
+                'code' => 403,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $options = get_option('dplr_settings');
+        $lists = get_option('dplr_subscribers_list');
+        $has_lists = is_array($lists) && ( !empty($lists['contacts']) || !empty($lists['buyers']) );
+
+        if(empty($options['dplr_option_useraccount']) || empty($options['dplr_option_apikey']) || !$has_lists) {
+            $payload = array(
+                'success' => false,
+                'message' => __('Missing required data to check status', 'doppler-for-woocommerce'),
+                'code' => 400,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $app_connect = new Doppler_For_WooCommerce_App_Connect(
+            $options['dplr_option_useraccount'],
+            $options['dplr_option_apikey'], 
+            DOPPLER_WOO_API_URL,
+            DOPPLER_FOR_WOOCOMMERCE_ORIGIN
+        );
+
+        $response = $app_connect->get_status();
+        if(is_wp_error($response)) {
+            $payload = array(
+                'success' => false,
+                'message' => $response->get_error_message(),
+                'code' => 403,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $decoded_body = json_decode($body);
+        $connected = (
+            $code >= 200
+            && $code < 300
+            && is_object($decoded_body)
+            && isset($decoded_body->message)
+            && $decoded_body->message === 'connected'
+        );
+
+        update_option(
+            'dplrwoo_api_connected', array(
+            'account' => $options['dplr_option_useraccount'],
+            'status' => 'on',
+            'remote_status' => $connected ? 'connected' : 'disconnected',
+            'checked_at' => time()
+            )
+        );
+
+        $payload = array(
+            'success' => true,
+            'connected' => $connected,
+            'status_code' => $code,
+            'body' => $body,
+            'checked_at' => time()
+        );
+
+        if ($is_ajax) {
+            wp_send_json_success($payload);
+        }
+
+        return $payload;
+    }
+
+    /**
      * Define custom API endpoint
      */
     public function dplrwoo_abandoned_endpoint( $controllers )
