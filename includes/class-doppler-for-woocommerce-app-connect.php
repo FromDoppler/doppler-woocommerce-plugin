@@ -96,14 +96,17 @@ class Doppler_For_WooCommerce_App_Connect
         }
         
         $url = $api_url . 'accounts/'. $account. '/integrations/' . self::INTEGRATION;
-        return wp_remote_request(
-            $url, array(
+        $args = array(
             'method' => $method,
             'headers'=> $this->set_request_header(),
             'timeout' => 12,
-            'body'=> json_encode($body)
-            )
-        );        
+        );
+
+        if (strtoupper($method) !== 'GET') {
+            $args['body'] = wp_json_encode($body);
+        }
+
+        return wp_remote_request($url, $args);        
     }
 
     /**
