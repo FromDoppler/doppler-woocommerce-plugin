@@ -45,11 +45,11 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
     <?php $this->display_error_message() ?>
 
-    <div id="showSuccessResponse" class="messages-container info d-none">
+    <?php $this->display_warning_message() ?>
+
+    <div id="dplr-settings-text" class="messages-container info d-none">
     </div>
 
-    <div id="showErrorResponse" class="messages-container blocker d-none">
-    </div>
     <div class="col-sm-12 col-md-12 col-lg-12 panel dp-box-shadow p-t-12 p-b-12">
         <form id="dplrwoo-form-list" action="" method="post">
             <?php 

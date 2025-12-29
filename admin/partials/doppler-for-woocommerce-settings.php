@@ -89,6 +89,16 @@ if(isset($_GET['tab']) ) {
                         
                 if($has_to_update) { update_option('dplr_subscribers_list', $subscribers_lists);
                 }
+
+                $connection_status = $this->dplrwoo_check_status();
+
+                if(is_array($connection_status) 
+                    && isset($connection_status['success'])
+                    && $connection_status['success'] === true
+                    && isset($connection_status['connected'])
+                    && $connection_status['connected'] === false) {
+                    $this->set_warning_message(__('WooCommerce integration could not be verified.', 'doppler-for-woocommerce'), 'dplrwoo-reconnect-btn', __("Reconnect integration","doppler-for-woocommerce"));
+                }
                     
                 include_once 'lists.php';
                 
