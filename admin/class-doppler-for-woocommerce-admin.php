@@ -72,6 +72,9 @@ class Doppler_For_Woocommerce_Admin
         $this->doppler_service = $doppler_service;
         $this->success_message = false;
         $this->error_message = false;
+        $this->warning_message = false;
+        $this->warning_button_id = false;
+        $this->warning_button_text = false;
         $this->required_doppler_version = '2.1.5';
         $this->origin = $this->set_origin();
         $this->set_credentials();
@@ -100,6 +103,13 @@ class Doppler_For_Woocommerce_Admin
         $this->success_message = $message;
     }
 
+    public function set_warning_message($message, $button_id, $button_text)
+    {
+        $this->warning_message = $message;
+        $this->warning_button_id = $button_id;
+        $this->warning_button_text = $button_text;
+    }
+
     public function get_error_message()
     {
         return $this->error_message;
@@ -108,6 +118,11 @@ class Doppler_For_Woocommerce_Admin
     public function get_success_message()
     {
         return $this->success_message;
+    }
+
+    public function get_warning_message()
+    {
+        return $this->warning_message;
     }
 
     public function get_required_doppler_version()
@@ -142,6 +157,25 @@ class Doppler_For_Woocommerce_Admin
 					<p><?php echo $this->get_success_message(); ?></p>
 				</div>
 			</div>
+		<?php
+		endif;
+	}
+
+    public function display_warning_message() {
+		if($this->get_warning_message()!=''):
+		?>
+		<div id="displayWarningMessage" class="dp-wrap-message dp-wrap-warning m-b-12">
+				<span class="dp-message-icon"></span>
+                <div class="dp-content-message dp-content-full">
+                    <p><?php echo esc_html($this->get_warning_message()); ?></p>
+                    <?php if($this->warning_button_id !='' && $this->warning_button_text !='') : ?>
+                        <button type="button" class="dp-button primary-green button-medium" id="<?php echo esc_attr($this->warning_button_id)?>">
+                            <?php echo esc_html($this->warning_button_text) ?>
+                        </button>
+                    <?php endif; ?>
+                    
+                </div>
+            </div>
 		<?php
 		endif;
 	}
