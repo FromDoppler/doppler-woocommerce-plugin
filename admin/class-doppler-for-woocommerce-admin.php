@@ -233,6 +233,7 @@ class Doppler_For_Woocommerce_Admin
             'Save'            => __('Save', 'doppler-for-woocommerce'),
             'Cancel'          => __('Cancel', 'doppler-for-woocommerce'),
             'listsSyncError'  => __('Ouch! The Lists couldn\'t be synchronized.', 'doppler-for-woocommerce'),
+            'reSyncError'  => __('Ouch! There was an error trying to reconnect.', 'doppler-for-woocommerce'),
             'listsSyncOk'      => __('Your Lists has been syncronized and saved succesfully.', 'doppler-for-woocommerce'),
             'Synchronizing'   => __('We\'re synchronizing your Customers with your Doppler List...', 'doppler-for-woocommerce'),
             'selectAList'        => __('Select the Doppler Lists where you want to import your Customers. When synchronized, those Customers already registered and future customers will be sent automatically.', 'doppler-for-woocommerce'),    

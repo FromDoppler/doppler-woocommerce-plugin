@@ -123,7 +123,7 @@
 				.fail(function () {
 					reconnectButton.removeAttr("disabled").removeClass("button--loading");
 					$("#dplr-settings-text")
-						.html(ObjWCStr.listsSyncError)
+						.html(ObjWCStr.reSyncError)
 						.removeClass("d-none");
 				});
 		});

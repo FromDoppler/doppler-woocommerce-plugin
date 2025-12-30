@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name "
 "<translations@example.com>\n"
-"POT-Creation-Date: 2025-12-30 12:39-0300\n"
+"POT-Creation-Date: 2025-12-30 13:02-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team "
@@ -82,18 +82,22 @@ msgid "Ouch! The Lists couldn't be synchronized."
 msgstr ""
 
 #: admin/class-doppler-for-woocommerce-admin.php:236
+msgid "Ouch! There was an error trying to reconnect."
+msgstr ""
+
+#: admin/class-doppler-for-woocommerce-admin.php:237
 msgid ""
 "Your Lists has been syncronized and saved "
 "succesfully."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:237
+#: admin/class-doppler-for-woocommerce-admin.php:238
 msgid ""
 "We're synchronizing your Customers with your "
 "Doppler List..."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:238
+#: admin/class-doppler-for-woocommerce-admin.php:239
 msgid ""
 "Select the Doppler Lists where you want to import "
 "your Customers. When synchronized, those Customers "
@@ -101,19 +105,19 @@ msgid ""
 "sent automatically."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:239
+#: admin/class-doppler-for-woocommerce-admin.php:240
 #: admin/partials/lists.php:18
 #: admin/partials/lists.php:73
 msgid "WooCommerce Buyers"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:240
+#: admin/class-doppler-for-woocommerce-admin.php:241
 #: admin/partials/lists.php:19
 #: admin/partials/lists.php:105
 msgid "WooCommerce Contacts"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:248
+#: admin/class-doppler-for-woocommerce-admin.php:249
 msgid ""
 "Ouch! <strong>Doppler for WooCommerce</strong> "
 "requires the <a href=\"https://wordpress.org/"
@@ -121,7 +125,7 @@ msgid ""
 "to be installed and active."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:252
+#: admin/class-doppler-for-woocommerce-admin.php:253
 #, php-format
 msgid ""
 "Ouch! <strong>Doppler for WooCommerce</strong> "
@@ -130,41 +134,41 @@ msgid ""
 "href=\"%2$splugins.php\">upgrade</a> Doppler Forms."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:342
 #: admin/class-doppler-for-woocommerce-admin.php:343
-#: admin/class-doppler-for-woocommerce-admin.php:1500
+#: admin/class-doppler-for-woocommerce-admin.php:344
+#: admin/class-doppler-for-woocommerce-admin.php:1501
 #: admin/partials/doppler-for-woocommerce-settings.php:40
 msgid "Doppler for WooCommerce"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:466
+#: admin/class-doppler-for-woocommerce-admin.php:467
 msgid "Products"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:472
+#: admin/class-doppler-for-woocommerce-admin.php:473
 msgid "Total amount"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:478
+#: admin/class-doppler-for-woocommerce-admin.php:479
 msgid "Date of purchase"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:1163
-#: admin/class-doppler-for-woocommerce-admin.php:1217
+#: admin/class-doppler-for-woocommerce-admin.php:1164
+#: admin/class-doppler-for-woocommerce-admin.php:1218
 msgid "Forbidden"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:1233
+#: admin/class-doppler-for-woocommerce-admin.php:1234
 msgid "Missing required data to check status"
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:1503
+#: admin/class-doppler-for-woocommerce-admin.php:1504
 msgid ""
 "By confirming this action some automations in your "
 "Doppler Woocommerce activation can be lost."
 msgstr ""
 
-#: admin/class-doppler-for-woocommerce-admin.php:1505
+#: admin/class-doppler-for-woocommerce-admin.php:1506
 msgid "¿Do yo wish to continue?"
 msgstr ""
 
