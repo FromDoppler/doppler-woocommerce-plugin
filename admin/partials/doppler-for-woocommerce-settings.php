@@ -35,9 +35,9 @@ if(isset($_GET['tab']) ) {
     <div class="dp-container" id="dplr_body_content" style="display: none;">
         <div class="dplr_settings">
 
-            <a href="<?php _e('https://www.fromdoppler.com/en/?utm_source=landing&utm_medium=integracion&utm_campaign=wordpress', 'doppler-form')?>" target="_blank" class="dplr-logo-header"><img src="<?php echo DOPPLER_FOR_WOOCOMMERCE_URL?>admin/img/logo-doppler.svg" alt="Doppler logo"/></a>
+            <a href="<?php esc_attr_e('https://www.fromdoppler.com/en/?utm_source=landing&utm_medium=integracion&utm_campaign=wordpress', 'doppler-for-woocommerce')?>" target="_blank" class="dplr-logo-header"><img src="<?php echo esc_url(DOPPLER_FOR_WOOCOMMERCE_URL)?>admin/img/logo-doppler.svg" alt="Doppler logo"/></a>
 
-            <h2 class="main-title"><?php _e('Doppler for WooCommerce', 'doppler-for-woocommerce')?> <?php echo $this->get_version()?></h2> 
+            <h2 class="main-title"><?php esc_html_e('Doppler for WooCommerce', 'doppler-for-woocommerce')?> <?php echo esc_html($this->get_version())?></h2> 
 
             <h1 class="screen-reader-text"></h1>
 
@@ -88,6 +88,16 @@ if(isset($_GET['tab']) ) {
                 }
                         
                 if($has_to_update) { update_option('dplr_subscribers_list', $subscribers_lists);
+                }
+
+                $connection_status = $this->dplrwoo_check_status();
+
+                if(is_array($connection_status) 
+                    && isset($connection_status['success'])
+                    && $connection_status['success'] === true
+                    && isset($connection_status['connected'])
+                    && $connection_status['connected'] === false) {
+                    $this->set_warning_message(__('WooCommerce integration could not be verified.', 'doppler-for-woocommerce'), 'dplrwoo-reconnect-btn', __("Reconnect integration","doppler-for-woocommerce"));
                 }
                     
                 include_once 'lists.php';

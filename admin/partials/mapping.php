@@ -81,11 +81,8 @@ if (! current_user_can('manage_options') ) {
                             <tr>
                                 <td>
                                     <?php 
-                                    if($fieldtype==='product') :
-                                        _e($fieldAtributes['label'], 'doppler-for-woocommerce');   
-                                    else:
-                                         echo $fieldAtributes['label'];
-                                    endif; ?>
+                                    echo esc_html($fieldAtributes['label']);
+                                    ?>
                                 </td>
                                 <td>
                                     <div class="awa-form">

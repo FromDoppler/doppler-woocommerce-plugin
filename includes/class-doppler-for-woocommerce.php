@@ -90,7 +90,6 @@ class Doppler_For_Woocommerce
         $this->plugin_name = 'doppler-for-woocommerce';
 
         $this->load_dependencies();
-        $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
         $this->schedule_cron();
@@ -163,24 +162,6 @@ class Doppler_For_Woocommerce
     }
 
     /**
-     * Define the locale for this plugin for internationalization.
-     *
-     * Uses the Doppler_For_Woocommerce_i18n class in order to set the domain and to register the hook
-     * with WordPress.
-     *
-     * @since  1.0.0
-     * @access private
-     */
-    private function set_locale()
-    {
-
-        $plugin_i18n = new Doppler_For_Woocommerce_i18n();
-
-        $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
-
-    }
-
-    /**
      * Register all of the hooks related to the admin area functionality
      * of the plugin.
      * 
@@ -206,6 +187,7 @@ class Doppler_For_Woocommerce
         $this->loader->add_action('wp_ajax_dplrwoo_ajax_create_lists', $plugin_admin, 'dplrwoo_create_default_lists');
         $this->loader->add_action('wp_ajax_dplrwoo_ajax_clear_lists', $plugin_admin, 'dplrwoo_clear_lists');
         $this->loader->add_action('wp_ajax_dplrwoo_ajax_verify_keys', $plugin_admin, 'dplrwoo_verify_keys');
+        $this->loader->add_action('wp_ajax_dplrwoo_ajax_check_status', $plugin_admin, 'dplrwoo_check_status');
         $this->loader->add_action('woocommerce_created_customer', $plugin_admin, 'dplrwoo_created_customer', 10, 3);
         $this->loader->add_action('woocommerce_thankyou', $plugin_admin, 'dplrwoo_customer_checkout_success');
         $this->loader->add_action('woocommerce_order_status_changed', $plugin_admin, 'dplrwoo_order_status_changed', 10, 4);

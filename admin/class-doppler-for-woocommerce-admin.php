@@ -72,6 +72,9 @@ class Doppler_For_Woocommerce_Admin
         $this->doppler_service = $doppler_service;
         $this->success_message = false;
         $this->error_message = false;
+        $this->warning_message = false;
+        $this->warning_button_id = false;
+        $this->warning_button_text = false;
         $this->required_doppler_version = '2.1.5';
         $this->origin = $this->set_origin();
         $this->set_credentials();
@@ -100,6 +103,13 @@ class Doppler_For_Woocommerce_Admin
         $this->success_message = $message;
     }
 
+    public function set_warning_message($message, $button_id, $button_text)
+    {
+        $this->warning_message = $message;
+        $this->warning_button_id = $button_id;
+        $this->warning_button_text = $button_text;
+    }
+
     public function get_error_message()
     {
         return $this->error_message;
@@ -108,6 +118,11 @@ class Doppler_For_Woocommerce_Admin
     public function get_success_message()
     {
         return $this->success_message;
+    }
+
+    public function get_warning_message()
+    {
+        return $this->warning_message;
     }
 
     public function get_required_doppler_version()
@@ -126,7 +141,7 @@ class Doppler_For_Woocommerce_Admin
 		<div id="displayErrorMessage" class="dp-wrap-message dp-wrap-cancel m-b-12">
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message">
-					<p><?php echo $this->get_error_message(); ?></p>
+					<p><?php echo esc_html($this->get_error_message()); ?></p>
 				</div>
 			</div>
 		<?php
@@ -139,9 +154,28 @@ class Doppler_For_Woocommerce_Admin
 		<div id="displaySuccessMessage" class="dp-wrap-message dp-wrap-success m-b-12">
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message">
-					<p><?php echo $this->get_success_message(); ?></p>
+					<p><?php echo esc_html($this->get_success_message()); ?></p>
 				</div>
 			</div>
+		<?php
+		endif;
+	}
+
+    public function display_warning_message() {
+		if($this->get_warning_message()!=''):
+		?>
+		<div id="displayWarningMessage" class="dp-wrap-message dp-wrap-warning m-b-12">
+				<span class="dp-message-icon"></span>
+                <div class="dp-content-message dp-content-full">
+                    <p><?php echo esc_html($this->get_warning_message()); ?></p>
+                    <?php if($this->warning_button_id !='' && $this->warning_button_text !='') : ?>
+                        <button type="button" class="dp-button primary-green button-medium" id="<?php echo esc_attr($this->warning_button_id)?>">
+                            <?php echo esc_html($this->warning_button_text) ?>
+                        </button>
+                    <?php endif; ?>
+                    
+                </div>
+            </div>
 		<?php
 		endif;
 	}
@@ -199,6 +233,7 @@ class Doppler_For_Woocommerce_Admin
             'Save'            => __('Save', 'doppler-for-woocommerce'),
             'Cancel'          => __('Cancel', 'doppler-for-woocommerce'),
             'listsSyncError'  => __('Ouch! The Lists couldn\'t be synchronized.', 'doppler-for-woocommerce'),
+            'reSyncError'  => __('Ouch! There was an error trying to reconnect.', 'doppler-for-woocommerce'),
             'listsSyncOk'      => __('Your Lists has been syncronized and saved succesfully.', 'doppler-for-woocommerce'),
             'Synchronizing'   => __('We\'re synchronizing your Customers with your Doppler List...', 'doppler-for-woocommerce'),
             'selectAList'        => __('Select the Doppler Lists where you want to import your Customers. When synchronized, those Customers already registered and future customers will be sent automatically.', 'doppler-for-woocommerce'),    
@@ -214,7 +249,8 @@ class Doppler_For_Woocommerce_Admin
             $this->admin_notice = array( 'error', __('Ouch! <strong>Doppler for WooCommerce</strong> requires the <a href="https://wordpress.org/plugins/doppler-form/">Doppler Forms</a> plugin to be installed and active.', 'doppler-for-woocommerce') );
             $this->deactivate();
         }else if(version_compare(get_option('dplr_version'), $this->get_required_doppler_version(), '<') ) {
-            $this->admin_notice = array( 'error', sprintf(__('Ouch! <strong>Doppler for WooCommerce</strong> requires at least <strong>Doppler Forms v%s</strong> to be active. Please <a href="%splugins.php">upgrade</a> Doppler Forms.', 'doppler-for-woocommerce'), $this->get_required_doppler_version(), admin_url()));
+            /* translators: 2: Doppler Forms version, 2: Wordpress Admin url. */
+            $this->admin_notice = array( 'error', sprintf(__('Ouch! <strong>Doppler for WooCommerce</strong> requires at least <strong>Doppler Forms %1$s</strong> to be active. Please <a href="%2$splugins.php">upgrade</a> Doppler Forms.', 'doppler-for-woocommerce'), $this->get_required_doppler_version(), admin_url()));
             $this->deactivate();
         }
     }
@@ -286,7 +322,9 @@ class Doppler_For_Woocommerce_Admin
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
                 }
@@ -335,7 +373,7 @@ class Doppler_For_Woocommerce_Admin
     public function dplrwoo_save_list()
     {
         if(!empty($_POST['listName']) && ( strlen($_POST['listName']) < 100) ) {
-            echo $this->create_list(sanitize_text_field($_POST['listName']));
+            echo esc_html($this->create_list(sanitize_text_field($_POST['listName'])));
         }
         wp_die();
     }
@@ -426,19 +464,19 @@ class Doppler_For_Woocommerce_Admin
         //checkout from woocommerce
         $fields = WC()->checkout->checkout_fields;
 
-        $last_product = array( "product_names" => array("label" => "Products",
+        $last_product = array( "product_names" => array("label" => __("Products", "doppler-for-woocommerce"),
                                                         "required" => true,
                                                         "class" => array("form-row-first"),
                                                         "autocomplete" => "products_names",
                                                         "type" => "string",
                                                         "priority"=>10),
-                                "product_total" => array("label" => "Total amount",
+                                "product_total" => array("label" => __("Total amount", "doppler-for-woocommerce"),
                                                         "required" => true,
                                                         "class" => array("form-row-first"),
                                                         "autocomplete" => "total_ammount",
                                                         "type" => "number",
                                                         "priority"=>20),
-                                "product_date" => array("label" => "Date of purchase",
+                                "product_date" => array("label" => __("Date of purchase", "doppler-for-woocommerce"),
                                                         "required" => true,
                                                         "class" => array("form-row-first"),
                                                         "autocomplete" => "date_of_purchase",
@@ -689,7 +727,7 @@ class Doppler_For_Woocommerce_Admin
     {
         if(empty($_POST['buyers_list']) || empty($_POST['contacts_list']) ) { return false;
         }
-        echo $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
+        $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
     }
 
     public function dplrwoo_synch( $buyers_list , $contacts_list)
@@ -957,8 +995,8 @@ class Doppler_For_Woocommerce_Admin
         }
         if(!empty($class) && !empty($text) ) {
             ?>
-                <div class="notice notice-<?php echo $class?> is-dismissible">
-                    <p><?php echo $text ?></p>
+                <div class="notice notice-<?php echo esc_attr($class)?> is-dismissible">
+                    <p><?php echo wp_kses_post($text); ?></p>
                 </div>
             <?php
         }
@@ -1119,7 +1157,15 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_verify_keys()
     {
-        if(!empty(get_option('dplrwoo_api_connected'))) {
+        if ( ! function_exists('current_user_can') ) {
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+        }
+        if ( ! current_user_can('manage_woocommerce') ) {
+            wp_send_json_error(array('message' => __('Forbidden', 'doppler-for-woocommerce')), 403);
+        }
+        
+        $status = get_option('dplrwoo_api_connected');
+        if(!empty($status) && isset($status['remote_status']) && $status['remote_status'] === 'connected') {
             wp_send_json_success();
         }else{
             $options = get_option('dplr_settings');
@@ -1133,18 +1179,120 @@ class Doppler_For_Woocommerce_Admin
                 );
 
                 $response = $app_connect->connect();
-                if($response['response']['code'] === 200) {
+                if(is_wp_error($response)) {
+                    wp_send_json_error(array('message' => $response->get_error_message()), 403);
+                }
+                $code = isset($response['response']['code']) ? intval($response['response']['code']) : 0;
+                if($code === 200) {
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
-                             wp_send_json_success();
+                    wp_send_json_success();
                 }
             }        
         }
         wp_send_json_error();
+    }
+
+    /**
+     * Check real integration status against Doppler API.
+     *
+     * @since 1.1.x
+     */
+    public function dplrwoo_check_status()
+    {
+        if ( ! function_exists('current_user_can') ) {
+            include_once ABSPATH . 'wp-includes/pluggable.php';
+        }
+        $is_ajax = (function_exists('wp_doing_ajax') && wp_doing_ajax())
+            || (defined('DOING_AJAX') && DOING_AJAX);
+
+        if ( ! current_user_can('manage_woocommerce') ) {
+            $payload = array(
+                'success' => false,
+                'message' => __('Forbidden', 'doppler-for-woocommerce'),
+                'code' => 403,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $options = get_option('dplr_settings');
+        $lists = get_option('dplr_subscribers_list');
+        $has_lists = is_array($lists) && ( !empty($lists['contacts']) || !empty($lists['buyers']) );
+
+        if(empty($options['dplr_option_useraccount']) || empty($options['dplr_option_apikey']) || !$has_lists) {
+            $payload = array(
+                'success' => false,
+                'message' => __('Missing required data to check status', 'doppler-for-woocommerce'),
+                'code' => 400,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $app_connect = new Doppler_For_WooCommerce_App_Connect(
+            $options['dplr_option_useraccount'],
+            $options['dplr_option_apikey'], 
+            DOPPLER_WOO_API_URL,
+            DOPPLER_FOR_WOOCOMMERCE_ORIGIN
+        );
+
+        $response = $app_connect->get_status();
+        if(is_wp_error($response)) {
+            $payload = array(
+                'success' => false,
+                'message' => $response->get_error_message(),
+                'code' => 403,
+            );
+            if ($is_ajax) {
+                wp_send_json_error(array('message' => $payload['message']), $payload['code']);
+            }
+            return $payload;
+        }
+
+        $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $decoded_body = json_decode($body);
+        $connected = (
+            $code >= 200
+            && $code < 300
+            && is_object($decoded_body)
+            && isset($decoded_body->message)
+            && $decoded_body->message === 'connected'
+        );
+
+        update_option(
+            'dplrwoo_api_connected', array(
+            'account' => $options['dplr_option_useraccount'],
+            'status' => 'on',
+            'remote_status' => $connected ? 'connected' : 'disconnected',
+            'checked_at' => time()
+            )
+        );
+
+        $payload = array(
+            'success' => true,
+            'connected' => $connected,
+            'status_code' => $code,
+            'body' => $body,
+            'checked_at' => time()
+        );
+
+        if ($is_ajax) {
+            wp_send_json_success($payload);
+        }
+
+        return $payload;
     }
 
     /**
@@ -1317,7 +1465,9 @@ class Doppler_For_Woocommerce_Admin
                     update_option(
                         'dplrwoo_api_connected', array(
                         'account' => $options['dplr_option_useraccount'],
-                        'status' => 'on'
+                        'status' => 'on',
+                        'remote_status' => 'connected',
+                        'checked_at' => time()
                         )
                     );
                 }
@@ -1348,9 +1498,13 @@ class Doppler_For_Woocommerce_Admin
     public function display_deactivation_confirm_html()
     {
         ?>
-        <div id="dplrwoo-dialog" title="<?php _e("Doppler for WooCommerce", "doppler-for-woocommerce")?>">
-            <p><span class="dashicons dashicons-warning" style="float:left; margin:12px 12px 20px 0;"></span>
-        <?php _e("By confirming this action some automations in your Doppler Woocommerce activation can be lost. <br> ¿Do yo wish to continue?", "doppler-for-woocommerce")?></p>
+        <div id="dplrwoo-dialog" title="<?php esc_html_e("Doppler for WooCommerce", "doppler-for-woocommerce")?>">
+            <p>
+                <span class="dashicons dashicons-warning" style="float:left; margin:12px 12px 20px 0;"></span>
+                <?php esc_html_e("By confirming this action some automations in your Doppler Woocommerce activation can be lost.", "doppler-for-woocommerce")?>
+                <br>
+                <?php esc_html_e("¿Do yo wish to continue?", "doppler-for-woocommerce")?>
+            </p>
         </div>
         <?php
     }
