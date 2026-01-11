@@ -73,8 +73,6 @@ class Doppler_For_Woocommerce_Admin
         $this->success_message = false;
         $this->error_message = false;
         $this->warning_message = false;
-        $this->warning_button_id = false;
-        $this->warning_button_text = false;
         $this->required_doppler_version = '2.1.5';
         $this->origin = $this->set_origin();
         $this->set_credentials();
@@ -103,11 +101,9 @@ class Doppler_For_Woocommerce_Admin
         $this->success_message = $message;
     }
 
-    public function set_warning_message($message, $button_id, $button_text)
+    public function set_warning_message($message)
     {
         $this->warning_message = $message;
-        $this->warning_button_id = $button_id;
-        $this->warning_button_text = $button_text;
     }
 
     public function get_error_message()
@@ -140,8 +136,9 @@ class Doppler_For_Woocommerce_Admin
 		?>
 		<div id="displayErrorMessage" class="dp-wrap-message dp-wrap-cancel m-b-12">
 				<span class="dp-message-icon"></span>
-				<div class="dp-content-message">
+				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_error_message()); ?></p>
+                    <a href="#" id="ErrorMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
 				</div>
 			</div>
 		<?php
@@ -153,8 +150,9 @@ class Doppler_For_Woocommerce_Admin
 		?>
 		<div id="displaySuccessMessage" class="dp-wrap-message dp-wrap-success m-b-12">
 				<span class="dp-message-icon"></span>
-				<div class="dp-content-message">
+				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_success_message()); ?></p>
+                    <a href="#" id="SuccessMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
 				</div>
 			</div>
 		<?php
@@ -168,12 +166,7 @@ class Doppler_For_Woocommerce_Admin
 				<span class="dp-message-icon"></span>
                 <div class="dp-content-message dp-content-full">
                     <p><?php echo esc_html($this->get_warning_message()); ?></p>
-                    <?php if($this->warning_button_id !='' && $this->warning_button_text !='') : ?>
-                        <button type="button" class="dp-button primary-green button-medium" id="<?php echo esc_attr($this->warning_button_id)?>">
-                            <?php echo esc_html($this->warning_button_text) ?>
-                        </button>
-                    <?php endif; ?>
-                    
+                    <a href="#" id="WarningMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
                 </div>
             </div>
 		<?php
@@ -233,7 +226,6 @@ class Doppler_For_Woocommerce_Admin
             'Save'            => __('Save', 'doppler-for-woocommerce'),
             'Cancel'          => __('Cancel', 'doppler-for-woocommerce'),
             'listsSyncError'  => __('Ouch! The Lists couldn\'t be synchronized.', 'doppler-for-woocommerce'),
-            'reSyncError'  => __('Ouch! There was an error trying to reconnect.', 'doppler-for-woocommerce'),
             'listsSyncOk'      => __('Your Lists has been syncronized and saved succesfully.', 'doppler-for-woocommerce'),
             'Synchronizing'   => __('We\'re synchronizing your Customers with your Doppler List...', 'doppler-for-woocommerce'),
             'selectAList'        => __('Select the Doppler Lists where you want to import your Customers. When synchronized, those Customers already registered and future customers will be sent automatically.', 'doppler-for-woocommerce'),    
