@@ -202,6 +202,19 @@
 				});
 			}
 		});
+
+		var bindDismissMessage = function (linkId) {
+			var link = $("#" + linkId);
+			if (!link.length) return;
+			link.on("click", function (e) {
+				e.preventDefault();
+				$(this).closest(".dp-wrap-message").remove();
+			});
+		};
+
+		bindDismissMessage("ErrorMessageDismiss");
+		bindDismissMessage("SuccessMessageDismiss");
+		bindDismissMessage("WarningMessageDismiss");
 	});
 
 	function checkFieldType(dplrType, wcType) {

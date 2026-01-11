@@ -136,8 +136,9 @@ class Doppler_For_Woocommerce_Admin
 		?>
 		<div id="displayErrorMessage" class="dp-wrap-message dp-wrap-cancel m-b-12">
 				<span class="dp-message-icon"></span>
-				<div class="dp-content-message">
+				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_error_message()); ?></p>
+                    <a href="#" id="ErrorMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
 				</div>
 			</div>
 		<?php
@@ -149,8 +150,9 @@ class Doppler_For_Woocommerce_Admin
 		?>
 		<div id="displaySuccessMessage" class="dp-wrap-message dp-wrap-success m-b-12">
 				<span class="dp-message-icon"></span>
-				<div class="dp-content-message">
+				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_success_message()); ?></p>
+                    <a href="#" id="SuccessMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
 				</div>
 			</div>
 		<?php
@@ -164,6 +166,7 @@ class Doppler_For_Woocommerce_Admin
 				<span class="dp-message-icon"></span>
                 <div class="dp-content-message dp-content-full">
                     <p><?php echo esc_html($this->get_warning_message()); ?></p>
+                    <a href="#" id="WarningMessageDismiss" class="dp-message-link"><?php echo strtoupper(esc_html_e('Dismiss', 'doppler-for-woocommerce')); ?></a>
                 </div>
             </div>
 		<?php
