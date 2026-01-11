@@ -97,7 +97,14 @@ if(isset($_GET['tab']) ) {
                     && $connection_status['success'] === true
                     && isset($connection_status['connected'])
                     && $connection_status['connected'] === false) {
-                    $this->set_warning_message(__('WooCommerce integration could not be verified.', 'doppler-for-woocommerce'), 'dplrwoo-reconnect-btn', __("Reconnect integration","doppler-for-woocommerce"));
+                    $this->set_warning_message(__('WooCommerce integration could not be verified.', 'doppler-for-woocommerce'));
+                }
+                else if(is_array($connection_status)
+                    && isset($connection_status['success'])
+                    && $connection_status['success'] === false
+                    && isset($connection_status['code'])
+                    && $connection_status['code'] === 400) {
+                    $this->set_warning_message(__('Select the lists you want to synchronize and then press the connection button.', 'doppler-for-woocommerce'));
                 }
                     
                 include_once 'lists.php';

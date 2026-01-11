@@ -89,11 +89,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         </select>
                     </div>
                 </label>
-                <p>
-                    <?php if(empty($subscribers_lists['buyers'])): ?>
-                        <span class="dplrwoo-warning"><?php esc_html_e('Currently there is no Buyers list selected. Press synchronize to create and syncrhonize default Buyers List.',  'doppler-for-woocommerce') ?></span>
-                    <?php endif; ?>
-                </p>
             </div>
 
             <div class="awa-form m-t-12">
@@ -121,21 +116,15 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         </select>
                     </div>
                 </label>
-                <p>
-                    <?php if(empty($subscribers_lists['buyers'])): ?>
-                        <span class="dplrwoo-warning"><?php esc_html_e('Currently there is no Contacts list selected. Press synchronize to create and syncrhonize default Contacts List.',  'doppler-for-woocommerce') ?></span>
-                    <?php endif; ?>
-                </p>
             </div>
             
             <p class="d-flex justify-end">
-
                 <?php
                 $btn_disable = !$suggest_default_lists && ( empty($subscribers_lists['buyers']) && empty($subscribers_lists['contacts']) ) ? 'disabled' : '';
                 ?>
             
                 <button id="dplrwoo-lists-btn" class="dp-button button-medium primary-green m-t-12" <?php echo esc_attr($btn_disable)?>>
-                    <?php esc_html_e('Synchronize', 'doppler-for-woocommerce') ?>
+                    <?php esc_html_e('Connect and synchronize', 'doppler-for-woocommerce') ?>
                 </button>
 
             </p>
