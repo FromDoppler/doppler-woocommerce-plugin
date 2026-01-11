@@ -44,7 +44,7 @@ class DPLRWOO_Dependecy_Checker
                 foreach($this->inactive_plugins as $key=>$plugin){
                     array_push($missing_plugins, sprintf(' <a href="%s" target="_blank">%s</a>', $plugin['repository'], $plugin['name']));
                 }
-                printf('<div class="%s"><p>%s %s</p></div>', esc_attr($class), esc_html($message), implode(', ', $missing_plugins)); 
+                printf('<div class="%s"><p>%s %s</p></div>', esc_attr($class), esc_html($message), implode(', ', esc_html($missing_plugins))); 
             }
         );
     }

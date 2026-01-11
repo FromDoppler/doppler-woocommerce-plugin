@@ -191,8 +191,9 @@ class Doppler_For_Woocommerce_Abandoned_Cart
         if($dplr_cart_session_id === null ) {
             $abandoned_cart = $wpdb->get_row(
                 $wpdb->prepare(
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                     "SELECT session_id FROM ". $table_name ."
-                WHERE session_id = %d", get_current_user_id()
+                    WHERE session_id = %d", get_current_user_id()
                 )
             );
             if(!empty($abandoned_cart->session_id)) { $dplr_cart_session_id = $abandoned_cart->session_id;
@@ -217,21 +218,18 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             
             //Updating row where user's Session id = same as prevously saved in Session
             //Updating only Cart related data since the user can change his data only in the Checkout form
-            $wpdb->prepare(
-                '%s',
-                $wpdb->update(
-                    $table_name,
-                    array(
-                        'cart_contents'    =>    serialize($product_array),
-                        'cart_total'    =>    sanitize_text_field($cart_total),
-                        'currency'        =>    sanitize_text_field($cart_currency),
-                    'time'            =>    sanitize_text_field($current_time),
-                    'cart_url'        =>  $cart_url,
-                    ),
-                    array('session_id' => $session_id),
-                    array('%s', '%0.2f', '%s', '%s', '%s'),
-                    array('%s')
-                )
+            $wpdb->update(
+                $table_name,
+                array(
+                    'cart_contents' => serialize($product_array),
+                    'cart_total' => (float) $cart_total,
+                    'currency' => sanitize_text_field($cart_currency),
+                    'time' => sanitize_text_field($current_time),
+                    'cart_url' => $cart_url,
+                ),
+                array('session_id' => $session_id),
+                array('%s', '%f', '%s', '%s', '%s'),
+                array('%s')
             );
             
         }else{
@@ -262,9 +260,10 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             //Inserting row into Database
             $wpdb->query(
                 $wpdb->prepare(
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                     "INSERT INTO ". $table_name ."
                     ( name, lastname, email, phone, location, cart_contents, cart_total, currency, time, session_id, cart_url, token )
-                    VALUES ( %s, %s, %s, %s, %s, %s, %0.2f, %s, %s, %s, %s, %s)",
+                    VALUES ( %s, %s, %s, %s, %s, %s, %f, %s, %s, %s, %s, %s)",
                     array(
                     sanitize_text_field($name),
                     sanitize_text_field($surname),
@@ -272,7 +271,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                     filter_var($phone, FILTER_SANITIZE_NUMBER_INT),
                     sanitize_text_field($location),
                     serialize($product_array),
-                    sanitize_text_field($cart_total),
+                    (float) $cart_total,
                     sanitize_text_field($cart_currency),
                     sanitize_text_field($current_time),
                     sanitize_text_field($session_id),
@@ -297,7 +296,10 @@ class Doppler_For_Woocommerce_Abandoned_Cart
      */
     function save_frontend_user_data()
     {
-    
+        if ( ! check_ajax_referer('dplrwoo_save_data', 'dplrwoo_nonce', false) ) {
+            wp_send_json_error(array('message' => __('Invalid request.', 'doppler-for-woocommerce')), 403);
+        }
+
         if (isset($_POST["dplrwoo_email"]) ) {
             global $wpdb;
             $table_name = $this->get_cart_session_table();
@@ -395,6 +397,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 
                 $wpdb->query(
                     $wpdb->prepare(
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                         "INSERT INTO ". $table_name ."
 						( name, lastname, email, phone, location, cart_contents, cart_total, currency, time, session_id, other_fields, cart_url, token )
 						VALUES ( %s, %s, %s, %s, %s, %s, %0.2f, %s, %s, %s, %s, %s, %s)",
@@ -526,6 +529,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 //$wpdb->show_errors();
                 $resp = $wpdb->query(
                     $wpdb->prepare(
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                         "DELETE FROM ". $table_name ."
 						 WHERE session_id = %s",
                         sanitize_key($dplr_cart_session_id)
@@ -555,9 +559,9 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             //Check if abandoned cart already exists in database
             return $wpdb->get_var(
                 $wpdb->prepare(
-                    "SELECT session_id
-				FROM ". $main_table ."
-				WHERE session_id = %s",
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                    "SELECT session_id FROM " . $main_table .
+				    " WHERE session_id = %s",
                     $dplr_cart_session_id
                 )
             );

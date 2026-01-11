@@ -21,7 +21,11 @@ class Doppler_For_WooCommerce_Admin_Notice
         $noticeLevel = !empty($option['notice_class']) ? $option['notice_class'] : 'notice-error';
     
         if ($message) {
-            echo "<div class='notice {$noticeLevel} is-dismissible'><p>{$message}</p></div>";
+            printf(
+                '<div class="notice %1$s is-dismissible"><p>%2$s</p></div>',
+                esc_attr($noticeLevel),
+                wp_kses_post($message)
+            );
             delete_option(self::NOTICE_FIELD);
         }
     }

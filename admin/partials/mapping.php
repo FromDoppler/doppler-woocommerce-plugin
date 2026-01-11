@@ -9,12 +9,12 @@ if (! current_user_can('manage_options') ) {
         <div class="dp-container">
             <div class="dp-rowflex">
                 <div class="col-sm-12 col-md-12 col-lg-12">
-                    <h2><?php _e('Fields Mapping', 'doppler-for-woocommerce')?></h2>
+                    <h2><?php esc_html_e('Fields Mapping', 'doppler-for-woocommerce')?></h2>
                 </div>
                 <div class="col-sm-7">
                     <p>
-                        <?php _e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
-                        <a href="<?php _e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php _e('Learn how', 'doppler-for-woocommerce')?></a>.
+                        <?php esc_html_e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
+                        <a href="<?php esc_attr_e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php esc_html_e('Learn how', 'doppler-for-woocommerce')?></a>.
                     </p>
                 </div>
             </div>
@@ -47,16 +47,16 @@ if (! current_user_can('manage_options') ) {
                                 <?php
                                 switch($fieldtype){
                                 case 'billing':
-                                    _e('Billing fields', 'doppler-for-woocommerce');
+                                    esc_html_e('Billing fields', 'doppler-for-woocommerce');
                                     break;
                                 case 'shipping':
-                                    _e('Shipping fields', 'doppler-for-woocommerce');
+                                    esc_html_e('Shipping fields', 'doppler-for-woocommerce');
                                     break;
                                 case 'account':
-                                    _e('Account fields', 'doppler-for-woocommerce');
+                                    esc_html_e('Account fields', 'doppler-for-woocommerce');
                                     break;
                                 case 'product':
-                                    _e('Last purchase fields', 'doppler-for-woocommerce');
+                                    esc_html_e('Last purchase fields', 'doppler-for-woocommerce');
                                     break;
                                 default:
                                     echo esc_html($fieldtype);
@@ -66,8 +66,8 @@ if (! current_user_can('manage_options') ) {
                             </th>
                         </tr>
                         <tr>
-                                <th class="mapping-th-left text-left pt-1 pb-1"><?php _e('WooCommerce Fields', 'doppler-for-woocommerce') ?></th>
-                                <th class="text-left pt-1 pb-1"><?php _e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
+                                <th class="mapping-th-left text-left pt-1 pb-1"><?php esc_html_e('WooCommerce Fields', 'doppler-for-woocommerce') ?></th>
+                                <th class="text-left pt-1 pb-1"><?php esc_html_e('Doppler Fields', 'doppler-for-woocommerce') ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,9 +89,9 @@ if (! current_user_can('manage_options') ) {
                                         <div class="dp-select">
                                             <span class="dropdown-arrow"></span>
                                             <select class="dplrwoo-mapping-fields"
-                                                name="dplrwoo_mapping[<?php echo $fieldname?>]"
+                                                name="dplrwoo_mapping[<?php echo esc_attr($fieldname)?>]"
                                                 data-type="<?php if (isset($fieldAtributes['type']))
-                                                { echo $fieldAtributes['type']; } ?>">
+                                                { echo esc_attr($fieldAtributes['type']); } ?>">
                                                 <option></option>
                                                 <?php 
                                                 foreach ($dplr_fields as $field){
@@ -135,12 +135,12 @@ if (! current_user_can('manage_options') ) {
     <div class="dp-group-buttons">
         <a href="?page=doppler_woocommerce_menu&tab=lists">
         <button type="button" class="dp-button button-medium secondary-grey">
-            <?php _e('Back', 'doppler-for-woocommerce') ?>
+            <?php esc_html_e('Back', 'doppler-for-woocommerce') ?>
         </button>
         </a>
 
         <button id="dplrwoo-mapping-btn" class="dp-button button-medium primary-green">
-            <?php _e('Save and Synchronize', 'doppler-for-woocommerce') ?>
+            <?php esc_html_e('Save and Synchronize', 'doppler-for-woocommerce') ?>
         </button>
     </div>
     </form>

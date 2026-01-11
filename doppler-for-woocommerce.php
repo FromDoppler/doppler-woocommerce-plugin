@@ -80,9 +80,22 @@ function activate_doppler_for_woocommerce()
     if (current_user_can('activate_plugins') && ! class_exists('WooCommerce') ) {
         // Deactivate the plugin.
         deactivate_plugins(plugin_basename(__FILE__));
+
         // Throw an error in the WordPress admin console.
-        $error_message = '<p style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif;font-size: 13px;line-height: 1.5;color:#444;">' . esc_html__('This plugin requires', 'doppler-for-woocommerce') . ' <a href="' . esc_url('https://wordpress.org/plugins/woocommerce/') . '" target="_blank">WooCommerce</a> ' . esc_html__('plugin to be active.', 'doppler-for-woocommerce') . '</p>';
-        die($error_message); // WPCS: XSS ok.
+        $error_message = sprintf(
+        '<p style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif;font-size:13px;line-height:1.5;color:#444;">%s <a href="%s" target="_blank" rel="noopener">%s</a> %s</p>',
+        esc_html__('This plugin requires', 'doppler-for-woocommerce'),
+        esc_url('https://wordpress.org/plugins/woocommerce/'),
+        esc_html__('WooCommerce', 'doppler-for-woocommerce'),
+        esc_html__('plugin to be active.', 'doppler-for-woocommerce')
+        );
+
+        $allowed = array(
+        'p' => array('style' => true),
+        'a' => array('href' => true, 'target' => true, 'rel' => true),
+        );
+
+        wp_die( wp_kses( $error_message, $allowed ) );
     }else{
         include_once plugin_dir_path(__FILE__) . 'includes/class-doppler-for-woocommerce-activator.php';
         Doppler_For_Woocommerce_Activator::activate();

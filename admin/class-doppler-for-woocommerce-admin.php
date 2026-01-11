@@ -248,7 +248,8 @@ class Doppler_For_Woocommerce_Admin
             'Synchronizing'   => __('We\'re synchronizing your Customers with your Doppler List...', 'doppler-for-woocommerce'),
             'selectAList'        => __('Select the Doppler Lists where you want to import your Customers. When synchronized, those Customers already registered and future customers will be sent automatically.', 'doppler-for-woocommerce'),    
             'default_buyers_list' => __('WooCommerce Buyers', 'doppler-for-woocommerce'),
-            'default_contacts_list' => __('WooCommerce Contacts', 'doppler-for-woocommerce') 
+            'default_contacts_list' => __('WooCommerce Contacts', 'doppler-for-woocommerce'),
+            'nonce' => wp_create_nonce('admin_ajax_nonce')
             )
         );
     }
@@ -268,6 +269,7 @@ class Doppler_For_Woocommerce_Admin
     private function deactivate()
     {
         deactivate_plugins(DOPPLER_FOR_WOOCOMMERCE_PLUGIN); 
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Core handles nonce on activation; this clears the flag.
         if (isset($_GET['activate']) ) {
             unset($_GET['activate']);
         }
@@ -382,8 +384,12 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_save_list()
     {
-        if(!empty($_POST['listName']) && ( strlen($_POST['listName']) < 100) ) {
-            echo esc_html($this->create_list(sanitize_text_field($_POST['listName'])));
+        if ( ! check_ajax_referer('admin_ajax_nonce', 'dplrwoo_save_list_nonce', false) ) {
+            wp_send_json_error(array('message' => __('Invalid request.', 'doppler-for-woocommerce')), 403);
+        }
+
+        if(!empty($_POST['listName']) && ( strlen(sanitize_text_field(wp_unslash($_POST['listName']))) < 100) ) {
+            echo esc_html($this->create_list(sanitize_text_field(wp_unslash($_POST['listName']))));
         }
         wp_die();
     }
@@ -609,15 +615,20 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_created_customer( $customer_id, $customer_data, $customer_password )
     {
-        if(wp_verify_nonce($_POST['woocommerce-register-nonce'], 'woocommerce-register') ) {
+        if(isset($_POST['woocommerce-register-nonce']) &&
+            wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['woocommerce-register-nonce'])), 'woocommerce-register') ) 
+        {
             $fields_map = get_option('dplrwoo_mapping');
             $list_id = get_option('dplr_subscribers_list')['contacts'];
             if(!empty($list_id) ) {
                 $fields = array();
                 if(!empty($fields_map)) {
                     foreach($fields_map as $k=>$v){
-                        if($v!='') {
-                            $fields[] = array('name'=>$v, 'value'=>sanitize_text_field($_POST[$k]) );
+                        if($v !== '' && isset($_POST[$k])) {
+                            $fields[] = array(
+                                'name' => $v,
+                                'value' => sanitize_text_field(wp_unslash($_POST[$k]))
+                            );
                         }
                     }
                 }
@@ -735,9 +746,13 @@ class Doppler_For_Woocommerce_Admin
      */
     public function dplrwoo_ajax_synch()
     {
+        if ( ! check_ajax_referer('admin_ajax_nonce', 'dplrwoo_synch_nonce', false) ) {
+            wp_send_json_error(array('message' => __('Invalid request.', 'doppler-for-woocommerce')), 403);
+        }
+
         if(empty($_POST['buyers_list']) || empty($_POST['contacts_list']) ) { return false;
         }
-        $this->dplrwoo_synch($_POST['buyers_list'], $_POST['contacts_list']);
+        $this->dplrwoo_synch(absint(wp_unslash($_POST['buyers_list'])), absint(wp_unslash($_POST['contacts_list'])));
     }
 
     public function dplrwoo_synch( $buyers_list , $contacts_list)
@@ -774,7 +789,7 @@ class Doppler_For_Woocommerce_Admin
         }
 
         $last_id = 0;
-        $condition = '';
+        $condition_id = 0;
         
         $fields_map = get_option('dplrwoo_mapping');
         
@@ -784,19 +799,26 @@ class Doppler_For_Woocommerce_Admin
         //Synch!
         if(!empty($last_synch) && isset($last_synch['buyers'][$list_id])) {
             //synch orders from the beginning
-            $condition.=" AND id > ".$last_synch['buyers'][$list_id]." ";
+            $condition_id = absint($last_synch['buyers'][$list_id]);
         }
 
         //get registered users
         $registered_users = $this->get_registered_users();
         
         //get completed orders
-        $query = "SELECT p.ID, pm.meta_value as email FROM ".$wpdb->prefix."posts p ";
-        $query.= "JOIN ".$wpdb->prefix."postmeta pm ON p.ID = pm.post_id ";
-        $query.= "WHERE post_type = 'shop_order' AND p.post_status='wc-completed' AND pm.meta_key = '_billing_email' AND pm.meta_value != '' ";
-        $query.= $condition;
-        $query.= "ORDER BY p.ID ASC LIMIT 200";
-        $response = $wpdb->get_results($query);
+        $response = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT p.ID, pm.meta_value as email FROM {$wpdb->posts} p " .
+                "JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id " .
+                "WHERE p.post_type = %s AND p.post_status = %s AND pm.meta_key = %s AND pm.meta_value != '' " .
+                "AND p.ID > %d ORDER BY p.ID ASC LIMIT %d",
+                'shop_order',
+                'wc-completed',
+                '_billing_email',
+                $condition_id,
+                200
+            )
+        );
 
         if(!empty($response)) {
             foreach($response as $k=>$v){
@@ -856,8 +878,8 @@ class Doppler_For_Woocommerce_Admin
 
         $last_user_id = 0;
         $last_order_id = 0;
-        $condition_users = '';
-        $condition_orders = '';
+        $condition_users = 0;
+        $condition_orders = 0;
         $orders_by_email = array();
         $registered_users = array();        
         
@@ -869,17 +891,25 @@ class Doppler_For_Woocommerce_Admin
         //Synch!
         if(!empty($last_synch) && isset($last_synch['contacts'][$list_id])) {
             //synch orders from the beginning
-            $condition_orders.=" AND id > ".$last_synch['contacts'][$list_id]['orders']." ";
-            $condition_users.= " AND id > ".$last_synch['contacts'][$list_id]['users']." ";
+            $condition_orders = absint($last_synch['contacts'][$list_id]['orders']);
+            $condition_users = absint($last_synch['contacts'][$list_id]['users']);
         }
         
         //get users
-        $query = "SELECT u.ID, u.user_email FROM ".$wpdb->prefix."users u ";
-        $query.= "JOIN ".$wpdb->prefix."usermeta um ON u.ID = um.user_id WHERE um.meta_key = 'wp_capabilities' ";
-        $query.= $condition_users;
-        $query.= "AND ( um.meta_value LIKE '%customer%' OR um.meta_value LIKE '%subscriber%' ) ";
-        $query.= "ORDER BY u.ID ASC LIMIT 150";
-        $response = $wpdb->get_results($query);
+        $response = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT u.ID, u.user_email FROM {$wpdb->users} u " .
+                "JOIN {$wpdb->usermeta} um ON u.ID = um.user_id " .
+                "WHERE um.meta_key = %s AND u.ID > %d " .
+                "AND ( um.meta_value LIKE %s OR um.meta_value LIKE %s ) " .
+                "ORDER BY u.ID ASC LIMIT %d",
+                'wp_capabilities',
+                $condition_users,
+                '%customer%',
+                '%subscriber%',
+                150
+            )
+        );
         if(!empty($response)) {
             foreach($response as $k=>$v){
                 $meta_fields = get_user_meta($v->ID);
@@ -894,12 +924,19 @@ class Doppler_For_Woocommerce_Admin
         }
 
         //get uncomplete orders
-        $query = "SELECT p.ID, pm.meta_value as email FROM ".$wpdb->prefix."posts p ";
-        $query.= "JOIN ".$wpdb->prefix."postmeta pm ON p.ID = pm.post_id ";
-        $query.= "WHERE post_type = 'shop_order' AND p.post_status!='wc-completed' AND pm.meta_key = '_billing_email' AND pm.meta_value != '' ";
-        $query.= $condition_orders;
-        $query.= "ORDER BY p.ID ASC LIMIT 150";
-        $response = $wpdb->get_results($query);
+        $response = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT p.ID, pm.meta_value as email FROM {$wpdb->posts} p " .
+                "JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id " .
+                "WHERE p.post_type = %s AND p.post_status != %s AND pm.meta_key = %s AND pm.meta_value != '' " .
+                "AND p.ID > %d ORDER BY p.ID ASC LIMIT %d",
+                'shop_order',
+                'wc-completed',
+                '_billing_email',
+                $condition_orders,
+                150
+            )
+        );
         if(!empty($response)) {
             foreach($response as $k=>$v){
                 $order = wc_get_order($v->ID);
@@ -1371,12 +1408,15 @@ class Doppler_For_Woocommerce_Admin
             if(!$this->validateDate($_GET['from']) || !$this->validateDate($_GET['to'])) {
                 return array("code"=>"woocommerce_rest_wrong_parameter_count","message"=>"Invalid parameter","data"=>array("status"=>400));
             }
+            $abandoned_table = $wpdb->prefix . DOPPLER_ABANDONED_CART_TABLE;
             return $wpdb->get_results(
                 $wpdb->prepare(
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                     "SELECT id, name, lastname, email, phone, location, cart_contents, cart_total,
 			currency, time, session_id, other_fields, cart_url, restored 
-			FROM ". $wpdb->prefix . DOPPLER_ABANDONED_CART_TABLE . 
-                    " WHERE time BETWEEN '%s' AND '%s' ", $_GET['from'], $_GET['to']
+			FROM {$abandoned_table} WHERE time BETWEEN %s AND %s",
+                    $_GET['from'],
+                    $_GET['to']
                 )
             );
         }else{
@@ -1404,12 +1444,15 @@ class Doppler_For_Woocommerce_Admin
             if(!$this->validateDate($_GET['from']) || !$this->validateDate($_GET['to'])) {
                 return array("code"=>"woocommerce_rest_wrong_parameter_count","message"=>"Invalid parameter","data"=>array("status"=>400));
             }
+                $visited_table = $wpdb->prefix . DOPPLER_VISITED_PRODUCTS_TABLE;
                 return $wpdb->get_results(
                     $wpdb->prepare(
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Table name uses a plugin constant. */
                         "SELECT id, user_id, user_name, user_lastname, user_email, product_id, product_name, 
 					product_slug, product_link, product_price, product_regular_price, product_description, currency, visited_time, product_image
-					FROM ". $wpdb->prefix . DOPPLER_VISITED_PRODUCTS_TABLE .
-                        " WHERE visited_time BETWEEN '%s' AND '%s' ", $_GET['from'], $_GET['to']
+					FROM {$visited_table} WHERE visited_time BETWEEN %s AND %s",
+                        $_GET['from'],
+                        $_GET['to']
                     )
                 );
         }else{

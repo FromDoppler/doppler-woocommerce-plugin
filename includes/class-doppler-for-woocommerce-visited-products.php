@@ -56,12 +56,13 @@ class Doppler_For_WooCommerce_Visited_Products
     
             $wpdb->query(
                 $wpdb->prepare(
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
                     "INSERT INTO ". $table_name ."
                     ( user_id, user_email, user_name, user_lastname, product_id,
                      product_name, product_slug, product_description, product_image, product_link, product_price, product_regular_price,
                      currency, visited_time )
                     VALUES ( %d, %s, %s, %s, %d,
-                     %s, %s, %s, %s, %s, %0.2f, %0.2f, 
+                     %s, %s, %s, %s, %s, %f, %f, 
                      %s, %s)",
                     array(
                         filter_var($user_id, FILTER_SANITIZE_NUMBER_INT),
@@ -74,8 +75,8 @@ class Doppler_For_WooCommerce_Visited_Products
                         sanitize_text_field($product_description),
                         sanitize_text_field($product_image),
                         sanitize_text_field($product_link),
-                        sanitize_text_field($product_price),
-                        sanitize_text_field($regular_price),
+                        (float) $product_price,
+                        (float) $regular_price,
                         sanitize_text_field($currency),
                         sanitize_text_field($current_time)                    
                     ) 
