@@ -20,7 +20,6 @@
 		var buyersListSelect = $("#buyers-list");
 		var syncListsButton = $("#dplrwoo-lists-btn");
 		var listsForm = $("#dplrwoo-form-list");
-		var reconnectButton = $("#dplrwoo-reconnect-btn");
 
 		mappingFieldsSelects
 			.focus(function () {
@@ -113,28 +112,9 @@
 				});
 		});
 
-		reconnectButton?.click(function (e) {
-			e.preventDefault();
-			verifyKeys()
-				.done(function () {
-					$("#displayWarningMessage").hide();
-					syncListsButton.removeAttr("disabled").removeClass("button--loading");
-				})
-				.fail(function () {
-					reconnectButton.removeAttr("disabled").removeClass("button--loading");
-					$("#dplr-settings-text")
-						.html(ObjWCStr.reSyncError)
-						.removeClass("d-none");
-				});
-		});
-
 		function verifyKeys() {
 			syncListsButton.attr("disabled", "disabled").addClass("button--loading");
-			if (reconnectButton) {
-				reconnectButton
-					.attr("disabled", "disabled")
-					.addClass("button--loading");
-			}
+
 			return $.post(ajaxurl, { action: "dplrwoo_ajax_verify_keys" }).then(
 				function (resp) {
 					if (resp && resp.success) {
@@ -222,6 +202,19 @@
 				});
 			}
 		});
+
+		var bindDismissMessage = function (linkId) {
+			var link = $("#" + linkId);
+			if (!link.length) return;
+			link.on("click", function (e) {
+				e.preventDefault();
+				$(this).closest(".dp-wrap-message").remove();
+			});
+		};
+
+		bindDismissMessage("ErrorMessageDismiss");
+		bindDismissMessage("SuccessMessageDismiss");
+		bindDismissMessage("WarningMessageDismiss");
 	});
 
 	function checkFieldType(dplrType, wcType) {

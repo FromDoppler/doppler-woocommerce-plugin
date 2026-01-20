@@ -65,7 +65,7 @@ if(isset($_GET['tab']) ) {
                     $subscribers_lists = $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']);
 
                     update_option('dplr_subscribers_list', $subscribers_lists);
-                    $this->set_success_message(__('Subscribers lists saved succesfully', 'doppler-for-woocommerce'));
+                    $this->set_success_message(__('WooCommerce has been successfully connected and synchronized.', 'doppler-for-woocommerce'));
                         
                     $this->reset_buyers_and_contacts_last_synch();
                 } else {
@@ -97,7 +97,16 @@ if(isset($_GET['tab']) ) {
                     && $connection_status['success'] === true
                     && isset($connection_status['connected'])
                     && $connection_status['connected'] === false) {
-                    $this->set_warning_message(__('WooCommerce integration could not be verified.', 'doppler-for-woocommerce'), 'dplrwoo-reconnect-btn', __("Reconnect integration","doppler-for-woocommerce"));
+                    $this->set_warning_message_title(__('WooCommerce is not connected.', 'doppler-for-woocommerce'));
+                    $this->set_warning_message(__('To reconnect, click the Connect and Sync button.', 'doppler-for-woocommerce'));
+                }
+                else if(is_array($connection_status)
+                    && isset($connection_status['success'])
+                    && $connection_status['success'] === false
+                    && isset($connection_status['code'])
+                    && $connection_status['code'] === 400) {
+                    $this->set_warning_message_title(__('WooCommerce is not connected yet.', 'doppler-for-woocommerce'));
+                    $this->set_warning_message(__('Select the List you want to assign and click the button to synchronize your user data.', 'doppler-for-woocommerce'));
                 }
                     
                 include_once 'lists.php';
