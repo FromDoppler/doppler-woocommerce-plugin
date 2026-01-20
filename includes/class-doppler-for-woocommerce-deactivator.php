@@ -41,16 +41,16 @@ class Doppler_For_Woocommerce_Deactivator
          * If APP couldn't delete stops deactivation
          * and shows message.
          */
-        $options = get_option('dplr_settings');
+        $dplrwoo_options = get_option('dplr_settings');
         $has_consumer_secret = get_option('dplrwoo_api_connected');
 
-        if(empty($options['dplr_option_useraccount']) || empty($options['dplr_option_apikey']) 
+        if(empty($dplrwoo_options['dplr_option_useraccount']) || empty($dplrwoo_options['dplr_option_apikey']) 
             || empty($has_consumer_secret) 
         ) { return false;
         }
         
         $doppler_app_connect = new Doppler_For_WooCommerce_App_Connect(
-            $options['dplr_option_useraccount'], $options['dplr_option_apikey'],
+            $dplrwoo_options['dplr_option_useraccount'], $dplrwoo_options['dplr_option_apikey'],
             DOPPLER_WOO_API_URL, DOPPLER_FOR_WOOCOMMERCE_ORIGIN
         );
 

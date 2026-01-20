@@ -23,6 +23,7 @@ class DPLRWOO_Dependecy_Checker
     public function check()
     {
         $inactive_plugins = array();
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
         $active_plugins = apply_filters('active_plugins', get_option('active_plugins'));
         foreach(self::_DEPENDENCIES as $plugin):
             if (!in_array($plugin['plugin_dir'], $active_plugins) ) {
@@ -41,7 +42,7 @@ class DPLRWOO_Dependecy_Checker
                 $class = 'notice notice-error';
                 $message = __('Ouch! Doppler for WooCommerce will not work if the following plugins are not installed and active:', 'doppler-for-woocommerce');
                 $missing_plugins = array();
-                foreach($this->inactive_plugins as $key=>$plugin){
+                foreach($this->inactive_plugins as $dplrwoo_key=>$plugin){
                     array_push($missing_plugins, sprintf(' <a href="%s" target="_blank">%s</a>', $plugin['repository'], $plugin['name']));
                 }
                 printf('<div class="%s"><p>%s %s</p></div>', esc_attr($class), esc_html($message), implode(', ', esc_html($missing_plugins))); 

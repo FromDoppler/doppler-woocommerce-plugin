@@ -74,7 +74,7 @@ require plugin_dir_path(__FILE__) . 'includes/class-doppler-for-woocommerce-app-
  * The code that runs during plugin activation.
  * This action is documented in includes/class-doppler-for-woocommerce-activator.php
  */
-function activate_doppler_for_woocommerce()
+function doppler_for_woocommerce_activate()
 {
     
     if (current_user_can('activate_plugins') && ! class_exists('WooCommerce') ) {
@@ -107,15 +107,15 @@ function activate_doppler_for_woocommerce()
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-doppler-for-woocommerce-deactivator.php
  */
-function deactivate_doppler_for_woocommerce()
+function doppler_for_woocommerce_deactivate()
 {
     include_once plugin_dir_path(__FILE__) . 'includes/class-doppler-for-woocommerce-deactivator.php';
     Doppler_For_Woocommerce_Deactivator::deactivate();
 }
 
 
-register_activation_hook(__FILE__, 'activate_doppler_for_woocommerce');
-register_deactivation_hook(__FILE__, 'deactivate_doppler_for_woocommerce');
+register_activation_hook(__FILE__, 'doppler_for_woocommerce_activate');
+register_deactivation_hook(__FILE__, 'doppler_for_woocommerce_deactivate');
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -132,7 +132,7 @@ require plugin_dir_path(__FILE__) . 'includes/class-doppler-for-woocommerce.php'
  *
  * @since 1.0.0
  */
-function run_doppler_for_woocommerce()
+function doppler_for_woocommerce_run()
 {
 
     $plugin = new Doppler_For_Woocommerce();
@@ -141,10 +141,10 @@ function run_doppler_for_woocommerce()
 }
 
 require plugin_dir_path(__FILE__) . 'includes/class-doppler-for-woocommerce-dependency-check.php';
-$dependency_checker = new DPLRWOO_Dependecy_Checker();
+$dplrwoo_dependency_checker = new DPLRWOO_Dependecy_Checker();
 
-if($dependency_checker->check()) {
-    run_doppler_for_woocommerce();
+if($dplrwoo_dependency_checker->check()) {
+    doppler_for_woocommerce_run();
 }else{
-    $dependency_checker->display_warning();
+    $dplrwoo_dependency_checker->display_warning();
 }

@@ -123,13 +123,13 @@ class Doppler_For_WooCommerce_App_Connect
         }
         //just in case, remove previous keys.
         $this->remove_keys();
-        $keys = $this->generate_WC_Api_keys();
-        if(!$keys) { return false;
+        $dplrwoo_keys = $this->generate_WC_Api_keys();
+        if(!$dplrwoo_keys) { return false;
         }
         $body = array(
-        'accessToken'=> $keys['consumer_key'], 
+        'accessToken'=> $dplrwoo_keys['consumer_key'], 
         'accountName' => get_site_url(), 
-        'refreshToken' => $keys['consumer_secret']
+        'refreshToken' => $dplrwoo_keys['consumer_secret']
         );
         $response = $this->do_request('PUT', $body);
         return $response;
@@ -174,6 +174,7 @@ class Doppler_For_WooCommerce_App_Connect
         }
         global $wpdb;
         try{
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->DELETE(
                 $wpdb->prefix . 'woocommerce_api_keys',
                 array(
@@ -201,7 +202,7 @@ class Doppler_For_WooCommerce_App_Connect
         $response = array();
         try {
             
-            $key_id = 0;
+            $dplrwoo_key_id = 0;
             $description = sanitize_text_field(wp_unslash($this->get_api_keys_description()));
             $permissions = 'read_write';
             $user_id     = get_current_user_id();
@@ -224,6 +225,7 @@ class Doppler_For_WooCommerce_App_Connect
             'truncated_key'   => substr($consumer_key, -7),
             );
 
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
             $wpdb->insert(
                 $wpdb->prefix . 'woocommerce_api_keys',
                 $data,
@@ -238,12 +240,12 @@ class Doppler_For_WooCommerce_App_Connect
             );
 
             //$wpdb->print_error();                
-            $key_id                      = $wpdb->insert_id;
+            $dplrwoo_key_id                      = $wpdb->insert_id;
             $response                    = $data;
             $response['consumer_key']    = $consumer_key;
             $response['consumer_secret'] = $consumer_secret;
             $response['message']         = 'API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page.';
-            $response['revoke_url']      = '<a style="color: #a00; text-decoration: none;" href="' . esc_url(wp_nonce_url(add_query_arg(array( 'revoke-key' => $key_id ), admin_url('admin.php?page=wc-settings&tab=advanced&section=keys')), 'revoke')) . '">' . 'Revoke key' . '</a>';
+            $response['revoke_url']      = '<a style="color: #a00; text-decoration: none;" href="' . esc_url(wp_nonce_url(add_query_arg(array( 'revoke-key' => $dplrwoo_key_id ), admin_url('admin.php?page=wc-settings&tab=advanced&section=keys')), 'revoke')) . '">' . 'Revoke key' . '</a>';
         
         } catch ( Exception $e ) {
             //return array( 'message' => $e->getMessage());

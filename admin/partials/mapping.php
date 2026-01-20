@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 if (! current_user_can('manage_options') ) {
     return;
 }
@@ -31,13 +33,13 @@ if (! current_user_can('manage_options') ) {
     <?php wp_nonce_field('map-fields');?>
 
     <?php
-    $maps? $used_fields = array_filter($maps): $used_fields = array();
+    $dplrwoo_maps? $dplrwoo_used_fields = array_filter($dplrwoo_maps): $dplrwoo_used_fields = array();
 
-    if(is_array($wc_fields)) {
+    if(is_array($dplrwoo_wc_fields)) {
 
-        foreach($wc_fields as $fieldtype=>$arr){
+        foreach($dplrwoo_wc_fields as $dplrwoo_fieldtype=>$dplrwoo_arr){
 
-            if($fieldtype!='' && $fieldtype!='order' && (count($arr)>0) ) :
+            if($dplrwoo_fieldtype!='' && $dplrwoo_fieldtype!='order' && (count($dplrwoo_arr)>0) ) :
 
                 ?>
                 <table class="grid panel col-sm-12 col-md-12 col-lg-12 dp-box-shadow">
@@ -45,7 +47,7 @@ if (! current_user_can('manage_options') ) {
                         <tr class="panel-header">
                             <th colspan="2" class="text-white semi-bold">
                                 <?php
-                                switch($fieldtype){
+                                switch($dplrwoo_fieldtype){
                                 case 'billing':
                                     esc_html_e('Billing fields', 'doppler-for-woocommerce');
                                     break;
@@ -59,7 +61,7 @@ if (! current_user_can('manage_options') ) {
                                     esc_html_e('Last purchase fields', 'doppler-for-woocommerce');
                                     break;
                                 default:
-                                    echo esc_html($fieldtype);
+                                    echo esc_html($dplrwoo_fieldtype);
                                     break;
                                 }
                                 ?>
@@ -74,14 +76,14 @@ if (! current_user_can('manage_options') ) {
                 
                 <?php
 
-                foreach($arr as $fieldname=>$fieldAtributes){
-                    isset($fieldAtributes['type'])? $woo_field_type = $fieldAtributes['type'] : $woo_field_type = 'string';
-                    if($fieldname!=='billing_email') :
+                foreach($dplrwoo_arr as $dplrwoo_fieldname=>$dplrwoo_fieldAtributes){
+                    isset($dplrwoo_fieldAtributes['type'])? $dplrwoo_woo_field_type = $dplrwoo_fieldAtributes['type'] : $dplrwoo_woo_field_type = 'string';
+                    if($dplrwoo_fieldname!=='billing_email') :
                         ?>
                             <tr>
                                 <td>
                                     <?php 
-                                    echo esc_html($fieldAtributes['label']);
+                                    echo esc_html($dplrwoo_fieldAtributes['label']);
                                     ?>
                                 </td>
                                 <td>
@@ -89,18 +91,18 @@ if (! current_user_can('manage_options') ) {
                                         <div class="dp-select">
                                             <span class="dropdown-arrow"></span>
                                             <select class="dplrwoo-mapping-fields"
-                                                name="dplrwoo_mapping[<?php echo esc_attr($fieldname)?>]"
-                                                data-type="<?php if (isset($fieldAtributes['type']))
-                                                { echo esc_attr($fieldAtributes['type']); } ?>">
+                                                name="dplrwoo_mapping[<?php echo esc_attr($dplrwoo_fieldname)?>]"
+                                                data-type="<?php if (isset($dplrwoo_fieldAtributes['type']))
+                                                { echo esc_attr($dplrwoo_fieldAtributes['type']); } ?>">
                                                 <option></option>
                                                 <?php 
-                                                foreach ($dplr_fields as $field){
+                                                foreach ($dplrwoo_dplr_fields as $dplrwoo_field){
                                                     
-                                                    if(($this->check_field_type($woo_field_type, $field->type) && is_array($used_fields) && !in_array($field->name, $used_fields)) || (is_array($maps) && $maps[$fieldname] === $field->name) ) {
+                                                    if(($this->check_field_type($dplrwoo_woo_field_type, $dplrwoo_field->type) && is_array($dplrwoo_used_fields) && !in_array($dplrwoo_field->name, $dplrwoo_used_fields)) || (is_array($dplrwoo_maps) && $dplrwoo_maps[$dplrwoo_fieldname] === $dplrwoo_field->name) ) {
                                                         ?>
-                                                        <option value="<?php echo esc_attr($field->name)?>" <?php if(is_array($maps) && $maps[$fieldname] === $field->name ) { echo 'selected'; 
-                                                                    } ?> data-type="<?php echo esc_attr($field->type) ?>">
-                                                            <?php echo esc_html($field->name)?>
+                                                        <option value="<?php echo esc_attr($dplrwoo_field->name)?>" <?php if(is_array($dplrwoo_maps) && $dplrwoo_maps[$dplrwoo_fieldname] === $dplrwoo_field->name ) { echo 'selected'; 
+                                                                    } ?> data-type="<?php echo esc_attr($dplrwoo_field->type) ?>">
+                                                            <?php echo esc_html($dplrwoo_field->name)?>
                                                         </option>
                                                         <?php
                                                     }
