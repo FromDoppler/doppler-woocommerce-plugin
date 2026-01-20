@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2025-12-30 13:03-0300\n"
+"POT-Creation-Date: 2026-01-19 22:31-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -22,33 +22,39 @@ msgstr ""
 "X-Generator: Poedit 3.6\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: admin/class-doppler-for-woocommerce-admin.php:225
+#: admin/class-doppler-for-woocommerce-admin.php:152
+#: admin/class-doppler-for-woocommerce-admin.php:166
+#: admin/class-doppler-for-woocommerce-admin.php:187
+msgid "Got it"
+msgstr "Entendido"
+
+#: admin/class-doppler-for-woocommerce-admin.php:236
 msgid "Ouch! Enter a valid Email."
 msgstr "¡Ouch! Escribe un Email válido."
 
-#: admin/class-doppler-for-woocommerce-admin.php:226
+#: admin/class-doppler-for-woocommerce-admin.php:237
 msgid "Ouch! The Field is empty."
 msgstr "¡Ouch! El campo está vacío."
 
-#: admin/class-doppler-for-woocommerce-admin.php:227
+#: admin/class-doppler-for-woocommerce-admin.php:238
 msgid ""
 "Ouch! There's something wrong with your Username or API Key. Please, try "
 "again."
 msgstr "¡Ouch! Hay un error en tu Usuario o API Key. Vuelve a intentarlo."
 
-#: admin/class-doppler-for-woocommerce-admin.php:228
+#: admin/class-doppler-for-woocommerce-admin.php:239
 msgid "The List has been created correctly."
 msgstr "La Lista se ha creado correctamente."
 
-#: admin/class-doppler-for-woocommerce-admin.php:229
+#: admin/class-doppler-for-woocommerce-admin.php:240
 msgid "Ouch! You've reached the maximum number of Lists created."
 msgstr "¡Ouch! Has alcanzado el número máximo de Listas creadas."
 
-#: admin/class-doppler-for-woocommerce-admin.php:230
+#: admin/class-doppler-for-woocommerce-admin.php:241
 msgid "Ouch! You've already used this name for another List."
 msgstr "¡Ouch! Ya has utilizado este nombre para otra Lista."
 
-#: admin/class-doppler-for-woocommerce-admin.php:231
+#: admin/class-doppler-for-woocommerce-admin.php:242
 msgid ""
 "Ouch! You've made several actions in a short period of time. Please wait a "
 "few minutes before making another one."
@@ -56,35 +62,31 @@ msgstr ""
 "¡Ouch! Has realizado varias acciones en un periodo corto de tiempo. Por "
 "favor, espera unos minutos antes de realizar otra."
 
-#: admin/class-doppler-for-woocommerce-admin.php:232
+#: admin/class-doppler-for-woocommerce-admin.php:243
 msgid "Ouch! List name is invalid. Please choose another name."
 msgstr "¡Ouch! El nombre de la Lista es inválido. Elige otro nombre."
 
-#: admin/class-doppler-for-woocommerce-admin.php:233
+#: admin/class-doppler-for-woocommerce-admin.php:244
 msgid "Save"
 msgstr "Guardar"
 
-#: admin/class-doppler-for-woocommerce-admin.php:234
+#: admin/class-doppler-for-woocommerce-admin.php:245
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: admin/class-doppler-for-woocommerce-admin.php:235
+#: admin/class-doppler-for-woocommerce-admin.php:246
 msgid "Ouch! The Lists couldn't be synchronized."
 msgstr "¡Ouch! La lista no se pudo sincronizar."
 
-#: admin/class-doppler-for-woocommerce-admin.php:236
-msgid "Ouch! There was an error trying to reconnect."
-msgstr "¡Ouch! Hubo un error al intentar reconectar."
-
-#: admin/class-doppler-for-woocommerce-admin.php:237
+#: admin/class-doppler-for-woocommerce-admin.php:247
 msgid "Your Lists has been syncronized and saved succesfully."
 msgstr "Tus Listas fueron sincronizadas y guardadas con éxito."
 
-#: admin/class-doppler-for-woocommerce-admin.php:238
+#: admin/class-doppler-for-woocommerce-admin.php:248
 msgid "We're synchronizing your Customers with your Doppler List..."
 msgstr "Estamos sincronizando tus Clientes con tus Listas de Doppler."
 
-#: admin/class-doppler-for-woocommerce-admin.php:239
+#: admin/class-doppler-for-woocommerce-admin.php:249
 msgid ""
 "Select the Doppler Lists where you want to import your Customers. When "
 "synchronized, those Customers already registered and future customers will "
@@ -94,17 +96,17 @@ msgstr ""
 "sincronizarlas, se enviarán automáticamente los existentes y los futuros "
 "clientes."
 
-#: admin/class-doppler-for-woocommerce-admin.php:240
+#: admin/class-doppler-for-woocommerce-admin.php:250
 #: admin/partials/lists.php:18 admin/partials/lists.php:73
 msgid "WooCommerce Buyers"
 msgstr "Compradores de WooCommerce"
 
-#: admin/class-doppler-for-woocommerce-admin.php:241
-#: admin/partials/lists.php:19 admin/partials/lists.php:105
+#: admin/class-doppler-for-woocommerce-admin.php:251
+#: admin/partials/lists.php:19 admin/partials/lists.php:100
 msgid "WooCommerce Contacts"
 msgstr "Contactos de WooCommerce"
 
-#: admin/class-doppler-for-woocommerce-admin.php:249
+#: admin/class-doppler-for-woocommerce-admin.php:259
 msgid ""
 "Ouch! <strong>Doppler for WooCommerce</strong> requires the <a "
 "href=\"https://wordpress.org/plugins/doppler-form/\">Doppler Forms</a> "
@@ -113,7 +115,7 @@ msgstr ""
 "¡Ouch! <strong>Doppler para WooCommerce</strong> requiere que tengas el "
 "plugin Formularios Doppler instalado y activo."
 
-#: admin/class-doppler-for-woocommerce-admin.php:253
+#: admin/class-doppler-for-woocommerce-admin.php:263
 #, php-format
 msgid ""
 "Ouch! <strong>Doppler for WooCommerce</strong> requires at least "
@@ -124,42 +126,42 @@ msgstr ""
 "<strong>Doppler Forms v%1$s</strong> para  poder activarse. Por favor <a "
 "href=\"%2$splugins.php\">actualiza</a> Doppler Forms."
 
-#: admin/class-doppler-for-woocommerce-admin.php:343
-#: admin/class-doppler-for-woocommerce-admin.php:344
-#: admin/class-doppler-for-woocommerce-admin.php:1501
+#: admin/class-doppler-for-woocommerce-admin.php:353
+#: admin/class-doppler-for-woocommerce-admin.php:354
+#: admin/class-doppler-for-woocommerce-admin.php:1511
 #: admin/partials/doppler-for-woocommerce-settings.php:40
 msgid "Doppler for WooCommerce"
 msgstr "Doppler para WooCommerce"
 
-#: admin/class-doppler-for-woocommerce-admin.php:467
+#: admin/class-doppler-for-woocommerce-admin.php:477
 msgid "Products"
 msgstr "Productos"
 
-#: admin/class-doppler-for-woocommerce-admin.php:473
+#: admin/class-doppler-for-woocommerce-admin.php:483
 msgid "Total amount"
 msgstr "Monto total"
 
-#: admin/class-doppler-for-woocommerce-admin.php:479
+#: admin/class-doppler-for-woocommerce-admin.php:489
 msgid "Date of purchase"
 msgstr "Fecha de compra"
 
-#: admin/class-doppler-for-woocommerce-admin.php:1164
-#: admin/class-doppler-for-woocommerce-admin.php:1218
+#: admin/class-doppler-for-woocommerce-admin.php:1174
+#: admin/class-doppler-for-woocommerce-admin.php:1228
 msgid "Forbidden"
 msgstr "Prohibido"
 
-#: admin/class-doppler-for-woocommerce-admin.php:1234
+#: admin/class-doppler-for-woocommerce-admin.php:1244
 msgid "Missing required data to check status"
 msgstr "Faltan datos necesarios para comprobar el estado"
 
-#: admin/class-doppler-for-woocommerce-admin.php:1504
+#: admin/class-doppler-for-woocommerce-admin.php:1514
 msgid ""
 "By confirming this action some automations in your Doppler Woocommerce "
 "activation can be lost."
 msgstr ""
 "Si tienes automations relacionados con este sitio podrían dejar de funcionar."
 
-#: admin/class-doppler-for-woocommerce-admin.php:1506
+#: admin/class-doppler-for-woocommerce-admin.php:1516
 msgid "¿Do yo wish to continue?"
 msgstr "¿Deseas continuar?"
 
@@ -176,28 +178,39 @@ msgid "Fields mapped succesfully"
 msgstr "Los Campos han sido guardados correctamente"
 
 #: admin/partials/doppler-for-woocommerce-settings.php:68
-msgid "Subscribers lists saved succesfully"
-msgstr "Las Listas han sido guardadas correctamente"
+msgid "WooCommerce has been successfully connected and synchronized."
+msgstr "WooCommerce se conectó y sincronizó exitosamente."
 
 #: admin/partials/doppler-for-woocommerce-settings.php:100
-msgid "WooCommerce integration could not be verified."
-msgstr "La integración con WooCommerce no pudo ser verificada."
+msgid "WooCommerce is not connected."
+msgstr "WooComerce no esta conectado."
 
-#: admin/partials/doppler-for-woocommerce-settings.php:100
-msgid "Reconnect integration"
-msgstr "Reconectar integración"
+#: admin/partials/doppler-for-woocommerce-settings.php:101
+msgid "To reconnect, click the Connect and Sync button."
+msgstr "Para reconectar haz Clic en el botón de Conectar y Sincronizar."
+
+#: admin/partials/doppler-for-woocommerce-settings.php:108
+msgid "WooCommerce is not connected yet."
+msgstr "WooCommerce no está conectado aún."
+
+#: admin/partials/doppler-for-woocommerce-settings.php:109
+msgid ""
+"Select the List you want to assign and click the button to synchronize your "
+"user data."
+msgstr ""
+"Selecciona las Listas que deseas asignar para sincronizar datos y conecta."
 
 #: admin/partials/lists.php:12
-msgid "Lists to synchronize"
-msgstr "Listas a sincronizar"
+msgid "WooCommerce connection and List synchronization."
+msgstr "Conexión de WooCommerce y sincronización de Listas."
 
 #: admin/partials/lists.php:26
 msgid ""
-"Pick the Doppler Lists you want to import your Users into. You can sync "
-"existing Lists or create new ones."
+"Connect your Store and choose a List to automatically synchronize your user "
+"data."
 msgstr ""
-"Selecciona las Listas de Doppler a donde quieres importar tus Usuarios. "
-"Puedes sincronizar Listas existentes o crear nuevas."
+"Conecta tu Tienda y elige una Lista para sincronizar automáticamente los "
+"datos de tus usuarios."
 
 #: admin/partials/lists.php:28
 msgid ""
@@ -215,31 +228,15 @@ msgstr "Mapeo de Campos"
 msgid "Doppler List to send Buyers"
 msgstr "Lista de Doppler a la cual enviarás Compradores"
 
-#: admin/partials/lists.php:94
-msgid ""
-"Currently there is no Buyers list selected. Press synchronize to create and "
-"syncrhonize default Buyers List."
-msgstr ""
-"Actualmente no hay una Lista de Compradores seleccionada. Presiona "
-"Sincronizar para crear y sincronizar una Lista de Compradores."
-
-#: admin/partials/lists.php:101
+#: admin/partials/lists.php:96
 msgid "Doppler List to send Contacts"
 msgstr "Lista de Doppler a la cual enviarás Contactos"
 
-#: admin/partials/lists.php:126
-msgid ""
-"Currently there is no Contacts list selected. Press synchronize to create "
-"and syncrhonize default Contacts List."
-msgstr ""
-"Actualmente no hay una Lista de Contactos seleccionada. Presiona Sincronizar "
-"para crear y sincronizar una Lista de Compradores."
+#: admin/partials/lists.php:127
+msgid "Connect and synchronize"
+msgstr "Conectar y sincronizar"
 
 #: admin/partials/lists.php:138
-msgid "Synchronize"
-msgstr "Sincronizar"
-
-#: admin/partials/lists.php:149
 msgid "Connected account"
 msgstr "Cuenta conectada"
 
@@ -316,6 +313,42 @@ msgid ""
 msgstr ""
 "¡Ouch! Doppler para Woocommerce no funcionará si los siguientes plugins no "
 "están instalados y activos:"
+
+#~ msgid "Ouch! There was an error trying to reconnect."
+#~ msgstr "¡Ouch! Hubo un error al intentar reconectar."
+
+#~ msgid "Subscribers lists saved succesfully"
+#~ msgstr "Las Listas han sido guardadas correctamente"
+
+#~ msgid "Reconnect integration"
+#~ msgstr "Reconectar integración"
+
+#~ msgid "Lists to synchronize"
+#~ msgstr "Listas a sincronizar"
+
+#~ msgid ""
+#~ "Pick the Doppler Lists you want to import your Users into. You can sync "
+#~ "existing Lists or create new ones."
+#~ msgstr ""
+#~ "Selecciona las Listas de Doppler a donde quieres importar tus Usuarios. "
+#~ "Puedes sincronizar Listas existentes o crear nuevas."
+
+#~ msgid ""
+#~ "Currently there is no Buyers list selected. Press synchronize to create "
+#~ "and syncrhonize default Buyers List."
+#~ msgstr ""
+#~ "Actualmente no hay una Lista de Compradores seleccionada. Presiona "
+#~ "Sincronizar para crear y sincronizar una Lista de Compradores."
+
+#~ msgid ""
+#~ "Currently there is no Contacts list selected. Press synchronize to create "
+#~ "and syncrhonize default Contacts List."
+#~ msgstr ""
+#~ "Actualmente no hay una Lista de Contactos seleccionada. Presiona "
+#~ "Sincronizar para crear y sincronizar una Lista de Compradores."
+
+#~ msgid "Synchronize"
+#~ msgstr "Sincronizar"
 
 #~ msgid ""
 #~ "Obtain the Tracking Code from the Doppler App and paste it here in order "

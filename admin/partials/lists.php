@@ -9,7 +9,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
         <div class="dp-container">
             <div class="dp-rowflex">
                 <div class="col-sm-12 col-md-12 col-lg-12">
-                    <h2><?php esc_html_e('Lists to synchronize', 'doppler-for-woocommerce')?></h2>
+                    <h2><?php esc_html_e('WooCommerce connection and List synchronization.', 'doppler-for-woocommerce')?></h2>
                 </div>
                 <div class="col-sm-7">
                     <p>
@@ -23,7 +23,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         $suggest_default_lists = false;
                         if( empty($subscribers_lists['contacts']) && empty($subscribers_lists['buyers']) ):
                             $suggest_default_lists = true;
-                            esc_html_e('Pick the Doppler Lists you want to import your Users into. You can sync existing Lists or create new ones.', 'doppler-for-woocommerce');
+                            esc_html_e('Connect your Store and choose a List to automatically synchronize your user data.', 'doppler-for-woocommerce');
                         else :
                             esc_html_e('As they register to your store or buy a product, your Subscribers will be automatically sent to the selected Doppler Lists.', 'doppler-for-woocommerce');
                         endif;
