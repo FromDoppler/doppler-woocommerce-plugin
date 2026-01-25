@@ -149,7 +149,7 @@ class Doppler_For_Woocommerce_Admin
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_error_message()); ?></p>
-                    <a href="#" id="ErrorMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(esc_html_e('Got it', 'doppler-for-woocommerce'))); ?></a>
+                    <a href="#" id="ErrorMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(__('Got it', 'doppler-for-woocommerce'))); ?></a>
 				</div>
 			</div>
 		<?php
@@ -163,7 +163,7 @@ class Doppler_For_Woocommerce_Admin
 				<span class="dp-message-icon"></span>
 				<div class="dp-content-message dp-content-full">
 					<p><?php echo esc_html($this->get_success_message()); ?></p>
-                    <a href="#" id="SuccessMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(esc_html_e('Got it', 'doppler-for-woocommerce'))); ?></a>
+                    <a href="#" id="SuccessMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(__('Got it', 'doppler-for-woocommerce'))); ?></a>
 				</div>
 			</div>
 		<?php
@@ -184,7 +184,7 @@ class Doppler_For_Woocommerce_Admin
                             <p><?php echo esc_html($this->get_warning_message()); ?></p>
                         <?php endif; ?>
                     </div>
-                    <a href="#" id="WarningMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(esc_html_e('Got it', 'doppler-for-woocommerce'))); ?></a>
+                    <a href="#" id="WarningMessageDismiss" class="dp-message-link"><?php echo esc_html(strtoupper(__('Got it', 'doppler-for-woocommerce'))); ?></a>
                 </div>
             </div>
 		<?php

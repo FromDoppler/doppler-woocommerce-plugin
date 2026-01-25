@@ -122,12 +122,6 @@ class Doppler_For_Woocommerce
         include_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-doppler-for-woocommerce-loader.php';
 
         /**
-         * The class responsible for defining internationalization functionality
-         * of the plugin.
-         */
-        include_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-doppler-for-woocommerce-i18n.php';
-
-        /**
          * The class responsible for defining all actions that occur in the admin area.
          */
         include_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-doppler-for-woocommerce-admin.php';

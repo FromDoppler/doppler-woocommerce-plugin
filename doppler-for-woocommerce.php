@@ -86,7 +86,7 @@ function doppler_for_woocommerce_activate()
         '<p style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif;font-size:13px;line-height:1.5;color:#444;">%s <a href="%s" target="_blank" rel="noopener">%s</a> %s</p>',
         esc_html__('This plugin requires', 'doppler-for-woocommerce'),
         esc_url('https://wordpress.org/plugins/woocommerce/'),
-        esc_html__('WooCommerce', 'doppler-for-woocommerce'),
+        esc_html('WooCommerce'),
         esc_html__('plugin to be active.', 'doppler-for-woocommerce')
         );
 

@@ -177,7 +177,6 @@ class Doppler_For_Woocommerce_Abandoned_Cart
         $current_time = $cart_data['current_time'];
         $session_id = $cart_data['session_id'];
         $product_array = $cart_data['product_array'];
-        //Where is this setted?
         $dplr_cart_session_id = WC()->session->get('dplr_cart_session_id');
 
         //In case if the user updates the cart and takes out all items from the cart
@@ -583,6 +582,8 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                     )
                 );
                 wp_cache_set($cache_key, $response, 'dplrwoo_abandoned_cart_session', 5 * MINUTE_IN_SECONDS);
+
+                return $response;
             }
         }else{
             return false;
