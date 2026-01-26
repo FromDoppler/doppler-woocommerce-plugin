@@ -15,7 +15,9 @@ if (! current_user_can('manage_options') ) {
                 </div>
                 <div class="col-sm-7">
                     <p>
-                        <?php esc_html_e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields. <br/>Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
+                        <?php esc_html_e('Send the information of your Contacts in WooCommerce to Doppler. To do this, select the Doppler Field equivalent to each of the WooCommerce Fields.', 'doppler-for-woocommerce'); ?>
+                        <br />
+                        <?php esc_html_e('Need to create Custom Fields in Doppler?', 'doppler-for-woocommerce'); ?>
                         <a href="<?php esc_attr_e('https://help.fromdoppler.com/en/how-to-create-a-customized-field?utm_source=landing&utm_medium=integracion&utm_campaign=woocommerce', 'doppler-for-woocommerce')?>" class="green-link"><?php esc_html_e('Learn how', 'doppler-for-woocommerce')?></a>.
                     </p>
                 </div>
