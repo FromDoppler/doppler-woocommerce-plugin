@@ -114,6 +114,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                         }
                     }
                 }else{
+                    // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
                     $value = apply_filters('woocommerce_variation_option_name', $product_variation_name);
                     if(!empty($value)) {
                         $attribute_array[] = $value;
@@ -164,7 +165,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
         }
         
         global $wpdb;
-        $table_name = $this->get_cart_session_table();
+        $dplrwoo_table_name = esc_sql($this->get_cart_session_table());
         $token = openssl_random_pseudo_bytes(16);
         $token = bin2hex($token);
         $cart_url = wc_get_cart_url();
@@ -176,7 +177,6 @@ class Doppler_For_Woocommerce_Abandoned_Cart
         $current_time = $cart_data['current_time'];
         $session_id = $cart_data['session_id'];
         $product_array = $cart_data['product_array'];
-        //Where is this setted?
         $dplr_cart_session_id = WC()->session->get('dplr_cart_session_id');
 
         //In case if the user updates the cart and takes out all items from the cart
@@ -185,17 +185,25 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             return;
         }
 
-        $abandoned_cart = '';
-
         //Check in the database if the current user has got an abandoned cart already
         if($dplr_cart_session_id === null ) {
-            $abandoned_cart = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT session_id FROM ". $table_name ."
-                WHERE session_id = %d", get_current_user_id()
-                )
-            );
-            if(!empty($abandoned_cart->session_id)) { $dplr_cart_session_id = $abandoned_cart->session_id;
+
+            $cache_key = 'dplrwoo_abandoned_cart_session_' . get_current_user_id();
+            $abandoned_cart = wp_cache_get($cache_key, 'dplrwoo_abandoned_cart_session');
+            if (false === $abandoned_cart) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                $abandoned_cart = $wpdb->get_row(
+                    $wpdb->prepare(
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                        "SELECT session_id FROM ". $dplrwoo_table_name ."
+                        WHERE session_id = %d", get_current_user_id()
+                    )
+                );
+                wp_cache_set($cache_key, $abandoned_cart, 'dplrwoo_abandoned_cart_session', 5 * MINUTE_IN_SECONDS);
+            }
+
+            if(isset($abandoned_cart) && !empty($abandoned_cart->session_id)) { 
+                $dplr_cart_session_id = $abandoned_cart->session_id;
             }
         }
 
@@ -217,21 +225,19 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             
             //Updating row where user's Session id = same as prevously saved in Session
             //Updating only Cart related data since the user can change his data only in the Checkout form
-            $wpdb->prepare(
-                '%s',
-                $wpdb->update(
-                    $table_name,
-                    array(
-                        'cart_contents'    =>    serialize($product_array),
-                        'cart_total'    =>    sanitize_text_field($cart_total),
-                        'currency'        =>    sanitize_text_field($cart_currency),
-                    'time'            =>    sanitize_text_field($current_time),
-                    'cart_url'        =>  $cart_url,
-                    ),
-                    array('session_id' => $session_id),
-                    array('%s', '%0.2f', '%s', '%s', '%s'),
-                    array('%s')
-                )
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->update(
+                $dplrwoo_table_name,
+                array(
+                    'cart_contents' => serialize($product_array),
+                    'cart_total' => (float) $cart_total,
+                    'currency' => sanitize_text_field($cart_currency),
+                    'time' => sanitize_text_field($current_time),
+                    'cart_url' => $cart_url,
+                ),
+                array('session_id' => $session_id),
+                array('%s', '%f', '%s', '%s', '%s'),
+                array('%s')
             );
             
         }else{
@@ -260,11 +266,13 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             }
 
             //Inserting row into Database
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->query(
                 $wpdb->prepare(
-                    "INSERT INTO ". $table_name ."
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                    "INSERT INTO ". $dplrwoo_table_name ."
                     ( name, lastname, email, phone, location, cart_contents, cart_total, currency, time, session_id, cart_url, token )
-                    VALUES ( %s, %s, %s, %s, %s, %s, %0.2f, %s, %s, %s, %s, %s)",
+                    VALUES ( %s, %s, %s, %s, %s, %s, %f, %s, %s, %s, %s, %s)",
                     array(
                     sanitize_text_field($name),
                     sanitize_text_field($surname),
@@ -272,7 +280,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                     filter_var($phone, FILTER_SANITIZE_NUMBER_INT),
                     sanitize_text_field($location),
                     serialize($product_array),
-                    sanitize_text_field($cart_total),
+                    (float) $cart_total,
                     sanitize_text_field($cart_currency),
                     sanitize_text_field($current_time),
                     sanitize_text_field($session_id),
@@ -297,10 +305,13 @@ class Doppler_For_Woocommerce_Abandoned_Cart
      */
     function save_frontend_user_data()
     {
-    
+        if ( ! check_ajax_referer('dplrwoo_save_data', 'dplrwoo_nonce', false) ) {
+            wp_send_json_error(array('message' => __('Invalid request.', 'doppler-for-woocommerce')), 403);
+        }
+
         if (isset($_POST["dplrwoo_email"]) ) {
             global $wpdb;
-            $table_name = $this->get_cart_session_table();
+            $dplrwoo_table_name = esc_sql($this->get_cart_session_table());
             $cart_url = wc_get_cart_url();
             //Generate a random string.
             $token = openssl_random_pseudo_bytes(16);
@@ -319,29 +330,29 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 $this->delete_cart_session();
                 return;
             }
-            
-            (isset($_POST['dplrwoo_name'])) ? $name = $_POST['dplrwoo_name'] : $name = '';
-            (isset($_POST['dplrwoo_surname'])) ? $surname = $_POST['dplrwoo_lastname'] : $surname = '';
-            (isset($_POST['dplrwoo_phone'])) ? $phone = $_POST['dplrwoo_phone'] : $phone = '';
-            (isset($_POST['dplrwoo_country'])) ? $country = $_POST['dplrwoo_country'] : $country = '';
-            (isset($_POST['dplrwoo_city']) && $_POST['dplrwoo_city'] != '') ? $city = ", ". $_POST['dplrwoo_city'] : $city = '';
-            (isset($_POST['dplrwoo_billing_company'])) ? $company = $_POST['dplrwoo_billing_company'] : $company = '';
-            (isset($_POST['dplrwoo_billing_address_1'])) ? $address_1 = $_POST['dplrwoo_billing_address_1'] : $address_1 = '';
-            (isset($_POST['dplrwoo_billing_address_2'])) ? $address_2 = $_POST['dplrwoo_billing_address_2'] : $address_2 = '';
-            (isset($_POST['dplrwoo_billing_state'])) ? $state = $_POST['dplrwoo_billing_state'] : $state = '';
-            (isset($_POST['dplrwoo_billing_postcode'])) ? $postcode = $_POST['dplrwoo_billing_postcode'] : $postcode = '';
-            (isset($_POST['dplrwoo_shipping_first_name'])) ? $shipping_name = $_POST['dplrwoo_shipping_first_name'] : $shipping_name = '';
-            (isset($_POST['dplrwoo_shipping_last_name'])) ? $shipping_surname = $_POST['dplrwoo_shipping_last_name'] : $shipping_surname = '';
-            (isset($_POST['dplrwoo_shipping_company'])) ? $shipping_company = $_POST['dplrwoo_shipping_company'] : $shipping_company = '';
-            (isset($_POST['dplrwoo_shipping_country'])) ? $shipping_country = $_POST['dplrwoo_shipping_country'] : $shipping_country = '';
-            (isset($_POST['dplrwoo_shipping_address_1'])) ? $shipping_address_1 = $_POST['dplrwoo_shipping_address_1'] : $shipping_address_1 = '';
-            (isset($_POST['dplrwoo_shipping_address_2'])) ? $shipping_address_2 = $_POST['dplrwoo_shipping_address_2'] : $shipping_address_2 = '';
-            (isset($_POST['dplrwoo_shipping_city'])) ? $shipping_city = $_POST['dplrwoo_shipping_city'] : $shipping_city = '';
-            (isset($_POST['dplrwoo_shipping_state'])) ? $shipping_state = $_POST['dplrwoo_shipping_state'] : $shipping_state = '';
-            (isset($_POST['dplrwoo_shipping_postcode'])) ? $shipping_postcode = $_POST['dplrwoo_shipping_postcode'] : $shipping_postcode = '';
-            (isset($_POST['dplrwoo_order_comments'])) ? $comments = $_POST['dplrwoo_order_comments'] : $comments = '';
-            (isset($_POST['dplrwoo_create_account'])) ? $create_account = $_POST['dplrwoo_create_account'] : $create_account = '';
-            (isset($_POST['dplrwoo_ship_elsewhere'])) ? $ship_elsewhere = $_POST['dplrwoo_ship_elsewhere'] : $ship_elsewhere = '';
+
+            (isset($_POST['dplrwoo_name'])) ? $name = sanitize_text_field(wp_unslash($_POST['dplrwoo_name'])) : $name = '';
+            (isset($_POST['dplrwoo_lastname'])) ? $surname = sanitize_text_field(wp_unslash($_POST['dplrwoo_lastname'])) : $surname = '';
+            (isset($_POST['dplrwoo_phone'])) ? $phone = sanitize_text_field(wp_unslash($_POST['dplrwoo_phone'])) : $phone = '';
+            (isset($_POST['dplrwoo_country'])) ? $country = sanitize_text_field(wp_unslash($_POST['dplrwoo_country'])) : $country = '';
+            (isset($_POST['dplrwoo_city']) && $_POST['dplrwoo_city'] != '') ? $city = ", ". sanitize_text_field(wp_unslash($_POST['dplrwoo_city'])) : $city = '';
+            (isset($_POST['dplrwoo_billing_company'])) ? $company = sanitize_text_field(wp_unslash($_POST['dplrwoo_billing_company'])) : $company = '';
+            (isset($_POST['dplrwoo_billing_address_1'])) ? $address_1 = sanitize_text_field(wp_unslash($_POST['dplrwoo_billing_address_1'])) : $address_1 = '';
+            (isset($_POST['dplrwoo_billing_address_2'])) ? $address_2 = sanitize_text_field(wp_unslash($_POST['dplrwoo_billing_address_2'])) : $address_2 = '';
+            (isset($_POST['dplrwoo_billing_state'])) ? $state = sanitize_text_field(wp_unslash($_POST['dplrwoo_billing_state'])) : $state = '';
+            (isset($_POST['dplrwoo_billing_postcode'])) ? $postcode = sanitize_text_field(wp_unslash($_POST['dplrwoo_billing_postcode'])) : $postcode = '';
+            (isset($_POST['dplrwoo_shipping_first_name'])) ? $shipping_name = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_first_name'])) : $shipping_name = '';
+            (isset($_POST['dplrwoo_shipping_last_name'])) ? $shipping_surname = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_last_name'])) : $shipping_surname = '';
+            (isset($_POST['dplrwoo_shipping_company'])) ? $shipping_company = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_company'])) : $shipping_company = '';
+            (isset($_POST['dplrwoo_shipping_country'])) ? $shipping_country = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_country'])) : $shipping_country = '';
+            (isset($_POST['dplrwoo_shipping_address_1'])) ? $shipping_address_1 = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_address_1'])) : $shipping_address_1 = '';
+            (isset($_POST['dplrwoo_shipping_address_2'])) ? $shipping_address_2 = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_address_2'])) : $shipping_address_2 = '';
+            (isset($_POST['dplrwoo_shipping_city'])) ? $shipping_city = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_city'])) : $shipping_city = '';
+            (isset($_POST['dplrwoo_shipping_state'])) ? $shipping_state = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_state'])) : $shipping_state = '';
+            (isset($_POST['dplrwoo_shipping_postcode'])) ? $shipping_postcode = sanitize_text_field(wp_unslash($_POST['dplrwoo_shipping_postcode'])) : $shipping_postcode = '';
+            (isset($_POST['dplrwoo_order_comments'])) ? $comments = sanitize_text_field(wp_unslash($_POST['dplrwoo_order_comments'])) : $comments = '';
+            (isset($_POST['dplrwoo_create_account'])) ? $create_account = sanitize_text_field(wp_unslash($_POST['dplrwoo_create_account'])) : $create_account = '';
+            (isset($_POST['dplrwoo_ship_elsewhere'])) ? $ship_elsewhere = sanitize_text_field(wp_unslash($_POST['dplrwoo_ship_elsewhere'])) : $ship_elsewhere = '';
             
             $other_fields = array(
             'dplrwoo_billing_company'         => $company,
@@ -370,12 +381,13 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             if($current_session_exist_in_db && $dplr_cart_session_id !== null ) {
                 $wpdb->prepare(
                     '%s',
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                     $wpdb->update(
-                        $table_name,
+                        $dplrwoo_table_name,
                         array(
                         'name'            =>    sanitize_text_field($name),
                         'lastname'        =>    sanitize_text_field($surname),
-                        'email'            =>    sanitize_email($_POST['dplrwoo_email']),
+                        'email'            =>    sanitize_email(sanitize_text_field(wp_unslash($_POST['dplrwoo_email']))),
                         'phone'            =>    filter_var($phone, FILTER_SANITIZE_NUMBER_INT),
                         'location'        =>    sanitize_text_field($location),
                         'cart_contents'    =>    serialize($product_array),
@@ -392,16 +404,17 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 );
 
             }else{
-                
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->query(
                     $wpdb->prepare(
-                        "INSERT INTO ". $table_name ."
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                        "INSERT INTO ". $dplrwoo_table_name ."
 						( name, lastname, email, phone, location, cart_contents, cart_total, currency, time, session_id, other_fields, cart_url, token )
-						VALUES ( %s, %s, %s, %s, %s, %s, %0.2f, %s, %s, %s, %s, %s, %s)",
+						VALUES ( %s, %s, %s, %s, %s, %s, %f, %s, %s, %s, %s, %s, %s)",
                         array(
                         sanitize_text_field($name),
                         sanitize_text_field($surname),
-                        sanitize_email($_POST['dplrwoo_email']),
+                        sanitize_email(sanitize_text_field(wp_unslash($_POST['dplrwoo_email']))),
                         filter_var($phone, FILTER_SANITIZE_NUMBER_INT),
                         sanitize_text_field($location),
                         serialize($product_array),
@@ -437,7 +450,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
         if($dplr_cart_session_id !== null ) {
             
             global $wpdb;
-            $table_name = $this->get_cart_session_table();
+            $dplrwoo_table_name = esc_sql($this->get_cart_session_table());
             $cart_data = $this->get_cart();
             $product_array = $cart_data['product_array'];
             $cart_total = $cart_data['cart_total'];
@@ -453,8 +466,9 @@ class Doppler_For_Woocommerce_Abandoned_Cart
             //Updating row in the Database where users Session id = same as prevously saved in Session
             $wpdb->prepare(
                 '%s',
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $wpdb->update(
-                    $table_name,
+                    $dplrwoo_table_name,
                     array(
                     'cart_contents'    =>    serialize($product_array),
                     'cart_total'    =>    sanitize_text_field($cart_total),
@@ -478,7 +492,7 @@ class Doppler_For_Woocommerce_Abandoned_Cart
     function clear_cart_session()
     {
         global $wpdb;
-        $table_name = $this->get_cart_session_table();
+        $dplrwoo_table_name = esc_sql($this->get_cart_session_table());
         
         //If a new Order is added from the WooCommerce admin panel, 
         //we must check if WooCommerce session is set. Otherwise we would get a Fatal error.
@@ -494,8 +508,9 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 //Cleaning Cart data
                 $wpdb->prepare(
                     '%s',
+                    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                     $wpdb->update(
-                        $table_name,
+                        $dplrwoo_table_name,
                         array(
                         'cart_contents'    =>    '',
                         'cart_total'    =>    0,
@@ -517,16 +532,18 @@ class Doppler_For_Woocommerce_Abandoned_Cart
     function delete_cart_session()
     {
         global $wpdb;
-        $table_name = $this->get_cart_session_table();
+        $dplrwoo_table_name = esc_sql($this->get_cart_session_table());
         if(isset(WC()->session)) {
 
             $dplr_cart_session_id = WC()->session->get('dplr_cart_session_id');
             if(isset($dplr_cart_session_id)) {
                 //Deleting row from database
                 //$wpdb->show_errors();
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
                 $resp = $wpdb->query(
                     $wpdb->prepare(
-                        "DELETE FROM ". $table_name ."
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                        "DELETE FROM ". $dplrwoo_table_name ."
 						 WHERE session_id = %s",
                         sanitize_key($dplr_cart_session_id)
                     )
@@ -550,18 +567,24 @@ class Doppler_For_Woocommerce_Abandoned_Cart
     {
         if($dplr_cart_session_id !== null ) {
             global $wpdb;
-            $main_table = $this->get_cart_session_table();
+            $main_table = esc_sql($this->get_cart_session_table());
 
-            //Check if abandoned cart already exists in database
-            return $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT session_id
-				FROM ". $main_table ."
-				WHERE session_id = %s",
-                    $dplr_cart_session_id
-                )
-            );
+            $cache_key = 'dplrwoo_abandoned_cart_session_' . get_current_user_id();
+            $response = wp_cache_get($cache_key, 'dplrwoo_abandoned_cart_session');
+            if (false === $response) {
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                $response = $wpdb->get_var(
+                    $wpdb->prepare(
+                        /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                        "SELECT session_id FROM " . $main_table .
+                        " WHERE session_id = %s",
+                        $dplr_cart_session_id
+                    )
+                );
+                wp_cache_set($cache_key, $response, 'dplrwoo_abandoned_cart_session', 5 * MINUTE_IN_SECONDS);
 
+                return $response;
+            }
         }else{
             return false;
         }
@@ -601,10 +624,25 @@ class Doppler_For_Woocommerce_Abandoned_Cart
     private function get_cart_contents_from_session( $session_id, $token )
     {
         global $wpdb;
-        $main_table = $this->get_cart_session_table();
-        $response = $wpdb->get_row($wpdb->prepare("SELECT cart_contents, token FROM {$main_table} WHERE session_id = %d", $session_id));
-        if($response->token !== $token ) { return false;
+        $main_table = esc_sql($this->get_cart_session_table());
+        $cache_key = 'dplrwoo_abandoned_cart_content_' . $session_id;
+        $response = wp_cache_get($cache_key, 'dplrwoo_abandoned_cart_content');
+        if (false === $response) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $response = $wpdb->get_row(
+                $wpdb->prepare(
+                    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+                    "SELECT cart_contents, token FROM {$main_table} WHERE session_id = %d",
+                    $session_id
+                )
+            );
+            wp_cache_set($cache_key, $response, 'dplrwoo_abandoned_cart_content', 5 * MINUTE_IN_SECONDS);
         }
+
+        if(empty($response) || empty($response->token) || !hash_equals($response->token, $token)) {
+            return false;
+        }
+
         return unserialize($response->cart_contents);
     }
 
@@ -616,12 +654,19 @@ class Doppler_For_Woocommerce_Abandoned_Cart
     {
         global $wpdb;
 
-        if(empty($_GET['cart_session']) && empty($_GET['token']) ) { return false;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public cart restore uses token verification in URL.
+        if(empty($_GET['cart_session']) || empty($_GET['token']) ) { return false;
         }
-        //TODO: Validate token.
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $session_id = absint(wp_unslash($_GET['cart_session']));
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $token = sanitize_text_field(wp_unslash($_GET['token']));
+        if(empty($session_id) || empty($token)) { return false;
+        }
+
         if(is_page('cart') || is_cart() ) {
             
-            $items = $this->get_cart_contents_from_session($_GET['cart_session'], $_GET['token']);
+            $items = $this->get_cart_contents_from_session($session_id, $token);
             if(empty($items) ) { return false;
             }
 
@@ -637,10 +682,11 @@ class Doppler_For_Woocommerce_Abandoned_Cart
                 }
             }
 
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->update( 
                 $this->get_cart_session_table(), 
                 array("restored"=>1), 
-                array("session_id"=> $_GET['cart_session']) 
+                array("session_id"=> $session_id) 
             );
         }
     }

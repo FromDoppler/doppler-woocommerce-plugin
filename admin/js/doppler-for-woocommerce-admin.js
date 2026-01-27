@@ -97,6 +97,7 @@
 				action: "dplrwoo_ajax_synch",
 				buyers_list: buyersList,
 				contacts_list: contactsList,
+				dplrwoo_synch_nonce: ObjWCStr.nonce,
 			});
 		};
 
@@ -158,6 +159,7 @@
 			var data = {
 				action: "dplrwoo_ajax_save_list",
 				listName: listName,
+				dplrwoo_save_list_nonce: ObjWCStr.nonce,
 			};
 			$.post(ajaxurl, data, function (response) {
 				var body = JSON.parse(response);
@@ -258,7 +260,11 @@
 			}
 			$.post(
 				ajaxurl,
-				{ action: "dplrwoo_ajax_save_list", listName },
+				{
+					action: "dplrwoo_ajax_save_list",
+					listName,
+					dplrwoo_save_list_nonce: ObjWCStr.nonce,
+				},
 				function (response) {
 					var body = JSON.parse(response);
 					if (body.createdResourceId) {

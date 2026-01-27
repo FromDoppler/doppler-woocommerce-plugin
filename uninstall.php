@@ -31,9 +31,11 @@ if (! defined('WP_UNINSTALL_PLUGIN') ) {
 }
 
 // Remove all plugin options and plugin tables from database.
-if($_REQUEST['plugin'] === ( plugin_basename(__DIR__) . '/doppler-for-woocommerce.php' ) ) {
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Core handles nonce on uninstall.
+$dplrwoo_requested_plugin = isset($_REQUEST['plugin']) ? sanitize_text_field(wp_unslash($_REQUEST['plugin'])) : '';
+if($dplrwoo_requested_plugin === ( plugin_basename(__DIR__) . '/doppler-for-woocommerce.php' ) ) {
 
-    $options = array(
+    $dplrwoo_options = array(
     'dplr_subscribers_list',
     'dplrwoo_mapping',
     'dplrwoo_use_hub',
@@ -42,17 +44,24 @@ if($_REQUEST['plugin'] === ( plugin_basename(__DIR__) . '/doppler-for-woocommerc
     'dplrwoo_notice_field'
     );
     
-    array_map('uninstall_options', $options);
+    array_map('dplrwoo_uninstall_options', $dplrwoo_options);
 
     //Delete abandoned cart table on uninstall.
     global $wpdb;
-    $table_name = $wpdb->prefix . 'dplrwoo_abandoned_cart';
-    $result = $wpdb->query("DROP TABLE IF EXISTS {$table_name}");
-    $table_name = $wpdb->prefix . 'dplrwoo_visited_products';
-    $wpdb->query("DROP TABLE IF EXISTS {$table_name} ");
+    $dplrwoo_table_name = esc_sql($wpdb->prefix . 'dplrwoo_abandoned_cart');
+    // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery -- Uninstall cleanup.
+    // phpcs:disable WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall cleanup.
+    // phpcs:disable WordPress.DB.DirectDatabaseQuery.SchemaChange -- Uninstall cleanup.
+    // phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- Table name built from trusted prefix/constant.
+    // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Table name built from trusted prefix/constant.
+    $dplrwoo_result = $wpdb->query("DROP TABLE IF EXISTS {$dplrwoo_table_name}");
+    
+    $dplrwoo_table_name = esc_sql($wpdb->prefix . 'dplrwoo_visited_products');
+    $wpdb->query("DROP TABLE IF EXISTS {$dplrwoo_table_name}");
+    // phpcs:enable
 }
 
-function uninstall_options($option_name)
+function dplrwoo_uninstall_options($option_name)
 {
     delete_option($option_name);
     delete_site_option($option_name);

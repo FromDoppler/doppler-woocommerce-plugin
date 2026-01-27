@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Provide a admin area view for the plugin
@@ -22,9 +23,9 @@ if (! current_user_can('manage_options') ) {
 }
 
 if(isset($_GET['tab']) ) {
-    $active_tab = $_GET['tab'];
+    $dplrwoo_active_tab = sanitize_text_field(wp_unslash($_GET['tab']));
 }else{
-    $active_tab = 'lists';
+    $dplrwoo_active_tab = 'lists';
 } 
 
 ?>
@@ -43,68 +44,70 @@ if(isset($_GET['tab']) ) {
 
             <?php
 
-            switch($active_tab){
+            switch($dplrwoo_active_tab){
 
             case 'fields':
                 if(isset($_POST['dplrwoo_mapping']) && is_array($_POST['dplrwoo_mapping']) && current_user_can('manage_options') && check_admin_referer('map-fields') ) {
-                    update_option('dplrwoo_mapping', $this->sanitize_text_array($_POST['dplrwoo_mapping']));
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                    update_option('dplrwoo_mapping', $this->sanitize_text_array(wp_unslash($_POST['dplrwoo_mapping'])));
                     $this->set_success_message(__('Fields mapped succesfully', 'doppler-for-woocommerce'));
                     $this->reset_buyers_and_contacts_last_synch();
                 }
-                $wc_fields = $this->get_checkout_fields();
-                $fields_resource = $this->doppler_service->getResource('fields');
-                $dplr_fields = $fields_resource->getAllFields();
-                $dplr_fields = isset($dplr_fields->items) ? $dplr_fields->items : [];
-                $maps = get_option('dplrwoo_mapping');
+                $dplrwoo_wc_fields = $this->get_checkout_fields();
+                $dplrwoo_fields_resource = $this->doppler_service->getResource('fields');
+                $dplrwoo_dplr_fields = $dplrwoo_fields_resource->getAllFields();
+                $dplrwoo_dplr_fields = isset($dplrwoo_dplr_fields->items) ? $dplrwoo_dplr_fields->items : [];
+                $dplrwoo_maps = get_option('dplrwoo_mapping');
                 include_once 'mapping.php';
                 break;
 
             default:
-                if(isset($_POST['dplr_subscribers_list']) && $this->validate_subscribers_list($_POST['dplr_subscribers_list']) && current_user_can('manage_options') && check_admin_referer('map-lists') ) {
+                // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                if(isset($_POST['dplr_subscribers_list']) && $this->validate_subscribers_list(wp_unslash($_POST['dplr_subscribers_list'])) && current_user_can('manage_options') && check_admin_referer('map-lists') ) {
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                    $dplrwoo_subscribers_lists = $this->sanitize_subscribers_list(wp_unslash($_POST['dplr_subscribers_list']));
 
-                    $subscribers_lists = $this->sanitize_subscribers_list($_POST['dplr_subscribers_list']);
-
-                    update_option('dplr_subscribers_list', $subscribers_lists);
+                    update_option('dplr_subscribers_list', $dplrwoo_subscribers_lists);
                     $this->set_success_message(__('WooCommerce has been successfully connected and synchronized.', 'doppler-for-woocommerce'));
                         
                     $this->reset_buyers_and_contacts_last_synch();
                 } else {
-                    $subscribers_lists = get_option('dplr_subscribers_list');
+                    $dplrwoo_subscribers_lists = get_option('dplr_subscribers_list');
                 }
                     
-                $lists = $this->get_alpha_lists();            
+                $dplrwoo_lists = $this->get_alpha_lists();            
                     
                 //Check if saved buyers & contact Lists still exists, unset them if not.
-                $has_to_update = false;
+                $dplrwoo_has_to_update = false;
 
-                if(!empty($subscribers_lists['buyers']) && !$this->list_exists($subscribers_lists['buyers'], $lists)) {
-                    $has_to_update = true;
-                    $subscribers_lists['buyers'] = '0';
+                if(!empty($dplrwoo_subscribers_lists['buyers']) && !$this->list_exists($dplrwoo_subscribers_lists['buyers'], $dplrwoo_lists)) {
+                    $dplrwoo_has_to_update = true;
+                    $dplrwoo_subscribers_lists['buyers'] = '0';
                 }
                 
-                if(!empty($subscribers_lists['contacts']) && !$this->list_exists($subscribers_lists['contacts'], $lists)) {
-                    $subscribers_lists['contacts'] = '0';
-                    $has_to_update = true;
+                if(!empty($dplrwoo_subscribers_lists['contacts']) && !$this->list_exists($dplrwoo_subscribers_lists['contacts'], $dplrwoo_lists)) {
+                    $dplrwoo_subscribers_lists['contacts'] = '0';
+                    $dplrwoo_has_to_update = true;
                 }
                         
-                if($has_to_update) { update_option('dplr_subscribers_list', $subscribers_lists);
+                if($dplrwoo_has_to_update) { update_option('dplr_subscribers_list', $dplrwoo_subscribers_lists);
                 }
 
-                $connection_status = $this->dplrwoo_check_status();
+                $dplrwoo_connection_status = $this->dplrwoo_check_status();
 
-                if(is_array($connection_status) 
-                    && isset($connection_status['success'])
-                    && $connection_status['success'] === true
-                    && isset($connection_status['connected'])
-                    && $connection_status['connected'] === false) {
+                if(is_array($dplrwoo_connection_status) 
+                    && isset($dplrwoo_connection_status['success'])
+                    && $dplrwoo_connection_status['success'] === true
+                    && isset($dplrwoo_connection_status['connected'])
+                    && $dplrwoo_connection_status['connected'] === false) {
                     $this->set_warning_message_title(__('WooCommerce is not connected.', 'doppler-for-woocommerce'));
                     $this->set_warning_message(__('To reconnect, click the Connect and Sync button.', 'doppler-for-woocommerce'));
                 }
-                else if(is_array($connection_status)
-                    && isset($connection_status['success'])
-                    && $connection_status['success'] === false
-                    && isset($connection_status['code'])
-                    && $connection_status['code'] === 400) {
+                else if(is_array($dplrwoo_connection_status)
+                    && isset($dplrwoo_connection_status['success'])
+                    && $dplrwoo_connection_status['success'] === false
+                    && isset($dplrwoo_connection_status['code'])
+                    && $dplrwoo_connection_status['code'] === 400) {
                     $this->set_warning_message_title(__('WooCommerce is not connected yet.', 'doppler-for-woocommerce'));
                     $this->set_warning_message(__('Select the List you want to assign and click the button to synchronize your user data.', 'doppler-for-woocommerce'));
                 }

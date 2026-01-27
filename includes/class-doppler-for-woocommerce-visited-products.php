@@ -34,7 +34,7 @@ class Doppler_For_WooCommerce_Visited_Products
     public function save_visited_product()
     {
         global $wpdb;
-        $table_name = $this->get_visited_products_table();
+        $dplrwoo_table_name = esc_sql($this->get_visited_products_table());
         
         if(is_product() && is_user_logged_in() ) {
             $user = wp_get_current_user();
@@ -54,14 +54,16 @@ class Doppler_For_WooCommerce_Visited_Products
             $currency = get_woocommerce_currency();
             $current_time = gmdate('Y-m-d H:i:s');
     
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
             $wpdb->query(
                 $wpdb->prepare(
-                    "INSERT INTO ". $table_name ."
+                    /* phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared */
+                    "INSERT INTO ". $dplrwoo_table_name ."
                     ( user_id, user_email, user_name, user_lastname, product_id,
                      product_name, product_slug, product_description, product_image, product_link, product_price, product_regular_price,
                      currency, visited_time )
                     VALUES ( %d, %s, %s, %s, %d,
-                     %s, %s, %s, %s, %s, %0.2f, %0.2f, 
+                     %s, %s, %s, %s, %s, %f, %f, 
                      %s, %s)",
                     array(
                         filter_var($user_id, FILTER_SANITIZE_NUMBER_INT),
@@ -74,8 +76,8 @@ class Doppler_For_WooCommerce_Visited_Products
                         sanitize_text_field($product_description),
                         sanitize_text_field($product_image),
                         sanitize_text_field($product_link),
-                        sanitize_text_field($product_price),
-                        sanitize_text_field($regular_price),
+                        (float) $product_price,
+                        (float) $regular_price,
                         sanitize_text_field($currency),
                         sanitize_text_field($current_time)                    
                     ) 
@@ -83,7 +85,6 @@ class Doppler_For_WooCommerce_Visited_Products
             );
 
             //print($wpdb->last_error); die();
-
         }
 
     }

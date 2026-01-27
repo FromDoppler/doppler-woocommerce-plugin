@@ -3,6 +3,7 @@
 if (! defined('ABSPATH') ) { exit; // Exit if accessed directly
 }
 
+// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 class WC_REST_Doppler_Controller
 {
     /**

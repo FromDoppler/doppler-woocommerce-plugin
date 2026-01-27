@@ -42,9 +42,9 @@ class Doppler_For_Woocommerce_Activator
         //If account has changed, connects.
         
         global $wpdb;
-        $table_name = $wpdb->prefix . DOPPLER_ABANDONED_CART_TABLE;
+        $dplrwoo_table_name = $wpdb->prefix . DOPPLER_ABANDONED_CART_TABLE;
         $charset_collate = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table_name (
+        $sql = "CREATE TABLE $dplrwoo_table_name (
 			    id BIGINT(20) NOT NULL AUTO_INCREMENT,
 			    name VARCHAR(60),
 			    lastname VARCHAR(60),
@@ -66,12 +66,12 @@ class Doppler_For_Woocommerce_Activator
         include_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($sql);
 
-        $sql ="ALTER TABLE $table_name AUTO_INCREMENT = 1";
+        $sql ="ALTER TABLE $dplrwoo_table_name AUTO_INCREMENT = 1";
         dbDelta($sql);
 
-        $table_name = $wpdb->prefix . DOPPLER_VISITED_PRODUCTS_TABLE;
+        $dplrwoo_table_name = $wpdb->prefix . DOPPLER_VISITED_PRODUCTS_TABLE;
         $charset_collate = $wpdb->get_charset_collate();
-        $sql = "CREATE TABLE $table_name (
+        $sql = "CREATE TABLE $dplrwoo_table_name (
 			    id BIGINT(20) NOT NULL AUTO_INCREMENT,
 				user_id BIGINT(20),
 				user_name VARCHAR(60),
@@ -106,10 +106,10 @@ class Doppler_For_Woocommerce_Activator
          * deactivated and re-activated. On deactivation Integration was DELETED, so we
          * are goint to re-activate and regenerate the keys.
          */
-        $options = get_option('dplr_settings');
-        if(!empty(get_option('dplrwoo_api_connected')) && !empty($options['dplr_option_useraccount']) && !empty($options['dplr_option_apikey']) ) {
+        $dplrwoo_options = get_option('dplr_settings');
+        if(!empty(get_option('dplrwoo_api_connected')) && !empty($dplrwoo_options['dplr_option_useraccount']) && !empty($dplrwoo_options['dplr_option_apikey']) ) {
             $DopplerAppConnect = new Doppler_For_WooCommerce_App_Connect(
-                $options['dplr_option_useraccount'], $options['dplr_option_apikey'],
+                $dplrwoo_options['dplr_option_useraccount'], $dplrwoo_options['dplr_option_apikey'],
                 DOPPLER_WOO_API_URL, DOPPLER_FOR_WOOCOMMERCE_ORIGIN
             );
             //TODO: On fail through warning, but goes on with the activation.

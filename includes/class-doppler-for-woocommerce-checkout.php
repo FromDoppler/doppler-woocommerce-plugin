@@ -36,8 +36,8 @@ class Doppler_For_WooCommerce_Checkout
         );
     }
 
-    public function doppler_set_email_optin_checkbox_value($key, $value, $group, $wc_object){
-        if ( self::CONSENT_ID !== $key ) {
+    public function doppler_set_email_optin_checkbox_value($dplrwoo_key, $value, $group, $wc_object){
+        if ( self::CONSENT_ID !== $dplrwoo_key ) {
             return;
         }
 
