@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name "
 "<translations@example.com>\n"
-"POT-Creation-Date: 2026-01-25 21:02-0300\n"
+"POT-Creation-Date: 2026-02-04 21:44-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: Your Team "
@@ -228,7 +228,7 @@ msgstr ""
 #: admin/partials/lists.php:28
 msgid ""
 "Connect your Store and choose a List to "
-"automatically synchronize your user data."
+"automatically synchronize your User data."
 msgstr ""
 
 #: admin/partials/lists.php:30
