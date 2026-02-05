@@ -25,7 +25,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
                         $dplrwoo_suggest_default_lists = false;
                         if( empty($dplrwoo_subscribers_lists['contacts']) && empty($dplrwoo_subscribers_lists['buyers']) ):
                             $dplrwoo_suggest_default_lists = true;
-                            esc_html_e('Connect your Store and choose a List to automatically synchronize your user data.', 'doppler-for-woocommerce');
+                            esc_html_e('Connect your Store and choose a List to automatically synchronize your User data.', 'doppler-for-woocommerce');
                         else :
                             esc_html_e('As they register to your store or buy a product, your Subscribers will be automatically sent to the selected Doppler Lists.', 'doppler-for-woocommerce');
                         endif;

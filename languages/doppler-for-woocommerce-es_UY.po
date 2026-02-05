@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2026-01-25 21:05-0300\n"
+"POT-Creation-Date: 2026-02-04 21:48-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -194,7 +194,7 @@ msgstr "WooCommerce se conectó y sincronizó exitosamente."
 
 #: admin/partials/doppler-for-woocommerce-settings.php:103
 msgid "WooCommerce is not connected."
-msgstr "WooComerce no esta conectado."
+msgstr "WooComerce no está conectado."
 
 #: admin/partials/doppler-for-woocommerce-settings.php:104
 msgid "To reconnect, click the Connect and Sync button."
@@ -217,11 +217,11 @@ msgstr "Conexión de WooCommerce y sincronización de Listas."
 
 #: admin/partials/lists.php:28
 msgid ""
-"Connect your Store and choose a List to automatically synchronize your user "
+"Connect your Store and choose a List to automatically synchronize your User "
 "data."
 msgstr ""
 "Conecta tu Tienda y elige una Lista para sincronizar automáticamente los "
-"datos de tus usuarios."
+"datos de tus Usuarios."
 
 #: admin/partials/lists.php:30
 msgid ""
