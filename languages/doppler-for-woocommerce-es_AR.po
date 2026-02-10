@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Blank WordPress Pot v1.0.0\n"
 "Report-Msgid-Bugs-To: Translator Name <translations@example.com>\n"
-"POT-Creation-Date: 2026-02-04 21:44-0300\n"
+"POT-Creation-Date: 2026-02-10 20:33-0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: Your Team <translations@example.com>\n"
@@ -198,7 +198,7 @@ msgstr "WooComerce no está conectado."
 
 #: admin/partials/doppler-for-woocommerce-settings.php:104
 msgid "To reconnect, click the Connect and Sync button."
-msgstr "Para reconectar haz Clic en el botón de Conectar y Sincronizar."
+msgstr "Para reconectar haz clic en el botón de Conectar y Sincronizar."
 
 #: admin/partials/doppler-for-woocommerce-settings.php:111
 msgid "WooCommerce is not connected yet."
