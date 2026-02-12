@@ -4,7 +4,7 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.9
-Stable tag: 1.5.1
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
@@ -13,6 +13,10 @@ WC tested up: 9.9
 Submit your WooCommerce customers and buyers to a Doppler List.
 
 == Changelog ==
+
+= 1.6.0 =
+* Feat: Display warning message when integration with Doppler it's failing.
+* Refactor: Apply modifications reported by "Plugin Check".
 
 = 1.5.1 =
 * Update: Elevate the WooCommerce API token to read/write permissions.
