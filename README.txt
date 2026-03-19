@@ -4,7 +4,7 @@ Donate link: https://www.fromdoppler.com/
 Tags: email marketing woocommerce
 Requires at least: 4.9
 Tested up to: 6.9
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 WC requires at least: 3.3.2
@@ -13,6 +13,9 @@ WC tested up: 9.9
 Submit your WooCommerce customers and buyers to a Doppler List.
 
 == Changelog ==
+
+= 1.6.1 =
+* Fix: Correct issue when displaying the plugins section without the Doppler-forms plugin installed.
 
 = 1.6.0 =
 * Feat: Display warning message when integration with Doppler it's failing.
