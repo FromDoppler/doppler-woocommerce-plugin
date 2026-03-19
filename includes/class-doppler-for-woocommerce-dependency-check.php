@@ -42,12 +42,30 @@ class DPLRWOO_Dependecy_Checker
                 $class = 'notice notice-error';
                 $message = __('Ouch! Doppler for WooCommerce will not work if the following plugins are not installed and active:', 'doppler-for-woocommerce');
                 $missing_plugins = array();
+                $allowed_html = array(
+                    'a' => array(
+                        'href'   => array(),
+                        'target' => array(),
+                        'rel'    => array(),
+                    ),
+                );
                 foreach($this->inactive_plugins as $dplrwoo_key=>$plugin){
-                    array_push($missing_plugins, sprintf(' <a href="%s" target="_blank">%s</a>', $plugin['repository'], $plugin['name']));
+                    array_push(
+                        $missing_plugins,
+                        sprintf(
+                            '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+                            esc_url($plugin['repository']),
+                            esc_html($plugin['name'])
+                        )
+                    );
                 }
-                printf('<div class="%s"><p>%s %s</p></div>', esc_attr($class), esc_html($message), implode(', ', esc_html($missing_plugins))); 
+                printf(
+                    '<div class="%1$s"><p>%2$s %3$s</p></div>',
+                    esc_attr($class),
+                    esc_html($message),
+                    wp_kses(implode(', ', $missing_plugins), $allowed_html)
+                );
             }
         );
     }
-
 }
