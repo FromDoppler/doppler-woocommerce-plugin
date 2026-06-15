@@ -52,6 +52,10 @@ class Doppler_For_Woocommerce_Admin
 
     private $error_message;
 
+    private $warning_message;
+
+    private $warning_message_title;
+
     private $required_doppler_version;
 
     private $origin;
